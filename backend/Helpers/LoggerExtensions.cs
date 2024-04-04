@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace backend.Helpers;
 
-public class LoggerExtensions
+public static class LoggerExtensions
 {
     // https://code-maze.com/csharp-how-to-find-caller-method/#:~:text=To%20get%20it%2C%20we%20use,log%20them%20to%20the%20console.
     public static void LogInformationEx(this ILogger logger, string text, [CallerMemberName] string callerMethodName = "")

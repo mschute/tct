@@ -31,7 +31,7 @@ namespace backend.Controllers
                 var itineraries = await _context.Itineraries.ToListAsync();
             
                 _logger.LogInformationEx("Successfully retrieved Itinerariess");
-                return Ok(bookings);
+                return Ok(itineraries);
             }
             catch (Exception ex)
             {

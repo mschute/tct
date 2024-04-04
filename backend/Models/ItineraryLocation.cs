@@ -9,7 +9,7 @@ public class ItineraryLocation
     public Itinerary? Itinerary { get; set; }
     public int LocationId { get; set; }
     [JsonIgnore]
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
     
     public int Duration { get; set; }
     

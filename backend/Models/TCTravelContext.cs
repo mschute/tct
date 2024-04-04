@@ -22,10 +22,21 @@ public class TCTravelContext : IdentityDbContext<IdentityUser>
     public DbSet<BookingLocation> BookingLocations { get; set; } = default!;
     public DbSet<ItineraryLocation> ItineraryLocations { get; set; } = default!;
 
-    // overriding OnModelCreating to establish many-to-many relationship between Booking and Location
+    // overriding OnModelCreating to establish many-to-many relationship between Booking and Location and Itinerary and Location
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<ItineraryLocation>()
+            .HasKey(il => new { il.ItineraryId, il.LocationId });
+        modelBuilder.Entity<ItineraryLocation>()
+            .HasOne(il => il.Itinerary)
+            .WithMany(i => i.ItineraryLocations)
+            .HasForeignKey(i => i.ItineraryId);
+        modelBuilder.Entity<ItineraryLocation>()
+            .HasOne(il => il.Location)
+            .WithMany(l => l.ItineraryLocations)
+            .HasForeignKey(l => l.LocationId);
         
         modelBuilder.Entity<BookingLocation>()
             .HasKey(bl => new { bl.BookingId, bl.LocationId });
@@ -36,17 +47,6 @@ public class TCTravelContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<BookingLocation>()
             .HasOne(bl => bl.Location)
             .WithMany(l => l.BookingLocations)
-            .HasForeignKey(b => b.LocationId);
-        
-        modelBuilder.Entity<ItineraryLocation>()
-            .HasKey(bl => new { bl.ItineraryId, bl.LocationId });
-        modelBuilder.Entity<ItineraryLocation>()
-            .HasOne(bl => bl.Itinerary)
-            .WithMany(l => l.ItineraryLocations)
-            .HasForeignKey(b => b.ItineraryId);
-        modelBuilder.Entity<ItineraryLocation>()
-            .HasOne(bl => bl.Location)
-            .WithMany(l => l.ItineraryLocations)
             .HasForeignKey(b => b.LocationId);
     }
 }

@@ -9,5 +9,5 @@ public class Itinerary
     public int PassengerCount { get; set; }
     
     [JsonIgnore]
-    public ICollection<Location>? Locations { get; set; }
+    public ICollection<ItineraryLocation>? ItineraryLocations { get; set; }
 }

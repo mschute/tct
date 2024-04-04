@@ -91,7 +91,7 @@ namespace backend.Controllers
                 await _context.SaveChangesAsync();
                 
                 return CreatedAtAction("GetItineraryLocation", new { itineraryId = itineraryLocation.ItineraryId ,
-                    locationId = ItineraryLocation.LocationId }, itineraryLocation);
+                    locationId = itineraryLocation.LocationId }, itineraryLocation);
             }
             catch (DbUpdateException ex)
             {
