@@ -23,7 +23,7 @@ builder.Services.AddControllersWithViews();
 
 // Configure the database 
 builder.Services.AddDbContext<TCTravelContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("Connection")));
 
 // Configure identity framework for user registration, login etc.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
