@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models;
 
-public class TCTravelContext : IdentityDbContext<IdentityUser>
+public class TCTravelContext : DbContext
 {
     public TCTravelContext(DbContextOptions<TCTravelContext> options)
         : base(options)
