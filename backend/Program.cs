@@ -26,40 +26,40 @@ builder.Services.AddDbContext<TCTravelContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Connection")));
 
 // Configure identity framework for user registration, login etc.
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<TCTravelContext>()
-    .AddDefaultTokenProviders();
+// builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//     .AddEntityFrameworkStores<TCTravelContext>()
+//     .AddDefaultTokenProviders();
+//
+// builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+//
+// builder.Services.AddScoped<EmailService>();
+//
+// builder.Services.AddScoped<RolesController>();
 
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
-builder.Services.AddScoped<EmailService>();
-
-builder.Services.AddScoped<RolesController>();
-
-builder.Services.AddScoped<AppJwtBearerEvents>();
+//builder.Services.AddScoped<AppJwtBearerEvents>();
 
 // Configure Jwt authentication
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        // Override default events type for JwtBearerEvents in order to use logging for Jwt events
-        options.EventsType = typeof(AppJwtBearerEvents);
-        
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+// builder.Services.AddAuthentication(options =>
+//     {
+//         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//     })
+//     .AddJwtBearer(options =>
+//     {
+//         // Override default events type for JwtBearerEvents in order to use logging for Jwt events
+//         options.EventsType = typeof(AppJwtBearerEvents);
+//         
+//         options.TokenValidationParameters = new TokenValidationParameters
+//         {
+//             ValidateIssuer = true,
+//             ValidateAudience = true,
+//             ValidateLifetime = true,
+//             ValidateIssuerSigningKey = true,
+//             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//             ValidAudience = builder.Configuration["Jwt:Issuer"],
+//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+//         };
+//     });
 
 var app = builder.Build();
 
