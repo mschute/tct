@@ -433,3 +433,4 @@ FodyWeavers.xsd
 *.info
 .cache
 *.cache
+backend/Logs/TCTravel-System.Runtime.InteropServices.JavaScript.JSType+Date-20240405.txt
