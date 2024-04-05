@@ -439,3 +439,4 @@ backend/Logs/TCTravel-System.Runtime.InteropServices.JavaScript.JSType+Date-2024
 /backend/obj/Debug/net8.0
 /backend/obj
 /backend/obj
+*.db
