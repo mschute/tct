@@ -407,3 +407,10 @@ FodyWeavers.xsd
 .cache
 .txt
 .Assemblyinfo.cs
+*.env
+*.dll
+*.info
+*.cache
+*.txt
+*.Assemblyinfo.cs
+.json
