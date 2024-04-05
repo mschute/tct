@@ -403,3 +403,7 @@ FodyWeavers.xsd
 
 .env
 .dll
+.info
+.cache
+.txt
+.Assemblyinfo.cs
