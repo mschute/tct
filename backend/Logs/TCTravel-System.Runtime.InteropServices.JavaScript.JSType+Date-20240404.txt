@@ -1,0 +1,239 @@
+2024-04-04T20:41:41.0251220+01:00  [INF] User profile is available. Using '"/Users/Lady/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest. (a162847e)
+2024-04-04T20:41:41.0560320+01:00  [WRN] The WebRootPath was not found: "/Users/Lady/tct/backend/wwwroot". Static files may be unavailable. (3ae2c740)
+2024-04-04T20:41:41.0668010+01:00  [INF] Now listening on: "http://localhost:5255" (d826f4b8)
+2024-04-04T20:41:41.0698780+01:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2024-04-04T20:41:41.0703590+01:00  [INF] Hosting environment: "Development" (bc5a1a4e)
+2024-04-04T20:41:41.0703840+01:00  [INF] Content root path: "/Users/Lady/tct/backend" (cc26f24e)
+2024-04-04T20:41:41.5240980+01:00 0HN2KRT065SGS:00000001 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/swagger""" - null null (d509f86a)
+2024-04-04T20:41:41.5508570+01:00 0HN2KRT065SGS:00000001 [WRN] Failed to determine the https port for redirect. (ca76cc21)
+2024-04-04T20:41:41.5651910+01:00 0HN2KRT065SGS:00000001 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/swagger""" - 404 0 null 41.0941ms (74253ad3)
+2024-04-04T20:41:41.5681450+01:00 0HN2KRT065SGS:00000001 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: "GET" "http"://"localhost:5255""""/swagger", Response status code: 404 (e353595a)
+2024-04-04T20:53:39.3133780+01:00  [INF] Application is shutting down... (90f52c38)
+2024-04-04T21:45:57.4135590+01:00  [INF] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""PRAGMA journal_mode = 'wal';" (0723d8ff)
+2024-04-04T21:45:57.4464030+01:00  [INF] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"__EFMigrationsHistory\" (
+    \"MigrationId\" TEXT NOT NULL CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY,
+    \"ProductVersion\" TEXT NOT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4488430+01:00  [INF] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT COUNT(*) FROM \"sqlite_master\" WHERE \"name\" = '__EFMigrationsHistory' AND \"type\" = 'table';" (0723d8ff)
+2024-04-04T21:45:57.4495890+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";" (0723d8ff)
+2024-04-04T21:45:57.4549600+01:00  [INF] Applying migration '"20240404201754_InitialCreate"'. (0e2ac64d)
+2024-04-04T21:45:57.4704600+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Customers\" (
+    \"CustomerId\" INTEGER NOT NULL CONSTRAINT \"PK_Customers\" PRIMARY KEY AUTOINCREMENT,
+    \"FirstName\" TEXT NOT NULL,
+    \"LastName\" TEXT NOT NULL,
+    \"Dob\" TEXT NULL,
+    \"Nationality\" TEXT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4705350+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Drivers\" (
+    \"DriverId\" INTEGER NOT NULL CONSTRAINT \"PK_Drivers\" PRIMARY KEY AUTOINCREMENT,
+    \"FirstName\" TEXT NOT NULL,
+    \"LastName\" TEXT NOT NULL,
+    \"Dob\" TEXT NULL,
+    \"DrivingLicenseNo\" TEXT NOT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4705780+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Itineraries\" (
+    \"ItineraryId\" INTEGER NOT NULL CONSTRAINT \"PK_Itineraries\" PRIMARY KEY AUTOINCREMENT,
+    \"Date\" TEXT NOT NULL,
+    \"PassengerCount\" INTEGER NOT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4706180+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Locations\" (
+    \"LocationId\" INTEGER NOT NULL CONSTRAINT \"PK_Locations\" PRIMARY KEY AUTOINCREMENT,
+    \"LocationName\" TEXT NOT NULL,
+    \"LocationAddress\" TEXT NOT NULL,
+    \"LocationLat\" TEXT NOT NULL,
+    \"LocationLng\" TEXT NOT NULL,
+    \"LocationDescription\" TEXT NOT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4706570+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Vehicles\" (
+    \"VehicleId\" INTEGER NOT NULL CONSTRAINT \"PK_Vehicles\" PRIMARY KEY AUTOINCREMENT,
+    \"Make\" TEXT NULL,
+    \"Model\" TEXT NULL,
+    \"GasType\" TEXT NULL,
+    \"Seats\" INTEGER NOT NULL,
+    \"PricePerDay\" TEXT NOT NULL
+);" (0723d8ff)
+2024-04-04T21:45:57.4707190+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"ItineraryLocations\" (
+    \"ItineraryId\" INTEGER NOT NULL,
+    \"LocationId\" INTEGER NOT NULL,
+    \"Duration\" INTEGER NOT NULL,
+    \"TravelTimeNextLocale\" INTEGER NOT NULL,
+    CONSTRAINT \"PK_ItineraryLocations\" PRIMARY KEY (\"ItineraryId\", \"LocationId\"),
+    CONSTRAINT \"FK_ItineraryLocations_Itineraries_ItineraryId\" FOREIGN KEY (\"ItineraryId\") REFERENCES \"Itineraries\" (\"ItineraryId\") ON DELETE CASCADE,
+    CONSTRAINT \"FK_ItineraryLocations_Locations_LocationId\" FOREIGN KEY (\"LocationId\") REFERENCES \"Locations\" (\"LocationId\") ON DELETE CASCADE
+);" (0723d8ff)
+2024-04-04T21:45:57.4707730+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"Bookings\" (
+    \"BookingId\" INTEGER NOT NULL CONSTRAINT \"PK_Bookings\" PRIMARY KEY AUTOINCREMENT,
+    \"TotalPrice\" TEXT NOT NULL,
+    \"Date\" TEXT NOT NULL,
+    \"VehicleId\" INTEGER NOT NULL,
+    \"DriverId\" INTEGER NOT NULL,
+    \"CustomerId\" INTEGER NOT NULL,
+    CONSTRAINT \"FK_Bookings_Customers_CustomerId\" FOREIGN KEY (\"CustomerId\") REFERENCES \"Customers\" (\"CustomerId\") ON DELETE CASCADE,
+    CONSTRAINT \"FK_Bookings_Drivers_DriverId\" FOREIGN KEY (\"DriverId\") REFERENCES \"Drivers\" (\"DriverId\") ON DELETE CASCADE,
+    CONSTRAINT \"FK_Bookings_Vehicles_VehicleId\" FOREIGN KEY (\"VehicleId\") REFERENCES \"Vehicles\" (\"VehicleId\") ON DELETE CASCADE
+);" (0723d8ff)
+2024-04-04T21:45:57.4708250+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"BookingLocations\" (
+    \"BookingId\" INTEGER NOT NULL,
+    \"LocationId\" INTEGER NOT NULL,
+    CONSTRAINT \"PK_BookingLocations\" PRIMARY KEY (\"BookingId\", \"LocationId\"),
+    CONSTRAINT \"FK_BookingLocations_Bookings_BookingId\" FOREIGN KEY (\"BookingId\") REFERENCES \"Bookings\" (\"BookingId\") ON DELETE CASCADE,
+    CONSTRAINT \"FK_BookingLocations_Locations_LocationId\" FOREIGN KEY (\"LocationId\") REFERENCES \"Locations\" (\"LocationId\") ON DELETE CASCADE
+);" (0723d8ff)
+2024-04-04T21:45:57.4708620+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"IX_BookingLocations_LocationId\" ON \"BookingLocations\" (\"LocationId\");" (0723d8ff)
+2024-04-04T21:45:57.4709010+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"IX_Bookings_CustomerId\" ON \"Bookings\" (\"CustomerId\");" (0723d8ff)
+2024-04-04T21:45:57.4709380+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"IX_Bookings_DriverId\" ON \"Bookings\" (\"DriverId\");" (0723d8ff)
+2024-04-04T21:45:57.4709730+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"IX_Bookings_VehicleId\" ON \"Bookings\" (\"VehicleId\");" (0723d8ff)
+2024-04-04T21:45:57.4710060+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"IX_ItineraryLocations_LocationId\" ON \"ItineraryLocations\" (\"LocationId\");" (0723d8ff)
+2024-04-04T21:45:57.4710290+01:00  [INF] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20240404201754_InitialCreate', '8.0.3');" (0723d8ff)
+2024-04-04T21:51:35.0314980+01:00  [INF] User profile is available. Using '"/Users/Lady/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest. (a162847e)
+2024-04-04T21:51:35.0514390+01:00  [WRN] The WebRootPath was not found: "/Users/Lady/tct/backend/wwwroot". Static files may be unavailable. (3ae2c740)
+2024-04-04T21:51:35.0565470+01:00  [INF] Now listening on: "http://localhost:5255" (d826f4b8)
+2024-04-04T21:51:35.0579250+01:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2024-04-04T21:51:35.0581820+01:00  [INF] Hosting environment: "Development" (bc5a1a4e)
+2024-04-04T21:51:35.0581990+01:00  [INF] Content root path: "/Users/Lady/tct/backend" (cc26f24e)
+2024-04-04T22:01:18.3901410+01:00 0HN2KT9FQFF71:00000001 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - null null (d509f86a)
+2024-04-04T22:01:18.4050950+01:00 0HN2KT9FQFF71:00000001 [WRN] Failed to determine the https port for redirect. (ca76cc21)
+2024-04-04T22:01:18.4124090+01:00 0HN2KT9FQFF71:00000001 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:01:18.4134950+01:00 0HN2KT9FQFF71:00000001 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:01:18.4164380+01:00 0HN2KT9FQFF71:00000001 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - 401 0 null 26.9795ms (74253ad3)
+2024-04-04T22:01:48.8102460+01:00 0HN2KT9FQFF71:00000002 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - null null (d509f86a)
+2024-04-04T22:01:48.8186290+01:00 0HN2KT9FQFF71:00000002 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:01:48.8191500+01:00 0HN2KT9FQFF71:00000002 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:01:48.8195000+01:00 0HN2KT9FQFF71:00000002 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - 401 0 null 9.3817ms (74253ad3)
+2024-04-04T22:01:57.6411270+01:00 0HN2KT9FQFF71:00000003 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/""" - null null (d509f86a)
+2024-04-04T22:01:57.6435430+01:00 0HN2KT9FQFF71:00000003 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/""" - 404 0 null 2.4776ms (74253ad3)
+2024-04-04T22:01:57.6447970+01:00 0HN2KT9FQFF71:00000003 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: "GET" "http"://"localhost:5255""""/", Response status code: 404 (e353595a)
+2024-04-04T22:02:17.1127200+01:00 0HN2KT9FQFF71:00000004 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - null null (d509f86a)
+2024-04-04T22:02:17.1150830+01:00 0HN2KT9FQFF71:00000004 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:02:17.1153290+01:00 0HN2KT9FQFF71:00000004 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:02:17.1154830+01:00 0HN2KT9FQFF71:00000004 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer""" - 401 0 null 2.8707ms (74253ad3)
+2024-04-04T22:02:22.1073620+01:00 0HN2KT9FQFF71:00000005 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer/5""" - null null (d509f86a)
+2024-04-04T22:02:22.1086570+01:00 0HN2KT9FQFF71:00000005 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin|Customer)" (92d7f7d3)
+2024-04-04T22:02:22.1088350+01:00 0HN2KT9FQFF71:00000005 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:02:22.1090750+01:00 0HN2KT9FQFF71:00000005 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Customer/5""" - 401 0 null 1.728ms (74253ad3)
+2024-04-04T22:02:52.5956120+01:00 0HN2KT9FQFF71:00000006 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:02:52.5962720+01:00 0HN2KT9FQFF71:00000006 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:02:52.5963800+01:00 0HN2KT9FQFF71:00000006 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:02:52.5965260+01:00 0HN2KT9FQFF71:00000006 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.9527ms (74253ad3)
+2024-04-04T22:04:30.0630670+01:00 0HN2KT9FQFF71:00000007 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:04:30.0636530+01:00 0HN2KT9FQFF71:00000007 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:04:30.0637300+01:00 0HN2KT9FQFF71:00000007 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:04:30.0638320+01:00 0HN2KT9FQFF71:00000007 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.8902ms (74253ad3)
+2024-04-04T22:04:34.6021190+01:00 0HN2KT9FQFF71:00000008 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/swagger""" - null null (d509f86a)
+2024-04-04T22:04:34.6026740+01:00 0HN2KT9FQFF71:00000008 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/swagger""" - 404 0 null 0.6467ms (74253ad3)
+2024-04-04T22:04:34.6030050+01:00 0HN2KT9FQFF71:00000008 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: "GET" "http"://"localhost:5255""""/swagger", Response status code: 404 (e353595a)
+2024-04-04T22:04:34.5913940+01:00  [INF] User profile is available. Using '"/Users/Lady/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest. (a162847e)
+2024-04-04T22:04:34.6394980+01:00  [WRN] The WebRootPath was not found: "/Users/Lady/tct/backend/wwwroot". Static files may be unavailable. (3ae2c740)
+2024-04-04T22:04:34.6562220+01:00  [ERR] Hosting failed to start (2bb045e9)
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5255: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+2024-04-04T22:04:44.4039050+01:00 0HN2KT9FQFF71:00000009 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:04:44.4046900+01:00 0HN2KT9FQFF71:00000009 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:04:44.4048220+01:00 0HN2KT9FQFF71:00000009 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:04:44.4050310+01:00 0HN2KT9FQFF71:00000009 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 1.1685ms (74253ad3)
+2024-04-04T22:05:52.2897550+01:00 0HN2KT9FQFF76:00000001 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:05:52.2899500+01:00 0HN2KT9FQFF76:00000001 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:05:52.2899780+01:00 0HN2KT9FQFF76:00000001 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:05:52.2900190+01:00 0HN2KT9FQFF76:00000001 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.2728ms (74253ad3)
+2024-04-04T22:07:33.6087550+01:00 0HN2KT9FQFF77:00000001 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:07:33.6089450+01:00 0HN2KT9FQFF77:00000001 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:07:33.6089710+01:00 0HN2KT9FQFF77:00000001 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:07:33.6090050+01:00 0HN2KT9FQFF77:00000001 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.2639ms (74253ad3)
+2024-04-04T22:07:34.9354820+01:00 0HN2KT9FQFF77:00000002 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:07:34.9360400+01:00 0HN2KT9FQFF77:00000002 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:07:34.9361270+01:00 0HN2KT9FQFF77:00000002 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:07:34.9362560+01:00 0HN2KT9FQFF77:00000002 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.8155ms (74253ad3)
+2024-04-04T22:07:42.0166170+01:00  [INF] User profile is available. Using '"/Users/Lady/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest. (a162847e)
+2024-04-04T22:07:42.0464920+01:00  [WRN] The WebRootPath was not found: "/Users/Lady/tct/backend/wwwroot". Static files may be unavailable. (3ae2c740)
+2024-04-04T22:07:42.0694160+01:00  [ERR] Hosting failed to start (2bb045e9)
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5255: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+2024-04-04T22:08:02.0385790+01:00 0HN2KT9FQFF77:00000004 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:08:02.0391830+01:00 0HN2KT9FQFF77:00000004 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:08:02.0392860+01:00 0HN2KT9FQFF77:00000004 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:08:02.0399690+01:00 0HN2KT9FQFF77:00000004 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 0.9123ms (74253ad3)
+2024-04-04T22:08:05.8539230+01:00 0HN2KT9FQFF77:00000005 [INF] Request starting "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - null null (d509f86a)
+2024-04-04T22:08:05.8545570+01:00 0HN2KT9FQFF77:00000005 [INF] Authorization failed. "These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin)" (92d7f7d3)
+2024-04-04T22:08:05.8546850+01:00 0HN2KT9FQFF77:00000005 [INF] AuthenticationScheme: "Bearer" was challenged. (d45f1f38)
+2024-04-04T22:08:05.8548780+01:00 0HN2KT9FQFF77:00000005 [INF] Request finished "HTTP/1.1" "GET" "http"://"localhost:5255""""/api/Location""" - 401 0 null 1.04ms (74253ad3)
