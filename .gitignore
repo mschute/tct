@@ -434,3 +434,8 @@ FodyWeavers.xsd
 .cache
 *.cache
 backend/Logs/TCTravel-System.Runtime.InteropServices.JavaScript.JSType+Date-20240405.txt
+/backend/Logs
+/backend/obj/Debug/net8.0
+/backend/obj/Debug/net8.0
+/backend/obj
+/backend/obj
