@@ -401,12 +401,12 @@ FodyWeavers.xsd
 # ASP.NET Core Web Application
 *.json
 
-.env
-.dll
-.info
-.cache
-.txt
-.Assemblyinfo.cs
+.env/
+.dll/
+.info/
+.cache/
+.txt/
+.Assemblyinfo.cs/
 *.env
 *.dll
 *.info
