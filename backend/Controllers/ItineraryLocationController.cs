@@ -23,7 +23,7 @@ namespace backend.Controllers
 
         // GET: api/BookingLocation
         // Retrieve booking locations
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItineraryLocation>>> GetBookingLocations()
         {
@@ -43,7 +43,7 @@ namespace backend.Controllers
 
         // GET: api/BookingLocation/itineraryId/locationId
         // Retrieve specific itinerary location
-        [Authorize(Roles = "SuperAdmin,Admin,Customer,Driver")]
+        //[Authorize(Roles = "SuperAdmin,Admin,Customer,Driver")]
         [HttpGet("{itineraryId}/{locationId}")]
         public async Task<ActionResult<ItineraryLocation>> GetItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId)
         {
@@ -74,7 +74,7 @@ namespace backend.Controllers
         }
 
         // POST: api/BookingLocation
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         public async Task<ActionResult<ItineraryLocation>> PostItineraryLocation([FromBody] ItineraryLocation itineraryLocation)
         {
@@ -114,7 +114,7 @@ namespace backend.Controllers
         
         // PUT: api/BookingLocation/itineraryId/locationId
         // Update specific ItineraryLocation
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPut("{itineraryId}/{locationId}")]
         public async Task<IActionResult> PutItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId, [FromBody] ItineraryLocation itineraryLocation)
         {
@@ -160,7 +160,7 @@ namespace backend.Controllers
         // DELETE: api/ItineraryLocation/5
         // Delete specific itinerary
         [HttpDelete("{id}")]
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> DeleteItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId)
         {
             try

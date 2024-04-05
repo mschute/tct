@@ -22,7 +22,7 @@ namespace backend.Controllers
 
         // GET: api/Itinerary
         // Retrieve all itineraries
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Itinerary>>> GetItineraries()
         {
@@ -42,7 +42,7 @@ namespace backend.Controllers
 
         // GET: api/Itinerary/5
         // Retrieve specific itinerariess
-        [Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
+        //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Itinerary>> GetItinerary(int id)
         {
@@ -74,7 +74,7 @@ namespace backend.Controllers
 
         // PUT: api/Itinerary/5
         // Update specific itinerary
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItinerary(int id, Itinerary itinerary)
         {
@@ -119,7 +119,7 @@ namespace backend.Controllers
 
         // POST: api/Itinerary
         // Create itinerary
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         public async Task<ActionResult<Itinerary>> PostItinerary(Itinerary itinerary)
         {
@@ -146,7 +146,7 @@ namespace backend.Controllers
 
         // DELETE: api/Itinerary/5
         // Delete specific itinerary
-        [Authorize(Roles = "SuperAdmin,Admin")]
+        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItinerary(int id)
         {
