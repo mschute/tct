@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../apiConfig.js';
 import service from '../service/CustomerService'; 
 import List from "./List";
 import Form from "./Form";
@@ -16,18 +14,6 @@ const Customers = () => {
         // Fetch customers data when component mounts
         fetchCustomers();
     }, []);
-
-    // const fetchCustomers = async () => {
-    //     try {
-    //         const response = await axios.get(`${API_BASE_URL}Customer`);
-    //         console.log("This is the response for fetch customer: " + response)
-    //         setCustomers(response.data);
-    //         setSelectedCustomer(null);
-    //         setEditingCustomer(null);
-    //     } catch (error) {
-    //         console.error('Error fetching customers:', error);
-    //     }
-    // };
     
     const fetchCustomers = async () => {
         try {

@@ -13,14 +13,14 @@ const service = {
         }
     },
 
-    // getSpecificCustomer: async (customerId) => {
-    //     try {
-    //         const response = await axios.get(`${API_URL}/${customerId}`)
-    //         return response.data;
-    //     } catch (error) {
-    //         throw new Error(`Error fetching customers: ${error.message}`);
-    //     }
-    // },
+    getSpecificCustomer: async (customerId) => {
+        try {
+            const response = await axios.get(`${API_URL}/${customerId}`)
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching customers: ${error.message}`);
+        }
+    },
 
     createCustomer: async (newCustomer) => {
         try {
