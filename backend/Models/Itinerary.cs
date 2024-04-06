@@ -5,7 +5,7 @@ namespace backend.Models;
 public class Itinerary
 {
     public int ItineraryId { get; set; }
-    public DateOnly Date { get; set; }
+    public DateOnly TripDate { get; set; }
     public int PassengerCount { get; set; }
     
     [JsonIgnore]
