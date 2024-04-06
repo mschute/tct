@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = 'http://localhost:5255/api/Customer'
 
 const service = {
-    
+
     getCustomers: async () => {
         try {
             const response = await axios.get(`${API_URL}`)
