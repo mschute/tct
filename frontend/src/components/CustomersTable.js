@@ -15,15 +15,15 @@ const CustomersTable = ({ customers, handleEdit, handleDelete }) => {
             </thead>
             <tbody>
             {customers.map((customer) => (
-                <tr key={customer.id}>
-                    <td>{customer.id}</td>
+                <tr key={customer.customerId}>
+                    <td>{customer.customerId}</td>
                     <td>{customer.firstName}</td>
                     <td>{customer.lastName}</td>
                     <td>{customer.dob}</td>
                     <td>{customer.nationality}</td>
                     <td>
-                        <button onClick={() => handleEdit(customer.CustomerId)}>Edit</button>
-                        <button onClick={() => handleDelete(customer.CustomerId)}>Delete</button>
+                        <button onClick={() => handleEdit(customer.customerId)}>Edit</button>
+                        <button onClick={() => handleDelete(customer.customerId)}>Delete</button>
                     </td>
                 </tr>
             ))}

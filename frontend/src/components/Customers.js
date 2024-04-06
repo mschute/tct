@@ -27,27 +27,27 @@ const Customers = () => {
         }
     };
 
-    const handleEdit = (id) => {
-        console.log('Edit button clicked for customer id:', id);
-        const selected = customers.find((customer) => customer.id === id);
+    const handleEdit = (customerId) => {
+        console.log('Edit button clicked for customer customerId:', customerId);
+        const selected = customers.find((customer) => customer.customerId === customerId);
         console.log('Selected customer:', selected);
         setSelectedCustomer(null);
 
         // Ensure that the property names match the expected format
-        setEditingCustomer({ id: selected.id, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
+        setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
     };
     
-    const handleDelete = async (id) => {
+    const handleDelete = async (customerId) => {
         try {
-            await axios.delete(`${API_BASE_URL}Customer/${id}`);
+            await axios.delete(`${API_BASE_URL}Customer/${customerId}`);
             fetchCustomers();
         } catch (error) {
             console.error('Error deleting customer:', error);
         }
     };
 
-    const handleViewDetails = (id) => {
-        const selected = customers.find((customer) => customer.id === id);
+    const handleViewDetails = (customerId) => {
+        const selected = customers.find((customer) => customer.customerId === customerId);
         setSelectedCustomer(selected);
         setEditingCustomer(null);
     };
@@ -67,13 +67,13 @@ const Customers = () => {
             console.log('Editing Customer:', editingCustomer);
 
             if (editingCustomer) {
-                if (editingCustomer.id) {
+                if (editingCustomer.customerId) {
                     console.log('Updating existing customer:', editingCustomer);
-                    await axios.put(`${API_BASE_URL}Customer/${editingCustomer.id}`, editingCustomer);
+                    await axios.put(`${API_BASE_URL}Customer/${editingCustomer.customerId}`, editingCustomer);
 
                 } else {
-                    // Remove the existing id property for new customers
-                    const { id, ...newCustomer } = editingCustomer;
+                    // Remove the existing customerId property for new customers
+                    const { customerId, ...newCustomer } = editingCustomer;
                     console.log('Creating new customer:', newCustomer);
                     await axios.post(`${API_BASE_URL}Customer`, newCustomer);
                 }

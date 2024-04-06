@@ -8,7 +8,7 @@ const CustomersDetails = ({ customer }) => {
     return (
         <div>
             <h2>Customer Details</h2>
-            <p>ID: {customer.id}</p>
+            <p>ID: {customer.customerId}</p>
             <p>First Name: {customer.firstName}</p>
             <p>Last Name: {customer.lastName}</p>
             <p>Dob: {customer.dob}</p>
