@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Form = ({model, handleInputChange, handleSubmit, handleCancel}) => {
+const Form = ({model, modelName, handleInputChange, handleSubmit, handleCancel}) => {
     
     const getType = (str) => {
         if (str === "dob"){
@@ -18,7 +18,7 @@ const Form = ({model, handleInputChange, handleSubmit, handleCancel}) => {
     
     return (
         <div>
-            <h2>{typeof(model)} Form</h2>
+            <h2>{modelName} Form</h2>
             <form onSubmit={handleSubmit}>
                 {Object.entries(model).map(([key, value]) => (
                     <div key={key}>

@@ -9,6 +9,7 @@ const Customers = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [editingCustomer, setEditingCustomer] = useState(null);
+    const modelName = "Customer";
 
     useEffect(() => {
         // Fetch customers data when component mounts
@@ -89,11 +90,12 @@ const Customers = () => {
     
     return (
         <div>
-            <List model={customers} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedCustomer && <Details model={selectedCustomer} />}
+            <List model={customers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
+            {selectedCustomer && <Details model={selectedCustomer} modelName={modelName} />}
             {editingCustomer && (
                 <Form
                     model={editingCustomer}
+                    modelName={modelName}
                     handleInputChange={(e) => setEditingCustomer({ ...editingCustomer, [e.target.name]: e.target.value })}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}

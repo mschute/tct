@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Details = ({ model }) => {
+const Details = ({ model, modelName }) => {
     if (!model) {
-        return <div>No {typeof(model)} selected.</div>;
+        return <div>No {modelName} selected.</div>;
     }
 
     return (
