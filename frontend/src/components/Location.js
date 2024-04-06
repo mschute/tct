@@ -8,7 +8,7 @@ const Locations = () => {
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [editingLocation, setEditingLocation] = useState(null);
-    const locationAddressName = "Location";
+    const modelName = "Location";
 
     useEffect(() => {
         // Fetch locations data when component mounts
@@ -86,12 +86,12 @@ const Locations = () => {
 
     return (
         <div>
-            <List locationAddress={locations} locationAddressName={locationAddressName} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedLocation && <Details locationAddress={selectedLocation} locationAddressName={locationAddressName} />}
+            <List model={locations} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
+            {selectedLocation && <Details model={selectedLocation} modelName={modelName} />}
             {editingLocation && (
                 <Form
-                    locationAddress={editingLocation}
-                    locationAddressName={locationAddressName}
+                    model={editingLocation}
+                    modelName={modelName}
                     handleInputChange={(e) => setEditingLocation({ ...editingLocation, [e.target.name]: e.target.value })}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
