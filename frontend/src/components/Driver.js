@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../apiConfig.js';
+import service from '../service/DriverService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
@@ -18,15 +17,12 @@ const Drivers = () => {
 
     const fetchDrivers = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Driver`);
-            console.log("This is the response for fetch driver: " + response)
-            setDrivers(response.data);
-            setSelectedDriver(null);
-            setEditingDriver(null);
+            const driversData = await service.getDrivers();
+            setDrivers(driversData);
         } catch (error) {
-            console.error('Error fetching drivers:', error);
+            console.error(error.message)
         }
-    };
+    }
 
     const handleEdit = (driverId) => {
         console.log('Edit button clicked for driver driverId:', driverId);
@@ -40,7 +36,7 @@ const Drivers = () => {
 
     const handleDelete = async (driverId) => {
         try {
-            await axios.delete(`${API_BASE_URL}Driver/${driverId}`);
+            await service.deleteDriver(driverId)
             fetchDrivers();
         } catch (error) {
             console.error('Error deleting driver:', error);
@@ -70,13 +66,13 @@ const Drivers = () => {
             if (editingDriver) {
                 if (editingDriver.driverId) {
                     console.log('Updating existing driver:', editingDriver);
-                    await axios.put(`${API_BASE_URL}Driver/${editingDriver.driverId}`, editingDriver);
+                    await service.updateDriver(editingDriver.driverId, editingDriver);
 
                 } else {
                     // Remove the existing driverId property for new drivers
                     const { driverId, ...newDriver } = editingDriver;
                     console.log('Creating new driver:', newDriver);
-                    await axios.post(`${API_BASE_URL}Driver`, newDriver);
+                    await service.createDriver(newDriver)
                 }
                 fetchDrivers();
             }
