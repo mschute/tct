@@ -8,7 +8,7 @@ const CustomersTable = ({ customers, handleEdit, handleDelete }) => {
                 <th>ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Dob</th>
+                <th>Date of Birth</th>
                 <th>Nationality</th>
                 <th>Action</th>
             </tr>

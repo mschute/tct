@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../apiConfig.js';
-import CustomersForm from "./CustomersForm";
-import CustomersList from "./CustomersList";
-import CustomersDetails from "./CustomersDetails";
+import List from "./List";
+import Form from "./Form";
+import Details from "./Details";
 
 const Customers = () => {
     const [customers, setCustomers] = useState([]);
@@ -89,17 +89,17 @@ const Customers = () => {
     
     return (
         <div>
-            <CustomersList customers={customers} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedCustomer && <CustomersDetails customer={selectedCustomer} />}
+            <List model={customers} handleEdit={handleEdit} handleDelete={handleDelete} />
+            {selectedCustomer && <Details model={selectedCustomer} />}
             {editingCustomer && (
-                <CustomersForm
-                    customer={editingCustomer}
+                <Form
+                    model={editingCustomer}
                     handleInputChange={(e) => setEditingCustomer({ ...editingCustomer, [e.target.name]: e.target.value })}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Create New Customer</button>
+            <button onClick={handleCreate}>Add new</button>
         </div>
     );
 };
