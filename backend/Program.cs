@@ -25,6 +25,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<TCTravelContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Connection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Configure identity framework for user registration, login etc.
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //     .AddEntityFrameworkStores<TCTravelContext>()
@@ -62,6 +73,7 @@ builder.Services.AddDbContext<TCTravelContext>(options =>
 //     });
 
 var app = builder.Build();
+app.UseCors("AllowReactApp");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

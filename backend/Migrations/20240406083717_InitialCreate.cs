@@ -49,7 +49,7 @@ namespace backend.Migrations
                 {
                     ItineraryId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    TripDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     PassengerCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

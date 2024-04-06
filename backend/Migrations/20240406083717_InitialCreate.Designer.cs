@@ -11,7 +11,7 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(TCTravelContext))]
-    [Migration("20240404201754_InitialCreate")]
+    [Migration("20240406083717_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -124,11 +124,11 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("PassengerCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TripDate")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ItineraryId");
 

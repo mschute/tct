@@ -121,11 +121,11 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("PassengerCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TripDate")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ItineraryId");
 
