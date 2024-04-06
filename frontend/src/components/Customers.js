@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../apiConfig.js';
+import service from '../service/CustomerService'; 
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
@@ -16,17 +17,26 @@ const Customers = () => {
         fetchCustomers();
     }, []);
 
+    // const fetchCustomers = async () => {
+    //     try {
+    //         const response = await axios.get(`${API_BASE_URL}Customer`);
+    //         console.log("This is the response for fetch customer: " + response)
+    //         setCustomers(response.data);
+    //         setSelectedCustomer(null);
+    //         setEditingCustomer(null);
+    //     } catch (error) {
+    //         console.error('Error fetching customers:', error);
+    //     }
+    // };
+    
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Customer`);
-            console.log("This is the response for fetch customer: " + response)
-            setCustomers(response.data);
-            setSelectedCustomer(null);
-            setEditingCustomer(null);
+            const customersData = await service.getCustomers();
+            setCustomers(customersData);
         } catch (error) {
-            console.error('Error fetching customers:', error);
+            console.error(error.message)
         }
-    };
+    }
 
     const handleEdit = (customerId) => {
         console.log('Edit button clicked for customer customerId:', customerId);
@@ -40,7 +50,7 @@ const Customers = () => {
     
     const handleDelete = async (customerId) => {
         try {
-            await axios.delete(`${API_BASE_URL}Customer/${customerId}`);
+            await service.deleteCustomer(customerId)
             fetchCustomers();
         } catch (error) {
             console.error('Error deleting customer:', error);
@@ -70,13 +80,13 @@ const Customers = () => {
             if (editingCustomer) {
                 if (editingCustomer.customerId) {
                     console.log('Updating existing customer:', editingCustomer);
-                    await axios.put(`${API_BASE_URL}Customer/${editingCustomer.customerId}`, editingCustomer);
+                    await service.updateCustomer(editingCustomer.customerId, editingCustomer);
 
                 } else {
                     // Remove the existing customerId property for new customers
                     const { customerId, ...newCustomer } = editingCustomer;
                     console.log('Creating new customer:', newCustomer);
-                    await axios.post(`${API_BASE_URL}Customer`, newCustomer);
+                    await service.createCustomer(newCustomer)
                 }
                 fetchCustomers();
             }
