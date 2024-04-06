@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../apiConfig.js';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import vehicleService from "../service/VehicleService";
+import customerService from "../service/CustomerService";
+import driverService from "../service/DriverService";
+import service from "../service/BookingService";
 
 const Bookings = () => {
     const [bookings, setBookings] = useState([]);
@@ -24,40 +26,40 @@ const Bookings = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Booking`);
-            console.log("This is the response for fetch booking: " + response)
-            setBookings(response.data);
+            const bookingsData = await service.getBookings();
             setSelectedBooking(null);
             setEditingBooking(null);
+            setBookings(bookingsData);
+            
         } catch (error) {
-            console.error('Error fetching bookings:', error);
+            console.error(error.message);
         }
     };
-    
+
     const fetchVehicles = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Vehicles`)
-            setVehicles(response.data);
+            const vehiclesData = await vehicleService.getVehicles();
+            setVehicles(vehiclesData);
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
+            console.error(error.message)
         }
     }
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Customers`)
-            setCustomers(response.data);
+            const customersData = await customerService.getCustomers();
+            setCustomers(customersData);
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
+            console.error(error.message)
         }
     }
 
     const fetchDrivers = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Drivers`)
-            setDrivers(response.data);
+            const driversData = await driverService.getDrivers();
+            setDrivers(driversData);
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
+            console.error(error.message)
         }
     }
 
@@ -73,7 +75,7 @@ const Bookings = () => {
 
     const handleDelete = async (bookingId) => {
         try {
-            await axios.delete(`${API_BASE_URL}Booking/${bookingId}`);
+            await service.deleteBooking(bookingId)
             fetchBookings();
         } catch (error) {
             console.error('Error deleting booking:', error);
@@ -103,13 +105,13 @@ const Bookings = () => {
             if (editingBooking) {
                 if (editingBooking.bookingId) {
                     console.log('Updating existing booking:', editingBooking);
-                    await axios.put(`${API_BASE_URL}Booking/${editingBooking.bookingId}`, editingBooking);
+                    await service.updateBooking(editingBooking.bookingId, editingBooking);
 
                 } else {
                     // Remove the existing bookingId property for new bookings
                     const { bookingId, ...newBooking } = editingBooking;
                     console.log('Creating new booking:', newBooking);
-                    await axios.post(`${API_BASE_URL}Booking`, newBooking);
+                    await service.createBooking(newBooking);
                 }
                 fetchBookings();
             }
@@ -127,6 +129,14 @@ const Bookings = () => {
             {selectedBooking && <Details model={selectedBooking} modelName={modelName} />}
             {editingBooking && (
                 <Form
+                    fields={[
+                        {name:ID, value:selectedBooking.bookingId, type:"text", disabled:true},
+                        {name:ID, value:selectedBooking.totalPrice, type:"text", disabled:true},
+                        {name:ID, value:selectedBooking.date, type:"text", disabled:true},
+                        {name:ID, value:selectedBooking.vehicleId, type:"text", disabled:true},
+                        {name:ID, value:selectedBooking.driverId, type:"text", disabled:true},
+                        {name:ID, value:selectedBooking.customerId, type:"text", disabled:true},
+                    ]}
                     model={editingBooking}
                     modelName={modelName}
                     vehicles={vehicles}
