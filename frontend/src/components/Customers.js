@@ -90,6 +90,13 @@ const Customers = () => {
             {selectedCustomer && <Details model={selectedCustomer} modelName={modelName} />}
             {editingCustomer && (
                 <Form
+                    fields={[
+                        {name:"customerId", label:"Customer ID", value:editingCustomer.customerId, type:"text", disabled:true, min: null, step: null},
+                        {name:"firstName", label:"First Name", value:editingCustomer.firstName, type:"text", disabled:false, min: null, step: null},
+                        {name:"lastName", label:"Last Name", value:editingCustomer.lastName, type:"text", disabled:false, min: null, step: null},
+                        {name:"dob", label:"Date of Birth", value:editingCustomer.dob, type:"date", disabled:false, min: null, step: null},
+                        {name:"nationality", label:"Nationality", value:editingCustomer.nationality, type:"text", disabled:false, min: null, step: null},
+                    ]}
                     model={editingCustomer}
                     modelName={modelName}
                     handleInputChange={(e) => setEditingCustomer({ ...editingCustomer, [e.target.name]: e.target.value })}

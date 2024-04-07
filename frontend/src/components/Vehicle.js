@@ -19,6 +19,7 @@ const Vehicles = () => {
         try {
             const vehiclesData = await service.getVehicles();
             setVehicles(vehiclesData);
+            console.log("This is vehicles data:", JSON.stringify(vehiclesData))
         } catch (error) {
             console.error(error.message)
         }
@@ -90,6 +91,14 @@ const Vehicles = () => {
             {selectedVehicle && <Details model={selectedVehicle} modelName={modelName} />}
             {editingVehicle && (
                 <Form
+                    fields={[
+                        {name:"vehicleId", label:"Vehicle ID", value:editingVehicle.vehicleId, type:"text", disabled:true, min: null, step: null},
+                        {name:"make", label:"Make", value:editingVehicle.make, type:"text", disabled:false, min: null, step: null},
+                        {name:"model", label:"Model", value:editingVehicle.model, type:"text", disabled:false, min: null, step: null},
+                        {name:"gasType", label:"Gas Type", value:editingVehicle.gasType, type:"text", disabled:false, min: null, step: null},
+                        {name:"seats", label:"Seats", value:editingVehicle.seats, type:"number", disabled:false, min: 5, step: 1},
+                        {name:"pricePerDay", label:"Price Per Day", value:editingVehicle.pricePerDay, type:"number", disabled:false, min: 0, step: 25},
+                    ]}
                     model={editingVehicle}
                     modelName={modelName}
                     handleInputChange={(e) => setEditingVehicle({ ...editingVehicle, [e.target.name]: e.target.value })}

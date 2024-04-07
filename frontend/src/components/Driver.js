@@ -90,6 +90,13 @@ const Drivers = () => {
             {selectedDriver && <Details model={selectedDriver} modelName={modelName} />}
             {editingDriver && (
                 <Form
+                    fields={[
+                        {name:"driverId", label:"Driver ID", value:editingDriver.driverId, type:"text", disabled:true, min: null, step: null},
+                        {name:"firstName", label:"First Name", value:editingDriver.firstName, type:"text", disabled:false, min: null, step: null},
+                        {name:"lastName", label:"Last Name", value:editingDriver.lastName, type:"text", disabled:false, min: null, step: null},
+                        {name:"dob", label:"Date of Birth", value:editingDriver.dob, type:"date", disabled:false, min: null, step: null},
+                        {name:"drivingLicenseNo", label:"Driving License No", value:editingDriver.drivingLicenseNo, type:"text", disabled:false, min: null, step: null},
+                    ]}
                     model={editingDriver}
                     modelName={modelName}
                     handleInputChange={(e) => setEditingDriver({ ...editingDriver, [e.target.name]: e.target.value })}

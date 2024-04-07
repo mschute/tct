@@ -90,6 +90,14 @@ const Locations = () => {
             {selectedLocation && <Details model={selectedLocation} modelName={modelName} />}
             {editingLocation && (
                 <Form
+                    fields={[
+                        {name:"locationId", label:"Location ID", value:editingLocation.locationId, type:"text", disabled:true, min: null, step: null},
+                        {name:"locationName", label:"Location Name", value:editingLocation.locationName, type:"text", disabled:false, min: null, step: null},
+                        {name:"locationAddress", label:"Location Address", value:editingLocation.locationAddress, type:"text", disabled:false, min: null, step: null},
+                        {name:"locationLat", label:"Location Latitude", value:editingLocation.locationLat, type:"text", disabled:false, min: null, step: null},
+                        {name:"locationLng", label:"Location Longitude", value:editingLocation.locationLng, type:"text", disabled:false, min: null, step: null},
+                        {name:"locationDescription", label:"Location Description", value:editingLocation.locationDescription, type:"text", disabled:false, min: null, step: null},
+                    ]}
                     model={editingLocation}
                     modelName={modelName}
                     handleInputChange={(e) => setEditingLocation({ ...editingLocation, [e.target.name]: e.target.value })}
