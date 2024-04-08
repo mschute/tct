@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Helpers;
 using backend.Models;
+using backend.Services;
+using backend.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
@@ -13,6 +19,8 @@ namespace backend.Controllers
     {
         private readonly TCTravelContext _context;
         private readonly ILogger<BookingController> _logger;
+        private readonly BookingService _bookingService;
+        private readonly BookingLocationService _bookingLocationService;
 
         public BookingController(TCTravelContext context, ILogger<BookingController> logger)
         {
@@ -24,11 +32,11 @@ namespace backend.Controllers
         // Retrieve all bookings
         //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookings()
         {
             try
             {
-                var bookings = await _context.Bookings.ToListAsync();
+                var bookings = await _bookingService.GetAllBookingsAsync();
             
                 _logger.LogInformationEx("Successfully retrieved Bookings");
                 return Ok(bookings);
@@ -44,7 +52,7 @@ namespace backend.Controllers
         // Retrieve specific bookings
         //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Booking>> GetBooking(int id)
+        public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
             try
             {
@@ -54,7 +62,7 @@ namespace backend.Controllers
                     return BadRequest(ModelState);
                 }
                 
-                var booking = await _context.Bookings.FindAsync(id);
+                var booking = await _bookingService.GetBookingByIdAsync(id);
 
                 if (booking == null)
                 {
@@ -76,7 +84,7 @@ namespace backend.Controllers
         // Update specific booking
         //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBooking(int id, Booking booking)
+        public async Task<IActionResult> PutBooking(int id, BookingDTO bookingDTO)
         {
             try
             {
@@ -86,15 +94,13 @@ namespace backend.Controllers
                     return BadRequest(ModelState);
                 }
 
-                if (id != booking.BookingId)
+                if (id != bookingDTO.BookingId)
                 {
                     _logger.LogErrorEx("Invalid request");
                     return BadRequest();
                 }
 
-                _context.Entry(booking).State = EntityState.Modified;
-
-                await _context.SaveChangesAsync();
+                await _bookingService.UpdateBookingAsync(bookingDTO);
                 
                 _logger.LogInformationEx($"Booking {id} updated successfully");
                 return Ok($"Booking {id} updated successfully");
@@ -121,7 +127,7 @@ namespace backend.Controllers
         // Create booking
         //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
-        public async Task<ActionResult<Booking>> PostBooking(Booking booking)
+        public async Task<ActionResult<BookingDTO>> PostBooking(BookingDTO bookingDTO)
         {
             try
             {
@@ -130,12 +136,33 @@ namespace backend.Controllers
                     _logger.LogErrorEx("Invalid request");
                     return BadRequest(ModelState);
                 }
-                
-                _context.Bookings.Add(booking);
-                await _context.SaveChangesAsync();
 
-                _logger.LogInformationEx($"Booking created successfully");
-                return CreatedAtAction("GetBooking", new { id = booking.BookingId }, booking);
+                _logger.LogInformation("About to call create booking asynchrously");
+                var createdBooking = await _bookingService.CreateBookingAsync(bookingDTO);
+                var bookingId = createdBooking.BookingId;
+                _logger.LogInformation($"This is the bookingIds: {bookingId}");
+                _logger.LogInformation($"This is the bookingDTO: {bookingDTO}");
+
+                var locationIds = bookingDTO.LocationIds;
+                _logger.LogInformation($"This is the locationIds: {locationIds}");
+
+                foreach (var locationId in locationIds)
+                {
+                    var bookingLocation = new BookingLocationDTO
+                    {
+                        BookingId = bookingId,
+                        LocationId = locationId
+                    };
+
+                    var createdBookingLocation = await _bookingLocationService.CreatedBookingLocationAsync(bookingLocation);
+                    _logger.LogInformation($"This is the createdBookingLocation: {createdBookingLocation}");
+                    createdBooking.BookingLocations.Add(createdBookingLocation);
+                }
+                    
+                _logger.LogInformation($"Booking created successfully");
+                
+                return CreatedAtAction(nameof(GetBooking), new { id = createdBooking.BookingId }, createdBooking);
+                
             }
             catch (Exception ex)
             {
@@ -157,18 +184,9 @@ namespace backend.Controllers
                     _logger.LogErrorEx("Invalid request");
                     return BadRequest(ModelState);
                 }
-                
-                var booking = await _context.Bookings.FindAsync(id);
 
-                if (booking == null)
-                {
-                    _logger.LogErrorEx($"Booking {id} not found");
-                    return NotFound($"Booking {id} not found");
-                }
-
-                _context.Bookings.Remove(booking);
-                
-                await _context.SaveChangesAsync();
+                await _bookingService.DeleteBookingAsync(id);
+                return Ok($"Booking {id} deleted successfully");
 
                 _logger.LogInformationEx($"Booking {id} deleted successfully");
                 return Ok($"Booking {id} deleted successfully");

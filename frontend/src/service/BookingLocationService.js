@@ -1,20 +1,28 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5255/api/Booking'
+const API_URL = 'http://localhost:5255/api/BookingLocation'
 
 const service = {
 
-    getBookings: async () => {
+    getBookingLocations: async () => {
         try {
             const response = await axios.get(`${API_URL}`)
-            console.log(`This is the get booking api response: ${JSON.stringify(response.data)}`)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    getSpecificBooking: async (bookingId) => {
+    getSpecificBookingLocation: async (bookingId, locationId) => {
+        try {
+            const response = await axios.get(`${API_URL}/${bookingId}/${locationId}`)
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching bookings: ${error.message}`);
+        }
+    },
+
+    GetBookingLocationsByBookingId: async (bookingId) => {
         try {
             const response = await axios.get(`${API_URL}/${bookingId}`)
             return response.data;
@@ -23,27 +31,27 @@ const service = {
         }
     },
 
-    createBooking: async (newBooking) => {
+    createBookingLocation: async (newBookingLocation) => {
         try {
-            const response = await axios.post(`${API_URL}`, newBooking)
+            const response = await axios.post(`${API_URL}`, newBookingLocation)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    updateBooking: async (bookingId, editingBooking) => {
+    updateBookingLocation: async (bookingId, locationId, editingBookingLocation) => {
         try {
-            const response = await axios.put(`${API_URL}/${bookingId}`, editingBooking)
+            const response = await axios.put(`${API_URL}/${bookingId}/${locationId}`, editingBookingLocation)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    deleteBooking: async (bookingId) => {
+    deleteBookingLocation: async (bookingId, locationId) => {
         try {
-            const response = await axios.delete(`${API_URL}/${bookingId}`)
+            const response = await axios.delete(`${API_URL}/${bookingId}/${locationId}`)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);

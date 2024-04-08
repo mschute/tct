@@ -5,7 +5,10 @@ import Details from "./Details";
 import vehicleService from "../service/VehicleService";
 import customerService from "../service/CustomerService";
 import driverService from "../service/DriverService";
+import locationService from "../service/LocationService";
+import BookingLocationService from "../service/BookingLocationService";
 import service from "../service/BookingService";
+import bookingLocationService from "../service/BookingLocationService";
 
 const Bookings = () => {
     const [bookings, setBookings] = useState([]);
@@ -14,6 +17,7 @@ const Bookings = () => {
     const [vehicles, setVehicles] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [drivers, setDrivers] = useState([]);
+    const [locations, setLocations] = useState([]);
     const modelName = "Booking";
 
     useEffect(() => {
@@ -22,11 +26,13 @@ const Bookings = () => {
         fetchVehicles();
         fetchCustomers();
         fetchDrivers();
+        fetchLocations();
     }, []);
 
     const fetchBookings = async () => {
         try {
             const bookingsData = await service.getBookings();
+            console.log(`This is bookings data ${JSON.stringify(bookingsData)}`)
             setSelectedBooking(null);
             setEditingBooking(null);
             setBookings(bookingsData);
@@ -63,6 +69,15 @@ const Bookings = () => {
         }
     }
 
+    const fetchLocations = async () => {
+        try {
+            const locationsData = await locationService.getLocations();
+            setLocations(locationsData);
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
     const handleEdit = (bookingId) => {
         console.log('Edit button clicked for booking bookingId:', bookingId);
         const selected = bookings.find((booking) => booking.bookingId === bookingId);
@@ -70,7 +85,7 @@ const Bookings = () => {
         setSelectedBooking(null);
 
         // Ensure that the property names match the expected format
-        setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, date: selected.date, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId});
+        setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, date: selected.date, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId, locationIds: selected.locationIds});
     };
 
     const handleDelete = async (bookingId) => {
@@ -90,7 +105,7 @@ const Bookings = () => {
 
     const handleCreate = () => {
         setSelectedBooking(null);
-        setEditingBooking({ bookingId: '', totalPrice: '', date: '', vehicleId: '', driverId: '', customerId: '' });
+        setEditingBooking({ bookingId: '', totalPrice: '', date: '', vehicleId: '', driverId: '', customerId: '', locationIds: '' });
     };
 
     const handleCancelEdit = () => {
@@ -111,7 +126,19 @@ const Bookings = () => {
                     // Remove the existing bookingId property for new bookings
                     const { bookingId, ...newBooking } = editingBooking;
                     console.log('Creating new booking:', newBooking);
+                    
+                    //const createdBooking = await service.createBooking(newBooking);
+                    // const createdBooking = await service.createBooking(newBooking);
+
                     await service.createBooking(newBooking);
+                    
+                    // const _bookingId = createdBooking.bookingId;
+                    // const _locationIds = newBooking.locationIds;
+                    //
+                    // _locationIds.forEach((location) => {
+                    //     const newBookingLocation = {bookingId: _bookingId, locationId: location}
+                    //     bookingLocationService.createBookingLocation(newBookingLocation)
+                    // })
                 }
                 fetchBookings();
             }
@@ -130,19 +157,26 @@ const Bookings = () => {
             {editingBooking && (
                 <Form
                     fields={[
-                        {name:ID, value:selectedBooking.bookingId, type:"text", disabled:true},
-                        {name:ID, value:selectedBooking.totalPrice, type:"text", disabled:true},
-                        {name:ID, value:selectedBooking.date, type:"text", disabled:true},
-                        {name:ID, value:selectedBooking.vehicleId, type:"text", disabled:true},
-                        {name:ID, value:selectedBooking.driverId, type:"text", disabled:true},
-                        {name:ID, value:selectedBooking.customerId, type:"text", disabled:true},
+                        {name:"bookingID", label: "Booking ID", value:editingBooking.bookingId, type:"text", disabled:true, min: null, step: null},
+                        {name:"totalPrice", label: "Total Price", value:editingBooking.totalPrice, type:"number", disabled:false, min: 50, step: 15},
+                        {name:"date", label: "Date", value:editingBooking.date, type:"datetime-local", disabled:false, min: null, step: null},
+                        {name:"vehicleId", label: "Vehicle", value:editingBooking.vehicleId, type:"select", disabled:false, min: null, step: null, options: vehicles},
+                        {name:"driverId", label: "Driver", value:editingBooking.driverId, type:"select", disabled:false, min: null, step: null, options: drivers},
+                        {name:"customerId", label: "Customer", value:editingBooking.customerId, type:"select", disabled:false, min: null, step: null, options: customers},
+                        {name:"locationIds", label: "Location(s)", value:editingBooking.locationIds, type:"select", disabled:false, min: null, step: null, options: locations},
                     ]}
                     model={editingBooking}
                     modelName={modelName}
-                    vehicles={vehicles}
-                    customers={customers}
-                    drivers={drivers}
-                    handleInputChange={(e) => setEditingBooking({ ...editingBooking, [e.target.name]: e.target.value })}
+                    handleInputChange={(e) => {
+                        const { name, value } = e.target;
+                        if (name === 'locationIds') {
+                            const selectedLocations = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                            setEditingBooking({...editingBooking, [name]: selectedLocations});
+                        } else {
+                            setEditingBooking({...editingBooking, [name]: value });
+                        }
+                    }}
+                    
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />

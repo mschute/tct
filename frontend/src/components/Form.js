@@ -16,32 +16,33 @@ const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handle
                                     value={value}
                                     onChange={handleInputChange}
                                     disabled={disabled}
-                                    multiple={name === 'locationId'}
+                                    multiple={name === 'locationIds'}
                                 >
+                                    <option value="">Select...</option>
                                     {options && options.map((option, index) => {
                                         switch (name) {
-                                            case "vehicleID":
+                                            case "vehicleId":
                                                 return (
-                                                    <option key={index} value={option.vehicleId}>
+                                                    <option key={option.vehicleId} value={option.vehicleId}>
                                                         {`${option.vehicleId}: ${option.make} ${option.model}`}
                                                     </option>
                                                 );
-                                            case "customerID":
+                                            case "customerId":
                                                 return (
-                                                    <option key={index} value={option.customerId}>
+                                                    <option key={option.customerId} value={option.customerId}>
                                                         {`${option.customerId}: ${option.firstName} ${option.lastName}`}
                                                     </option>
                                                 );
-                                            case "driverID":
+                                            case "driverId":
                                                 return (
-                                                    <option key={index} value={option.driverId}>
+                                                    <option key={option.driverId} value={option.driverId}>
                                                         {`${option.driverId}: ${option.firstName} ${option.lastName}`}
                                                     </option>
                                                 );
-                                            case "locationId":
+                                            case "locationIds":
                                                 return (
                                                     <option key={option.locationId} value={option.locationId}>
-                                                        {`${option.locationId}: ${option.name}`}
+                                                        {`${option.locationId}: ${option.locationName}`}
                                                     </option>
                                                 );
                                             default:

@@ -9,6 +9,7 @@ using backend;
 using backend.Controllers;
 using backend.Models;
 using backend.Services;
+using AutoMapper;
 
 // Page includes various dependency injections to support this web application
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning)
     .AddFile($"Logs/TCTravel-{typeof(JSType.Date)}.txt");
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Configure the database 
 builder.Services.AddDbContext<TCTravelContext>(options =>
