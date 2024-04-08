@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../apiConfig.js';
+import service from '../service/CustomerService'; 
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
@@ -15,18 +14,15 @@ const Customers = () => {
         // Fetch customers data when component mounts
         fetchCustomers();
     }, []);
-
+    
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}Customer`);
-            console.log("This is the response for fetch customer: " + response)
-            setCustomers(response.data);
-            setSelectedCustomer(null);
-            setEditingCustomer(null);
+            const customersData = await service.getCustomers();
+            setCustomers(customersData);
         } catch (error) {
-            console.error('Error fetching customers:', error);
+            console.error(error.message)
         }
-    };
+    }
 
     const handleEdit = (customerId) => {
         console.log('Edit button clicked for customer customerId:', customerId);
@@ -40,7 +36,7 @@ const Customers = () => {
     
     const handleDelete = async (customerId) => {
         try {
-            await axios.delete(`${API_BASE_URL}Customer/${customerId}`);
+            await service.deleteCustomer(customerId)
             fetchCustomers();
         } catch (error) {
             console.error('Error deleting customer:', error);
@@ -70,13 +66,13 @@ const Customers = () => {
             if (editingCustomer) {
                 if (editingCustomer.customerId) {
                     console.log('Updating existing customer:', editingCustomer);
-                    await axios.put(`${API_BASE_URL}Customer/${editingCustomer.customerId}`, editingCustomer);
+                    await service.updateCustomer(editingCustomer.customerId, editingCustomer);
 
                 } else {
                     // Remove the existing customerId property for new customers
                     const { customerId, ...newCustomer } = editingCustomer;
                     console.log('Creating new customer:', newCustomer);
-                    await axios.post(`${API_BASE_URL}Customer`, newCustomer);
+                    await service.createCustomer(newCustomer)
                 }
                 fetchCustomers();
             }
@@ -94,6 +90,13 @@ const Customers = () => {
             {selectedCustomer && <Details model={selectedCustomer} modelName={modelName} />}
             {editingCustomer && (
                 <Form
+                    fields={[
+                        {name:"customerId", label:"Customer ID", value:editingCustomer.customerId, type:"text", disabled:true, min: null, step: null},
+                        {name:"firstName", label:"First Name", value:editingCustomer.firstName, type:"text", disabled:false, min: null, step: null},
+                        {name:"lastName", label:"Last Name", value:editingCustomer.lastName, type:"text", disabled:false, min: null, step: null},
+                        {name:"dob", label:"Date of Birth", value:editingCustomer.dob, type:"date", disabled:false, min: null, step: null},
+                        {name:"nationality", label:"Nationality", value:editingCustomer.nationality, type:"text", disabled:false, min: null, step: null},
+                    ]}
                     model={editingCustomer}
                     modelName={modelName}
                     handleInputChange={(e) => setEditingCustomer({ ...editingCustomer, [e.target.name]: e.target.value })}
