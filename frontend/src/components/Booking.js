@@ -118,7 +118,29 @@ const Bookings = () => {
             if (editingBooking) {
                 if (editingBooking.bookingId) {
                     console.log('Updating existing booking:', editingBooking);
+                    
                     await service.updateBooking(editingBooking.bookingId, editingBooking);
+                    
+                    const existingBookingLocations = await bookingLocationService.getSpecificBookingLocation(editingBooking.bookingId);
+
+                    const existingLocationIds = existingBookingLocations.map(location => location.locationId);
+                    
+                    const locationsToAdd = editingBooking.locationIds.filter(locationId => !existingLocationIds.includes(locationId));
+                    const locationsToRemove = existingLocationIds.filter(locationId => !editingBooking.locationIds.includes(locationId));
+                    
+                    const createBookingLocationPromises = locationsToAdd.map(locationId => {
+                        const newBookingLocation = { bookingId: editingBooking.bookingId, locationId };
+                        return bookingLocationService.createBookingLocation(newBookingLocation);
+                    });
+
+                    const deleteBookingLocationPromises = locationsToRemove.map(locationId => {
+                        const bookingLocation = existingBookingLocations.find(location => location.locationId === locationId);
+                        if (bookingLocation) {
+                            const bookingLocationId = editingBooking.bookingId + locationId;
+                            return bookingLocationService.deleteBookingLocation(bookingLocationId);
+                        }
+                        return Promise.resolve();
+                    });
 
                 } else {
                     // Remove the existing bookingId property for new bookings
@@ -131,7 +153,7 @@ const Bookings = () => {
 
                     const createBookingLocationPromise = _locationIds.map((location) => {
                         const newBookingLocation = { bookingId: _bookingId, locationId: location };
-                        return bookingLocationService.createBookingLocation(newBookingLocation);
+                        return bookingLocationService.updateBookingLocation(_bookingId, location, newBookingLocation);
                     });
                     
                     await Promise.all(createBookingLocationPromise);

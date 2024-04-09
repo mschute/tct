@@ -13,16 +13,16 @@ const service = {
         }
     },
 
-    getSpecificBookingLocation: async (bookingId, locationId) => {
-        try {
-            const response = await axios.get(`${API_URL}/${bookingId}/${locationId}`)
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching bookings: ${error.message}`);
-        }
-    },
+    // getSpecificBookingLocation: async (bookingId, locationId) => {
+    //     try {
+    //         const response = await axios.get(`${API_URL}/${bookingId}/${locationId}`)
+    //         return response.data;
+    //     } catch (error) {
+    //         throw new Error(`Error fetching bookings: ${error.message}`);
+    //     }
+    // },
 
-    GetBookingLocationsByBookingId: async (bookingId) => {
+    getSpecificBookingLocation: async (bookingId) => {
         try {
             const response = await axios.get(`${API_URL}/${bookingId}`)
             return response.data;
@@ -30,6 +30,15 @@ const service = {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
+
+    // GetBookingLocationsByBookingId: async (bookingId) => {
+    //     try {
+    //         const response = await axios.get(`${API_URL}/${bookingId}`)
+    //         return response.data;
+    //     } catch (error) {
+    //         throw new Error(`Error fetching bookings: ${error.message}`);
+    //     }
+    // },
 
     createBookingLocation: async (newBookingLocation) => {
         try {
@@ -51,7 +60,7 @@ const service = {
 
     deleteBookingLocation: async (bookingId, locationId) => {
         try {
-            const response = await axios.delete(`${API_URL}/${bookingId}/${locationId}`)
+            const response = await axios.delete(`${API_URL}/${bookingId/locationId}`)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
