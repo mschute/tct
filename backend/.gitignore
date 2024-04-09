@@ -412,7 +412,3 @@ FodyWeavers.xsd
 *.txt
 *.Assemblyinfo.cs
 .json
-
-# Database temp files
-.db-shm
-.db-wal
