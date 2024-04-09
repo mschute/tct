@@ -6,7 +6,6 @@ import vehicleService from "../service/VehicleService";
 import customerService from "../service/CustomerService";
 import driverService from "../service/DriverService";
 import locationService from "../service/LocationService";
-import BookingLocationService from "../service/BookingLocationService";
 import service from "../service/BookingService";
 import bookingLocationService from "../service/BookingLocationService";
 
@@ -32,7 +31,6 @@ const Bookings = () => {
     const fetchBookings = async () => {
         try {
             const bookingsData = await service.getBookings();
-            console.log(`This is bookings data ${JSON.stringify(bookingsData)}`)
             setSelectedBooking(null);
             setEditingBooking(null);
             setBookings(bookingsData);
@@ -125,20 +123,18 @@ const Bookings = () => {
                 } else {
                     // Remove the existing bookingId property for new bookings
                     const { bookingId, ...newBooking } = editingBooking;
-                    console.log('Creating new booking:', newBooking);
-                    
-                    //const createdBooking = await service.createBooking(newBooking);
-                    // const createdBooking = await service.createBooking(newBooking);
 
-                    await service.createBooking(newBooking);
+                    const createdBooking = await service.createBooking(newBooking);
                     
-                    // const _bookingId = createdBooking.bookingId;
-                    // const _locationIds = newBooking.locationIds;
-                    //
-                    // _locationIds.forEach((location) => {
-                    //     const newBookingLocation = {bookingId: _bookingId, locationId: location}
-                    //     bookingLocationService.createBookingLocation(newBookingLocation)
-                    // })
+                    const _bookingId = createdBooking.bookingId;
+                    const _locationIds = newBooking.locationIds;
+
+                    const createBookingLocationPromise = _locationIds.map((location) => {
+                        const newBookingLocation = { bookingId: _bookingId, locationId: location };
+                        return bookingLocationService.createBookingLocation(newBookingLocation);
+                    });
+                    
+                    await Promise.all(createBookingLocationPromise);
                 }
                 fetchBookings();
             }

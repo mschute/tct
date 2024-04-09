@@ -137,12 +137,7 @@ namespace backend.Controllers
                     return BadRequest();
                 }
 
-                //_context.Entry(booking).State = EntityState.Modified;
-                
-                var existingBooking = await _context.Bookings
-                    .Include(b => b.BookingLocations)
-                    .ThenInclude(bl => bl.Location)
-                    .FirstOrDefaultAsync(b => b.BookingId == id);
+                _context.Entry(booking).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
                 
