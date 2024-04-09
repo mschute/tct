@@ -41,6 +41,48 @@ namespace backend.Controllers
                 return StatusCode(500, $"Failed with error: {ex}");
             }
         }
+        
+        // GET: api/BookingLocation/bookingId
+        // Retrieve booking locations by booking Id
+        [HttpGet("{bookingId}")]
+        public async Task<ActionResult<IEnumerable<BookingLocation>>> GetBookingLocationsByBookingId([FromRoute] int bookingId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogErrorEx($"Invalid request");
+                    return BadRequest(ModelState);
+                }
+                
+                var bookingLocations = await _context.BookingLocations
+                    .Where(bl => bl.BookingId == bookingId)
+                    .ToListAsync();
+
+                if (bookingLocations == null)
+                {
+                    _logger.LogErrorEx($"Booking {bookingId}");
+                    return NotFound($"Booking {bookingId}");
+                }
+
+                _logger.LogInformationEx($"Booking {bookingId}");
+                return Ok(bookingLocations);
+                    
+                if (bookingLocations == null || !bookingLocations.Any())
+                {
+                    _logger.LogErrorEx($"Booking {bookingId} has no associated locations");
+                    return NotFound($"Booking {bookingId} has no associated locations");
+                }
+                
+                _logger.LogInformationEx($"Booking {bookingId} locations retrieved successfully");
+                return Ok(bookingLocations);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorEx($"Failed with error: {ex}");
+                return StatusCode(500, $"Failed with error: {ex}");
+            }
+        }
 
         // GET: api/BookingLocation/bookingId/locationId
         // Retrieve specific booking location
@@ -158,9 +200,9 @@ namespace backend.Controllers
             }
         }
 
-        // DELETE: api/BookingLocation/5
+        // DELETE: api/BookingLocation/bookingId/locationId
         // Delete specific booking
-        [HttpDelete("{id}")]
+        [HttpDelete("{bookingId}/{locationId}")]
         //[Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> DeleteBookingLocation([FromRoute] int bookingId, [FromRoute] int locationId)
         {
