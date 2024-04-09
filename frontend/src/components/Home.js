@@ -11,7 +11,7 @@ const Home = () => {
             <Header/>
             <main>
                 <Hero/>
-                <div>
+                <div className="lg">
                     <h2>
                         Our Service
                     </h2>
@@ -19,7 +19,7 @@ const Home = () => {
                         WORDS!
                     </p>
                 </div>
-                <div>
+                <div className="lg">
                     <h2>
                         About us
                     </h2>
