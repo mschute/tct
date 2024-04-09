@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using backend.Helpers;
 using backend.Models;
+using backend.DTOs;
 
 namespace backend.Controllers
 {
@@ -24,14 +26,33 @@ namespace backend.Controllers
         // Retrieve all bookings
         //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookings()
         {
             try
             {
-                var bookings = await _context.Bookings.ToListAsync();
+                var bookingsWithLocations = await _context.Bookings
+                    .Include(b => b.BookingLocations)
+                        //.ThenInclude(bl => bl.LocationId)
+                    .ToListAsync();
+
+                var bookingDTOs = bookingsWithLocations.Select(booking =>
+                {
+                    var LocationIds = booking.BookingLocations.Select(bl => bl.LocationId).ToList();
+
+                    return new BookingDTO
+                    {
+                        BookingId = booking.BookingId,
+                        TotalPrice = booking.TotalPrice,
+                        Date = booking.Date,
+                        VehicleId = booking.VehicleId,
+                        DriverId = booking.DriverId,
+                        CustomerId = booking.CustomerId,
+                        LocationIds = booking.BookingLocations.Select(bl => bl.LocationId).ToList(),
+                    };
+                });
             
                 _logger.LogInformationEx("Successfully retrieved Bookings");
-                return Ok(bookings);
+                return Ok(bookingDTOs);
             }
             catch (Exception ex)
             {
@@ -53,8 +74,12 @@ namespace backend.Controllers
                     _logger.LogErrorEx($"Invalid request");
                     return BadRequest(ModelState);
                 }
-                
+
                 var booking = await _context.Bookings.FindAsync(id);
+                // var bookingWithLocations = await _context.Bookings
+                //     .Include(b => b.BookingLocations)
+                //     .ThenInclude(bl => bl.Locations)
+                //     .FindAsync(b => b.Id == id);
 
                 if (booking == null)
                 {
@@ -92,7 +117,12 @@ namespace backend.Controllers
                     return BadRequest();
                 }
 
-                _context.Entry(booking).State = EntityState.Modified;
+                //_context.Entry(booking).State = EntityState.Modified;
+                
+                var existingBooking = await _context.Bookings
+                    .Include(b => b.BookingLocations)
+                    .ThenInclude(bl => bl.Location)
+                    .FirstOrDefaultAsync(b => b.BookingId == id);
 
                 await _context.SaveChangesAsync();
                 
