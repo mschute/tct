@@ -32,25 +32,30 @@ namespace backend.Controllers
             {
                 var bookingsWithLocations = await _context.Bookings
                     .Include(b => b.BookingLocations)
-                        //.ThenInclude(bl => bl.LocationId)
+                    .ThenInclude(bl => bl.Location)
+                    //.Include(b => b.Vehicle)
                     .ToListAsync();
 
                 var bookingDTOs = bookingsWithLocations.Select(booking =>
                 {
                     var LocationIds = booking.BookingLocations.Select(bl => bl.LocationId).ToList();
+                    //var vehicle = Vehicle.FindAsync(booking.VehicleId);
 
                     return new BookingDTO
                     {
                         BookingId = booking.BookingId,
                         TotalPrice = booking.TotalPrice,
                         Date = booking.Date,
+                        //VehicleId = booking.vehicle?.make,
                         VehicleId = booking.VehicleId,
                         DriverId = booking.DriverId,
                         CustomerId = booking.CustomerId,
-                        LocationIds = booking.BookingLocations.Select(bl => bl.LocationId).ToList(),
+                        LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
                     };
                 });
-            
+
+                //var results = await Task.WhenAll(bookingDTOs);
+                
                 _logger.LogInformationEx("Successfully retrieved Bookings");
                 return Ok(bookingDTOs);
             }

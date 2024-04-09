@@ -8,5 +8,5 @@ public class BookingDTO
     public int VehicleId { get; set; }
     public int DriverId { get; set; }
     public int CustomerId { get; set; }
-    public ICollection<int> LocationIds { get; set; }
+    public ICollection<string> LocationNames { get; set; }
 }
