@@ -412,3 +412,5 @@ FodyWeavers.xsd
 *.txt
 *.Assemblyinfo.cs
 .json
+.db-shm
+.db-wal
