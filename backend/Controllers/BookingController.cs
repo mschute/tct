@@ -32,7 +32,7 @@ namespace backend.Controllers
             {
                 var bookingsWithLocations = await _context.Bookings
                     .Include(b => b.BookingLocations)
-                    .ThenInclude(bl => bl.Location)
+                        .ThenInclude(bl => bl.Location)
                     .Include(b => b.Vehicle)
                     .Include(d => d.Driver)
                     .Include(c => c.Customer)
@@ -71,7 +71,7 @@ namespace backend.Controllers
         // Retrieve specific bookings
         //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Booking>> GetBooking(int id)
+        public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
             try
             {
@@ -81,17 +81,34 @@ namespace backend.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var booking = await _context.Bookings.FindAsync(id);
+                var booking = await _context.Bookings
+                    .Include(b => b.BookingLocations)
+                        .ThenInclude(bl => bl.Location)
+                    .Include(b => b.Vehicle)
+                    .Include(b => b.Customer)
+                    .Include(b => b.Driver)
+                    .FirstOrDefaultAsync(b => b.BookingId == id);
 
-
+                
                 if (booking == null)
                 {
                     _logger.LogErrorEx($"Error, booking {id} not found.");
                     return NotFound();
                 }
-
+                
+                var bookingDTO = new BookingDTO
+                {
+                    BookingId = booking.BookingId,
+                    TotalPrice = booking.TotalPrice,
+                    Date = booking.Date,
+                    VehicleName = booking.Vehicle != null ? $"{booking.Vehicle.Make} {booking.Vehicle.Model}" : null,
+                    DriverName = booking.Driver != null ? $"{booking.Driver.FirstName} {booking.Driver.LastName}" : null,
+                    CustomerName = booking.Customer != null ? $"{booking.Customer.FirstName} {booking.Customer.LastName}" : null,
+                    LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
+                };
+                
                 _logger.LogInformationEx($"Booking {id} retrieved successfully.");
-                return Ok(booking);
+                return Ok(bookingDTO);
             }
             catch (Exception ex)
             {
