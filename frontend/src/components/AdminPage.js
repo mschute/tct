@@ -3,16 +3,18 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const AdminPage = () => {
-    <div>
-        <Header/>
+    return (
         <div>
-            <h2>
-                Our Service
-            </h2>
-            <p> Words!</p>
+            <Header/>
+            <div>
+                <h2>
+                    Admin
+                </h2>
+                <p> Here are your Admin pages!</p>
+            </div>
+            <Footer/>
         </div>
-        <Footer/>
-    </div>
+    );
 }
 
 export default AdminPage;

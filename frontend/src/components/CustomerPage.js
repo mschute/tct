@@ -3,16 +3,18 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const CustomerPage = () => {
-    <div>
-        <Header/>
+    return (
         <div>
-            <h2>
-                Our Service
-            </h2>
-            <p> Words!</p>
+            <Header/>
+            <div>
+                <h2>
+                    Customers
+                </h2>
+                <p> Check out the form!</p>
+            </div>
+            <Footer/>
         </div>
-        <Footer/>
-    </div>
+    );
 }
 
 export default CustomerPage;
