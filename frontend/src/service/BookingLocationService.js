@@ -60,7 +60,7 @@ const service = {
 
     deleteBookingLocation: async (bookingId, locationId) => {
         try {
-            const response = await axios.delete(`${API_URL}/${bookingId/locationId}`)
+            const response = await axios.delete(`${API_URL}/${bookingId}/${locationId}`)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);

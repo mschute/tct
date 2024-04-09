@@ -136,11 +136,11 @@ const Bookings = () => {
                     const deleteBookingLocationPromises = locationsToRemove.map(locationId => {
                         const bookingLocation = existingBookingLocations.find(location => location.locationId === locationId);
                         if (bookingLocation) {
-                            const bookingLocationId = editingBooking.bookingId + locationId;
-                            return bookingLocationService.deleteBookingLocation(bookingLocationId);
+                            return bookingLocationService.deleteBookingLocation(editingBooking.bookingId, locationId);
                         }
-                        return Promise.resolve();
                     });
+
+                    await Promise.all([...createBookingLocationPromises, ...deleteBookingLocationPromises]);
 
                 } else {
                     // Remove the existing bookingId property for new bookings
