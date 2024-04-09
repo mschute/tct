@@ -153,7 +153,7 @@ const Bookings = () => {
 
                     const createBookingLocationPromise = _locationIds.map((location) => {
                         const newBookingLocation = { bookingId: _bookingId, locationId: location };
-                        return bookingLocationService.updateBookingLocation(_bookingId, location, newBookingLocation);
+                        return bookingLocationService.createBookingLocation(newBookingLocation);
                     });
                     
                     await Promise.all(createBookingLocationPromise);
