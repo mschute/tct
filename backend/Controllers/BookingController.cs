@@ -33,28 +33,29 @@ namespace backend.Controllers
                 var bookingsWithLocations = await _context.Bookings
                     .Include(b => b.BookingLocations)
                     .ThenInclude(bl => bl.Location)
-                    //.Include(b => b.Vehicle)
+                    .Include(b => b.Vehicle)
+                    .Include(d => d.Driver)
+                    .Include(c => c.Customer)
                     .ToListAsync();
 
-                var bookingDTOs = bookingsWithLocations.Select(booking =>
+                var bookingDTOs = await Task.WhenAll(bookingsWithLocations.Select(async booking =>
                 {
                     var LocationIds = booking.BookingLocations.Select(bl => bl.LocationId).ToList();
-                    //var vehicle = Vehicle.FindAsync(booking.VehicleId);
+                    var vehicle = await _context.Vehicles.FindAsync(booking.VehicleId);
+                    var driver = await _context.Drivers.FindAsync(booking.DriverId);
+                    var customer = await _context.Customers.FindAsync(booking.CustomerId);
 
                     return new BookingDTO
                     {
                         BookingId = booking.BookingId,
                         TotalPrice = booking.TotalPrice,
                         Date = booking.Date,
-                        //VehicleId = booking.vehicle?.make,
-                        VehicleId = booking.VehicleId,
-                        DriverId = booking.DriverId,
-                        CustomerId = booking.CustomerId,
+                        VehicleName = vehicle != null? $"{vehicle.Make} {vehicle.Model}" : null,
+                        DriverName = driver != null? $"{driver.FirstName} {driver.LastName}" : null,
+                        CustomerName = vehicle != null? $"{customer.FirstName} {customer.LastName}" : null,
                         LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
                     };
-                });
-
-                //var results = await Task.WhenAll(bookingDTOs);
+                }));
                 
                 _logger.LogInformationEx("Successfully retrieved Bookings");
                 return Ok(bookingDTOs);
@@ -81,10 +82,7 @@ namespace backend.Controllers
                 }
 
                 var booking = await _context.Bookings.FindAsync(id);
-                // var bookingWithLocations = await _context.Bookings
-                //     .Include(b => b.BookingLocations)
-                //     .ThenInclude(bl => bl.Locations)
-                //     .FindAsync(b => b.Id == id);
+
 
                 if (booking == null)
                 {
