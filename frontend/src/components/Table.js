@@ -23,7 +23,15 @@ const Table = ({ model, handleEdit, handleDelete }) => {
                 {model.map((entry, rowIndex) => (
                     <tr key={rowIndex}>
                         {attributeNames.map((attributeName, colIndex) => (
-                            <td key={colIndex}>{entry[attributeName]}</td>
+                            <td key={colIndex}>
+                                {Array.isArray(entry[attributeName]) ? (
+                                    entry[attributeName].map((item, index) => (
+                                        <div key={index}>{item}</div>
+                                    ))
+                                ) : (
+                                    entry[attributeName]
+                                )}
+                            </td>
                         ))}
                         <td>
                             <button onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>
