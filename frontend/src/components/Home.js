@@ -59,9 +59,7 @@ const Home = () => {
                         <h2 className='section-text section-text-title'>
                             Itinerary Planner
                         </h2>
-                        <p className='section-text section-text-paragraph'>
-                            WORDS!
-                        </p>
+                        <Map />
                     </div>
                     <ContactForm className="section-background section-background-even"/>
                 </main>
