@@ -25,7 +25,7 @@ const Header = () => {
                                 onMouseEnter={handleDropdownToggle}
                                 onMouseLeave={handleDropdownToggle}
                             >
-                                <LinkContainer to="/home">
+                                <LinkContainer to="/">
                                     <NavDropdown.Item>
                                         Home
                                     </NavDropdown.Item>
