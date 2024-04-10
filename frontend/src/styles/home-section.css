@@ -1,0 +1,29 @@
+.section-background {
+    max-width: 100%;
+    padding: 10%;
+}
+
+.section-background-even {
+    background-color: #0b1b28;
+    color: #f9f0e7;
+}
+
+.section-background-odd {
+    background-color: #f9f0e7;
+    color: #0b1b28;
+}
+
+
+
+.section-text {
+    text-align: center;
+}
+
+.section-text-title{
+    padding: 1rem;
+}
+
+.section-text-paragraph{
+    padding: 1rem;
+}
+
