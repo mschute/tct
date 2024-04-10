@@ -69,8 +69,8 @@ const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handle
                     </div>
                 ))}
                 <div className='button-container'>
-                    <button type="submit" className='form-submit'>Save</button>
-                    <button type="button" onClick={handleCancel} className='form-cancel'>Cancel</button>
+                    <button type="submit" className='primary-button'>Save</button>
+                    <button type="button" onClick={handleCancel} className='secondary-button'>Cancel</button>
                 </div>
 
             </form>

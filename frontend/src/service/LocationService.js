@@ -7,7 +7,6 @@ const service = {
     getLocations: async () => {
         try {
             const response = await axios.get(`${API_URL}`)
-            console.log(`This is the locations: ${JSON.stringify(response.data)}`)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching locations: ${error.message}`);

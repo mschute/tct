@@ -35,7 +35,7 @@ const Table = ({ model, handleEdit, handleDelete }) => {
                         ))}
                         <td>
                             <button className='primary-button' onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>
-                            <button onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>
+                            <button className="delete-button" onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>
                         </td>
                     </tr>
                 ))}

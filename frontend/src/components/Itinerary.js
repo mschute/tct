@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import ItineraryForm from "./ItineraryForm";
 
-const Itinerary = () => {
+const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange, selectedStartDate, selectedEndDate }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -105,6 +105,11 @@ const Itinerary = () => {
             {/*)}*/}
             {/*<button onClick={handleCreate}>Add new</button>*/}
             <ItineraryForm
+                totalTravelTime={totalTravelTime}
+                handleStartDate={handleStartDateChange}
+                handleEndDate={handleEndDateChange}
+                selectedStartDate={selectedStartDate}
+                selectedEndDate={selectedEndDate}
                 // handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
             />
            
