@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {InfoWindow, Map, Marker, useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 import '@react-google-maps/api'
-import "./MapComponent.css";
+import "../styles/MapComponent.css";
 import DateInput from "./DateInput";
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
