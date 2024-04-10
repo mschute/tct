@@ -1,16 +1,24 @@
 import React from 'react';
 import Header from "./Header";
 import Footer from "./Footer";
+import Booking from "./Booking";
+import Vehicles from "./Vehicle";
+import Locations from "./Location";
+import '../styles/BasicPage.css';
 
 const AdminPage = () => {
     return (
-        <div>
+        <div className='page-dimensions'>
             <Header/>
             <div>
-                <h2>
+                <h2 className='title'>
                     Admin
                 </h2>
-                <p> Here are your Admin pages!</p>
+                <Booking />
+                <br/>
+                <Vehicles/>
+                <br/>
+                <Locations />
             </div>
             <Footer/>
         </div>

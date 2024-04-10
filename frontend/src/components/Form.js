@@ -1,17 +1,19 @@
 import React from 'react';
+import '../styles/Form.css';
 
 const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handleCancel}) => {
 
     return (
-        <div>
-            <h2>{modelName} Form</h2>
+        <div className='form-container'>
+            <h2 className='form-title'>{modelName} Form</h2>
             <form onSubmit={handleSubmit}>
                 {fields.map(({name, value, label, type, disabled, min, step, options}) => (
                     <div key={name}>
-                        <label>
+                        <label className='form-label'>
                             {label}:
                             {type === "select" ? (
                                 <select
+                                    className='form-select'
                                     name={name}
                                     value={value}
                                     onChange={handleInputChange}
@@ -52,6 +54,7 @@ const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handle
                                 </select>
                             ) : (
                                 <input
+                                    className='form-input'
                                     type={type}
                                     name={name}
                                     value={value}
@@ -65,8 +68,11 @@ const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handle
                         <br/>
                     </div>
                 ))}
-                <button type="submit">Save</button>
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <div className='button-container'>
+                    <button type="submit" className='form-submit'>Save</button>
+                    <button type="button" onClick={handleCancel} className='form-cancel'>Cancel</button>
+                </div>
+
             </form>
         </div>
     );

@@ -9,8 +9,8 @@ const Table = ({ model, handleEdit, handleDelete }) => {
     console.log(attributeNames);
     
     return (
-        <div>
-            <table>
+        <div className='table-container'>
+            <table className='table'>
                 <thead>
                 <tr>
                     {attributeNames.map((attributeName, index) => (
@@ -34,7 +34,7 @@ const Table = ({ model, handleEdit, handleDelete }) => {
                             </td>
                         ))}
                         <td>
-                            <button onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>
+                            <button className='primary-button' onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>
                             <button onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>
                         </td>
                     </tr>
