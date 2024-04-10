@@ -8,14 +8,15 @@ import SignUp from './components/SignUp';
 
 function App() {
     return (
+        //TODO BUG WITH NAVIGATION BACK TO HOME
             <BrowserRouter>
                 <div>
                     <Routes>
-                        <Route path="/" element={<Home/>}/>
-                        <Route path="/customerpage" element={<CustomerPage/>}/>
-                        <Route path="/adminpage" element={<AdminPage/>}/>
-                        <Route path="/signin" element={<SignIn/>}/>
-                        <Route path="/signup" element={<SignUp/>}/>
+                        <Route path="/" element={<Home/>} exact/>
+                        <Route path="/customerpage" element={<CustomerPage/>} exact/>
+                        <Route path="/adminpage" element={<AdminPage/>} exact/>
+                        <Route path="/signin" element={<SignIn/>} exact/>
+                        <Route path="/signup" element={<SignUp/>} exact/>
                     </Routes>
                 </div>
             </BrowserRouter>

@@ -117,6 +117,7 @@ const Bookings = () => {
 
             if (editingBooking) {
                 if (editingBooking.bookingId) {
+                    //TODO Need to extract booking location logic out
                     console.log('Updating existing booking:', editingBooking);
                     
                     await service.updateBooking(editingBooking.bookingId, editingBooking);
@@ -143,7 +144,7 @@ const Bookings = () => {
                     await Promise.all([...createBookingLocationPromises, ...deleteBookingLocationPromises]);
 
                 } else {
-                    // Remove the existing bookingId property for new bookings
+                    //TODO Need to extract booking location logic out
                     const { bookingId, ...newBooking } = editingBooking;
 
                     const createdBooking = await service.createBooking(newBooking);

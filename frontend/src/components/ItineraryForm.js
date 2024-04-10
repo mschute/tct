@@ -1,5 +1,4 @@
 import React from 'react';
-import DateInput from "./DateInput";
 
 const ItineraryForm = ({totalTravelTime, handleStartDateChange, handleEndDateChange, selectedStartDate, selectedEndDate}) => {
 
