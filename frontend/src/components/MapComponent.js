@@ -3,6 +3,8 @@ import {InfoWindow, Map, Marker, useMap, useMapsLibrary} from '@vis.gl/react-goo
 import '@react-google-maps/api'
 import "../styles/MapComponent.css";
 import DateInput from "./DateInput";
+import ItineraryForm from "./ItineraryForm";
+import Itinerary from "./Itinerary";
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
@@ -274,6 +276,7 @@ const MapComponent = () => {
                 <h4>Total Tour Time</h4>
                 <p>{calcTotalTime()}</p>
             </div>
+            <Itinerary />
         </>
     );
 };
