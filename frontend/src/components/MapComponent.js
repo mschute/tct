@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {InfoWindow, Map, Marker, useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 import '@react-google-maps/api'
 import "../styles/MapComponent.css";
-import DateInput from "./DateInput";
 import Itinerary from "./Itinerary";
 import LocationService from "../service/LocationService";
 import useFetch from '../hooks/useFetch';
+
 
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
@@ -132,9 +132,10 @@ const MapComponent = () => {
                     position: {lat: JSON.parse(location.locationLat), lng: JSON.parse(location.locationLng)},
                     name: location.locationName,
                     address: location.address,
+                    image: `images/${location.locationId}.jpeg`,
                     description: location.locationDescription
                 }));
-
+                
                 setMarkers(newMarkers);
             })();
         }, []);
@@ -251,12 +252,19 @@ const MapComponent = () => {
                     <InfoWindow position={activeMarker?.position} onCloseClick={handleInfoWindowClose}
                                 visible={isInfoWindowOpen}>
                         <div>
-                            <p>
+                            <p className="info-window info-window-name">
                                 {activeMarker?.name}
+                            </p>
+                            <img src={activeMarker?.image} alt="Image of location" className="info-window info-window-image"/>
+                            <p className="info-window info-window-description">
                                 {activeMarker?.description}
                             </p>
+                            <div className="info-window">
+                                <button className="info-window primary-button"
+                                        onClick={handleAddItineraryButtonClick}>Add to Itinerary
+                                </button>
+                            </div>
 
-                            <button onClick={handleAddItineraryButtonClick}>Add to Itinerary</button>
                         </div>
                     </InfoWindow>
 
