@@ -1,0 +1,23 @@
+.parallax-container {
+    position: relative;
+    height: 100vh; /* Adjust as needed */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.parallax-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../public/images/PrayingHandsOfMaryGlenLyon.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.parallax-container .container {
+    padding-top: 10px; /* Adjust as needed */
+    padding-bottom: 100px; /* Adjust as needed */
+}
