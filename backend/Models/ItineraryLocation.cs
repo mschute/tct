@@ -10,9 +10,7 @@ public class ItineraryLocation
     public int LocationId { get; set; }
     [JsonIgnore]
     public Location? Location { get; set; }
-    
-    public int Duration { get; set; }
-    
+    public int StopOver { get; set; }
     public int TravelTimeNextLocale { get; set; }
     
 }

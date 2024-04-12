@@ -43,8 +43,7 @@ const MapComponent = () => {
             setActiveMarker(null)
             setIsInfoWindowOpen(false);
         };
-
-        // Function to handle the button click in the info window
+        
         const handleAddItineraryButtonClick = () => {
             const address = activeMarker.address
 
@@ -189,12 +188,14 @@ const MapComponent = () => {
             }
         }, [tempItineraries]);
 
+        // TODO Set this to setItineraryPickUp
         const ItineraryPickUp = (props) => {
             return <>
                 <p>Pick-up from {props.address} at 12:00</p>
             </>
         }
 
+        // TODO Set this to setItineraryDropOff
         const ItineraryDropOff = (props) => {
             if (itineraries.length > 2) {
                 return (<>
@@ -249,6 +250,7 @@ const MapComponent = () => {
                             onClick={() => handleMarkerClick(marker)}
                         />
                     ))}
+                    
                     <InfoWindow position={activeMarker?.position} onCloseClick={handleInfoWindowClose}
                                 visible={isInfoWindowOpen}>
                         <div>
@@ -268,7 +270,6 @@ const MapComponent = () => {
                         </div>
                     </InfoWindow>
 
-                    {/*TODO Need to update Marker to AdvancedMarker*/}
                     {markers.map((marker, index) => (
                         <Marker
                             key={marker.index}
@@ -280,8 +281,8 @@ const MapComponent = () => {
 
                 </Map>
                 <div>
-                    <h4>Itinerary</h4>
-                    {itineraries.length < 3 && <p>Please add a location from the map</p>}
+                    <h3>Itinerary Form</h3>
+                    {itineraries.length < 3 && <p>To plan your itinerary, please explore the selection of destinations on the map. When you click on a marker, it will open an info window describing the location. You acn then add the location to the itinerary. Please add a starting date and time. Feel free to add an amount of time you would like to stop over at that location. The total journey time will automatically be calculated. The pick-up and drop-off location are already determined. Feel free to add any other destination you would like.</p>}
                     {}
                     {itineraries.map((itinerary, index) => (
                         <ItineraryRow
@@ -295,6 +296,7 @@ const MapComponent = () => {
                     {}
                 </div>
 
+                {/*//TODO Pass itineraries down the chain*/}
                 <Itinerary
                     totalTravelTime={totalTravelTime}
                     handleStartDateChange={handleStartDateChange}

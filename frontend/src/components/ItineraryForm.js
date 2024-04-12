@@ -4,7 +4,6 @@ const ItineraryForm = ({totalTravelTime, handleStartDateChange, handleEndDateCha
 
     return (
         <div>
-            <h2>Itinerary Form</h2>
             <form>
                 <table>
                     <thead>
@@ -94,8 +93,7 @@ const ItineraryForm = ({totalTravelTime, handleStartDateChange, handleEndDateCha
             {/*<button type="button" onClick={handleCancel}>Cancel</button>*/
             }
         </div>
-    )
-        ;
+    );
 };
 
 export default ItineraryForm;

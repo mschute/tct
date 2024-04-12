@@ -11,5 +11,8 @@ public class Customer
     public string? Nationality { get; set; }
     
     [JsonIgnore]
-    public ICollection<Booking>? Bookings { get; set; }
+    public ICollection<Booking>? Bookings { get; set; } 
+    
+    [JsonIgnore]
+    public ICollection<Itinerary>? Itineraries { get; set; } 
 }

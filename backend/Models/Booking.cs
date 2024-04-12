@@ -6,7 +6,9 @@ public class Booking
 {
     public int BookingId { get; set; }
     public decimal TotalPrice { get; set; }
-    public DateTime Date { get; set; }
+    public DateOnly TripDate { get; set; }
+    public TimeOnly TripStartTime { get; set; }
+    public TimeOnly TripEndTime { get; set; }
     public int VehicleId { get; set; }
     public Vehicle? Vehicle { get; set; }
     public int DriverId { get; set; }
