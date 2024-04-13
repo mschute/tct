@@ -43,6 +43,7 @@ const service = {
     deleteLocation: async (locationId) => {
         try {
             const response = await axios.delete(`${API_URL}/${locationId}`)
+            console.log("delete locations " + response.data)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching locations: ${error.message}`);

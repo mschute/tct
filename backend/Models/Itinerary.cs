@@ -11,7 +11,6 @@ public class Itinerary
     public int PassengerCount { get; set; }
     public int? CustomerId { get; set; }
     public Customer? Customer { get; set; }
-    
-    [JsonIgnore]
+    public string ItineraryNotes { get; set; }
     public ICollection<ItineraryLocation>? ItineraryLocations { get; set; }
 }

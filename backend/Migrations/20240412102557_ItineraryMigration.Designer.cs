@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Models;
 
@@ -10,9 +11,11 @@ using backend.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(TCTravelContext))]
-    partial class TCTravelContextModelSnapshot : ModelSnapshot
+    [Migration("20240412102557_ItineraryMigration")]
+    partial class ItineraryMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -22,10 +25,6 @@ namespace backend.Migrations
                     b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("BookingNotes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("INTEGER");
@@ -65,6 +64,9 @@ namespace backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("LocationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StopOver")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("BookingId", "LocationId");
@@ -134,10 +136,6 @@ namespace backend.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ItineraryNotes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("PassengerCount")
                         .HasColumnType("INTEGER");
 
@@ -163,9 +161,6 @@ namespace backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("LocationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("StopOrder")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("StopOver")

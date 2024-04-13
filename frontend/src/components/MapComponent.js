@@ -4,33 +4,36 @@ import '@react-google-maps/api'
 import "../styles/MapComponent.css";
 import Itinerary from "./Itinerary";
 import LocationService from "../service/LocationService";
+import ItineraryService from "../service/ItineraryService";
+import ItineraryLocationService from "../service/ItineraryLocationService";
 import useFetch from '../hooks/useFetch';
+import bookingLocationService from "../service/BookingLocationService";
 
 
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
 const MapComponent = () => {
-        const currentDate = new Date().toISOString().slice(0, 16);
-
-        const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
-        const [markerPositions, setMarkerPositions] = useState([]);
-        const [selectedStartDate, setSelectedStartDate] = useState(currentDate)
-        const [selectedEndDate, setSelectedEndDate] = useState(currentDate)
-        const [locationAddress, setLocationAddress] = useState('')
-        const [markers, setMarkers] = useState([])
-        const [activeMarker, setActiveMarker] = useState(null);
-        const [totalTravelTime, setTotalTravelTime] = useState('0 hr and 0 min');
-
-        // https://github.com/visgl/react-google-maps/blob/main/examples/directions/src/app.tsx#L98
         const map = useMap();
         const routesLibrary = useMapsLibrary('routes');
+        // https://github.com/visgl/react-google-maps/blob/main/examples/directions/src/app.tsx#L98
         const [directionsService, setDirectionsService] = useState(null);
         const [directionsRenderer, setDirectionsRenderer] = useState(null);
-
-        // useSetTempItineraries when you want the directionsService to recalculate the route
-        const [itineraries, setItineraries] = useState([])
-        const [tempItineraries, setTempItineraries] = useState([])
+        const [markers, setMarkers] = useState([])
+        const [activeMarker, setActiveMarker] = useState(null);
+        const [markerPositions, setMarkerPositions] = useState([]); // TODO maybe remove
+        const [locationAddress, setLocationAddress] = useState('') // TODO maybe remove
+        const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
+        
+        // Itninerary Data
+    
+        const currentDate = new Date().toISOString().slice(0, 16);
+        const [selectedStartDate, setSelectedStartDate] = useState(currentDate)
+        const [selectedEndDate, setSelectedEndDate] = useState(currentDate)
+        const [itineraryLocations, setItineraryLocations] = useState([])
+        const [itineraryLocationsTemp1, setItineraryLocationsTemp1] = useState([])
+        const [itineraryNote, setItineraryNote] = useState('');
+        const [totalTravelTime, setTotalTravelTime] = useState('0 hr and 0 min');
 
         // Function to handle marker click event
         const handleMarkerClick = (marker) => {
@@ -43,30 +46,30 @@ const MapComponent = () => {
             setActiveMarker(null)
             setIsInfoWindowOpen(false);
         };
-        
+
         const handleAddItineraryButtonClick = () => {
             const address = activeMarker.address
 
-            const isAddressAlreadyAdded = tempItineraries.some((itinerary) => itinerary.address === address)
+            const isAddressAlreadyAdded = itineraryLocationsTemp1.some((itinerary) => itinerary.address === address)
             if (isAddressAlreadyAdded) return;
 
             const newItinerary = activeMarker
             newItinerary.stopTime = 0;
 
-            const insertAt = tempItineraries.length - 1;
-            const newItineraries = [
-                ...tempItineraries.slice(0, insertAt),
+            const insertAt = itineraryLocationsTemp1.length - 1;
+            const newItineraryStops = [
+                ...itineraryLocationsTemp1.slice(0, insertAt),
                 newItinerary,
-                ...tempItineraries.slice(insertAt)];
+                ...itineraryLocationsTemp1.slice(insertAt)];
 
-            setTempItineraries(newItineraries);
+            setItineraryLocationsTemp1(newItineraryStops);
             handleInfoWindowClose();
         };
 
         const handleDeleteItineraryButtonClick = (index) => {
-            const newItinerary = [...itineraries];
+            const newItinerary = [...itineraryLocations];
             newItinerary.splice(index, 1);
-            setTempItineraries(newItinerary);
+            setItineraryLocationsTemp1(newItinerary);
         }
 
         const handleStartDateChange = (event) => {
@@ -80,23 +83,23 @@ const MapComponent = () => {
         }
 
         const handleAddStopTimeHour = (index) => {
-            itineraries[index].stopTime += 15;
-            const newAddedTime = [...itineraries];
+            itineraryLocations[index].stopTime += 15;
+            const newAddedTime = [...itineraryLocations];
 
-            setItineraries(newAddedTime)
+            setItineraryLocations(newAddedTime)
         }
 
         const handleDeleteStopTimeHour = (index) => {
-            if (itineraries[index].stopTime === 0) return;
-            itineraries[index].stopTime -= 15;
-            const newDeletedTime = [...itineraries];
-            setItineraries(newDeletedTime)
+            if (itineraryLocations[index].stopTime === 0) return;
+            itineraryLocations[index].stopTime -= 15;
+            const newDeletedTime = [...itineraryLocations];
+            setItineraryLocations(newDeletedTime)
         }
 
         const calcTotalTime = () => {
             let totalTimeSeconds = 0;
 
-            itineraries.forEach(itinerary => {
+            itineraryLocations.forEach(itinerary => {
                 totalTimeSeconds += itinerary.stopTime * 60 || 0;
 
                 if (itinerary.travelTimeValue) {
@@ -105,8 +108,7 @@ const MapComponent = () => {
             });
             return formatTime(totalTimeSeconds)
         }
-
-
+        
         const formatTime = (totalSeconds) => {
             const hours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -124,6 +126,7 @@ const MapComponent = () => {
 
         useEffect(() => {
             (async () => {
+                console.log("useEffect that calls setMarkers");
                 const response = await LocationService.getLocations();
 
                 const newMarkers = response.map(location => ({
@@ -134,10 +137,67 @@ const MapComponent = () => {
                     image: `images/${location.locationId}.jpeg`,
                     description: location.locationDescription
                 }));
-                
+
                 setMarkers(newMarkers);
             })();
         }, []);
+
+        useEffect(() => {
+            (async () => {
+                const currentDate = new Date();
+                const formattedDate = currentDate.toISOString().slice(0, 10);
+                const formattedTime = currentDate.toTimeString().slice(0, 8);
+
+                try {
+                    const baseItinerary = {
+                        tripDate: formattedDate,
+                        tripStartTime: formattedTime,
+                        tripEndTime: formattedTime,
+                        passengerCount: 1,
+                        itineraryNotes: 'test notes',
+                    };
+                    console.log("The base itinerary: " + JSON.stringify(baseItinerary));
+
+                    const newItinerary = await ItineraryService.createItinerary(baseItinerary);
+                    console.log("This is the new Itinerary: " + JSON.stringify(newItinerary));
+                    const pickUpLocation = await LocationService.getSpecificLocation(1);
+                    console.log("Pick up location: " + JSON.stringify(pickUpLocation))
+                    console.log("Pick up location id " + JSON.stringify(pickUpLocation.locationId))
+                    console.log("New Itinerary, itinerary ID: " + JSON.stringify(newItinerary.itineraryId))
+                    const pickUpItineraryLocation = {
+                        itineraryId: newItinerary.itineraryId,
+                        locationId: pickUpLocation.locationId,
+                        stopOver: 0,
+                        stopOrder: 1,
+                        travelTimeNextLocale: 0,
+                    };
+                    console.log("Pick Up Itinerary Location: " + JSON.stringify(pickUpItineraryLocation));
+                    const dropOffLocation = await LocationService.getSpecificLocation(2);
+                    const dropOffItineraryLocation =
+                        {
+                            itineraryId: newItinerary.itineraryId,
+                            locationId: dropOffLocation.locationId,
+                            stopOver: 0,
+                            stopOrder: 2,
+                            travelTimeNextLocale: 0,
+                        };
+
+                    await Promise.all([
+                        ItineraryLocationService.createItineraryLocation(pickUpItineraryLocation),
+                        ItineraryLocationService.createItineraryLocation(dropOffItineraryLocation)
+                    ])
+
+                    // await ItineraryLocationService.createItineraryLocation(pickUpItineraryLocation);
+                    // await ItineraryLocationService.createItineraryLocation(dropOffItineraryLocation);
+
+                    setItineraryLocations(newItinerary);
+                    console.log("This is the new itinerary: " + JSON.stringify(newItinerary));
+                } catch (error) {
+                    console.error('Error creating base itinerary:', error);
+                }
+            })();
+        }, []);
+        
 
 
 // Use directions service
@@ -145,22 +205,22 @@ const MapComponent = () => {
             if (!directionsRenderer) return;
             if (!directionsService) return;
 
-            if (tempItineraries.length < 3) {
-                setItineraries(tempItineraries);
+            if (itineraryLocationsTemp1.length < 3) {
+                setItineraryLocations(itineraryLocationsTemp1);
                 return;
             }
 
-            const origin = {location: {lat: tempItineraries[0].position.lat, lng: tempItineraries[0].position.lng}};
+            const origin = {location: {lat: itineraryLocationsTemp1[0].position.lat, lng: itineraryLocationsTemp1[0].position.lng}};
             const destination = {
                 location: {
-                    lat: tempItineraries[tempItineraries.length - 1].position.lat,
-                    lng: tempItineraries[tempItineraries.length - 1].position.lng
+                    lat: itineraryLocationsTemp1[itineraryLocationsTemp1.length - 1].position.lat,
+                    lng: itineraryLocationsTemp1[itineraryLocationsTemp1.length - 1].position.lng
                 }
             };
 
             const waypoints = [];
-            for (let i = 1; i < tempItineraries.length - 1; i++) {
-                waypoints.push({location: {lat: tempItineraries[i].position.lat, lng: tempItineraries[i].position.lng}});
+            for (let i = 1; i < itineraryLocationsTemp1.length - 1; i++) {
+                waypoints.push({location: {lat: itineraryLocationsTemp1[i].position.lat, lng: itineraryLocationsTemp1[i].position.lng}});
             }
 
             const travelMode = 'DRIVING';
@@ -174,11 +234,11 @@ const MapComponent = () => {
 
                     const legs = response.routes[0].legs;
                     for (let i = 0; i < legs.length; i++) {
-                        tempItineraries[i + 1].travelTime = legs[i].duration.text;
-                        tempItineraries[i + 1].travelTimeValue = legs[i].duration.value;
+                        itineraryLocationsTemp1[i + 1].travelTime = legs[i].duration.text;
+                        itineraryLocationsTemp1[i + 1].travelTimeValue = legs[i].duration.value;
 
                     }
-                    setItineraries(tempItineraries);
+                    setItineraryLocations(itineraryLocationsTemp1);
                     const totalTime = calcTotalTime();
                     setTotalTravelTime(totalTime);
                 });
@@ -186,27 +246,19 @@ const MapComponent = () => {
             return () => {
                 directionsRenderer.setMap(null);
             }
-        }, [tempItineraries]);
+        }, [itineraryLocationsTemp1]);
 
-        // TODO Set this to setItineraryPickUp
-        const ItineraryPickUp = (props) => {
-            return <>
-                <p>Pick-up from {props.address} at 12:00</p>
-            </>
-        }
+        // const setItineraryPickUp = async () => {
+        //     const pickUpLocation = await LocationService.getSpecificLocation(1);
+        //     setItinerary(pickUpLocation);
+        // }
+        //
+        // // TODO Set this to setItineraryDropOff
+        // const setItineraryDropOff = async () => {
+        //     const dropOffLocation = await LocationService.getSpecificLocation(2);
+        //     setItinerary(dropOffLocation);
+        // }
 
-        // TODO Set this to setItineraryDropOff
-        const ItineraryDropOff = (props) => {
-            if (itineraries.length > 2) {
-                return (<>
-                    <p>Drop-off to {props.address} travel-time={props.travelTime}</p>
-                </>)
-            }
-
-            return (<>
-                <p>Drop-off to {props.address}</p>
-            </>)
-        }
 
         const ItineraryRemovable = (props) => {
             return (<>
@@ -219,14 +271,14 @@ const MapComponent = () => {
             </>)
         }
 
-        const ItineraryRow = (props) => {
-            if (props.index === 0) return <ItineraryPickUp address={props.address} stopTime={props.stopTime}/>;
-            if (props.index === itineraries.length - 1) return <ItineraryDropOff address={props.address}
-                                                                                 stopTime={props.stopTime}
-                                                                                 travelTime={props.travelTime}/>;
-            return <ItineraryRemovable address={props.address} stopTime={props.stopTime} index={props.index}
-                                       travelTime={props.travelTime}/>;
-        }
+        // const ItineraryRow = (props) => {
+        //     if (props.index === 0) return <ItineraryPickUp address={props.address} stopTime={props.stopTime}/>;
+        //     if (props.index === Itinerary.length - 1) return <ItineraryDropOff address={props.address}
+        //                                                                          stopTime={props.stopTime}
+        //                                                                          travelTime={props.travelTime}/>;
+        //     return <ItineraryRemovable address={props.address} stopTime={props.stopTime} index={props.index}
+        //                                travelTime={props.travelTime}/>;
+        // }
 
 // TODO Need to add handleFormSubmit
 
@@ -250,14 +302,15 @@ const MapComponent = () => {
                             onClick={() => handleMarkerClick(marker)}
                         />
                     ))}
-                    
+
                     <InfoWindow position={activeMarker?.position} onCloseClick={handleInfoWindowClose}
                                 visible={isInfoWindowOpen}>
                         <div>
                             <p className="info-window info-window-name">
                                 {activeMarker?.name}
                             </p>
-                            <img src={activeMarker?.image} alt="Image of location" className="info-window info-window-image"/>
+                            <img src={activeMarker?.image} alt="Image of location"
+                                 className="info-window info-window-image"/>
                             <p className="info-window info-window-description">
                                 {activeMarker?.description}
                             </p>
@@ -282,27 +335,36 @@ const MapComponent = () => {
                 </Map>
                 <div>
                     <h3>Itinerary Form</h3>
-                    {itineraries.length < 3 && <p>To plan your itinerary, please explore the selection of destinations on the map. When you click on a marker, it will open an info window describing the location. You acn then add the location to the itinerary. Please add a starting date and time. Feel free to add an amount of time you would like to stop over at that location. The total journey time will automatically be calculated. The pick-up and drop-off location are already determined. Feel free to add any other destination you would like.</p>}
-                    {}
-                    {itineraries.map((itinerary, index) => (
-                        <ItineraryRow
-                            index={index}
-                            address={itinerary.address}
-                            stopTime={itinerary.stopTime}
-                            travelTime={itinerary.travelTime}
-                        />
-                    ))}
+                    {/*{itinerary.length < 3 &&*/}
+                    <p>To plan your itinerary, please explore the selection of destinations on the map. When you click
+                        on a marker, it will open an info window describing the location. You acn then add the location
+                        to the itinerary. Please add a starting date and time. Feel free to add an amount of time you
+                        would like to stop over at that location. The total journey time will automatically be
+                        calculated. The pick-up and drop-off location are already determined. Feel free to add any other
+                        destination you would like.</p>
+                    {/*}*/}
+                    {/*{}*/}
+                    {/*{Itinerary.map((itinerary, index) => (*/}
+                    {/*    <ItineraryRow*/}
+                    {/*        index={index}*/}
+                    {/*        address={itinerary.address}*/}
+                    {/*        stopTime={itinerary.stopTime}*/}
+                    {/*        travelTime={itinerary.travelTime}*/}
+                    {/*    />*/}
+                    {/*))}*/}
 
                     {}
                 </div>
 
-                {/*//TODO Pass itineraries down the chain*/}
+                {/*//TODO Pass Itinerary down the chain*/}
                 <Itinerary
                     totalTravelTime={totalTravelTime}
                     handleStartDateChange={handleStartDateChange}
                     handleEndDateChange={handleEndDateChange}
                     selectedStartDate={selectedStartDate}
                     selectedEndDate={selectedEndDate}
+                    itineraryLocations={itineraryLocations}
+                    itineraryNote={itineraryNote}
                 />
             </>
         );

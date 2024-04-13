@@ -18,7 +18,6 @@ public class TCTravelContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Itinerary> Itineraries { get; set; }
-
     public DbSet<BookingLocation> BookingLocations { get; set; } = default!;
     public DbSet<ItineraryLocation> ItineraryLocations { get; set; } = default!;
 

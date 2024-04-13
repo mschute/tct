@@ -24,7 +24,9 @@ const service = {
 
     createItinerary: async (newItinerary) => {
         try {
+            console.log("Creating itinerary post: " + JSON.stringify(newItinerary));
             const response = await axios.post(`${API_URL}`, newItinerary)
+            console.log("Create itinerary response data: " + JSON.stringify(response.data));
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);

@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import ItineraryForm from "./ItineraryForm";
 
-const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange, selectedStartDate, selectedEndDate }) => {
+const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange, selectedStartDate, selectedEndDate, itineraryLocations, itineraryNote }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -31,8 +31,7 @@ const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange
         console.log('Selected itinerary:', selected);
         setSelectedItinerary(null);
 
-        // Ensure that the property names match the expected format
-        setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, passengerCount: selected.passengerCount});
+        setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, passengerCount: selected.passengerCount, customerName: selected.customerName, itineraryNotes: selected.itineraryNotes, itineraryLocations: selected.itineraryLocations });
     };
 
     const handleDelete = async (itineraryId) => {
@@ -52,7 +51,7 @@ const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange
 
     const handleCreate = () => {
         setSelectedItinerary(null);
-        setEditingItinerary({ tripDate: '', passengerCount: ''});
+        setEditingItinerary({ tripDate: '', tripStartTime: '', tripEndTime: '', passengerCount: '', customerName: '', itineraryNotes: '', itineraryLocations: ''});
     };
 
     const handleCancelEdit = () => {
@@ -110,6 +109,8 @@ const Itinerary = ({ totalTravelTime, handleStartDateChange, handleEndDateChange
                 handleEndDate={handleEndDateChange}
                 selectedStartDate={selectedStartDate}
                 selectedEndDate={selectedEndDate}
+                itinerary={itineraryLocations}
+                itineraryNote={itineraryNote}
                 // handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
             />
            

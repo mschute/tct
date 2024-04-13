@@ -15,6 +15,7 @@ public class Booking
     public Driver? Driver { get; set; }
     public int CustomerId { get; set; }
     public Customer? Customer { get; set; }
+    public string BookingNotes { get; set; }
     
     public ICollection<BookingLocation>? BookingLocations { get; set; }
 }
