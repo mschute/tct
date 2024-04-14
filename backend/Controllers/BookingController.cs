@@ -49,11 +49,14 @@ namespace backend.Controllers
                     {
                         BookingId = booking.BookingId,
                         TotalPrice = booking.TotalPrice,
-                        Date = booking.Date,
+                        TripDate = booking.TripDate,
+                        TripStartTime = booking.TripStartTime,
+                        TripEndTime = booking.TripEndTime,
                         VehicleName = vehicle != null? $"{vehicle.Make} {vehicle.Model}" : null,
                         DriverName = driver != null? $"{driver.FirstName} {driver.LastName}" : null,
-                        CustomerName = vehicle != null? $"{customer.FirstName} {customer.LastName}" : null,
+                        CustomerName = customer != null? $"{customer.FirstName} {customer.LastName}" : null,
                         LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
+                        BookingNotes = booking.BookingNotes,
                     };
                 }));
                 
@@ -100,11 +103,14 @@ namespace backend.Controllers
                 {
                     BookingId = booking.BookingId,
                     TotalPrice = booking.TotalPrice,
-                    Date = booking.Date,
+                    TripDate = booking.TripDate,
+                    TripStartTime = booking.TripStartTime,
+                    TripEndTime = booking.TripEndTime,
                     VehicleName = booking.Vehicle != null ? $"{booking.Vehicle.Make} {booking.Vehicle.Model}" : null,
                     DriverName = booking.Driver != null ? $"{booking.Driver.FirstName} {booking.Driver.LastName}" : null,
                     CustomerName = booking.Customer != null ? $"{booking.Customer.FirstName} {booking.Customer.LastName}" : null,
                     LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
+                    BookingNotes = booking.BookingNotes,
                 };
                 
                 _logger.LogInformationEx($"Booking {id} retrieved successfully.");

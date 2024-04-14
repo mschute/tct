@@ -11,7 +11,7 @@ const Header = () => {
     };
 
     return (
-        <div className='hero-container'>
+        <div>
             <Navbar expand="lg">
                 <Container style={{marginRight: '40px'}}>
                     <Navbar.Toggle aria-controls="basic"/>
@@ -25,7 +25,7 @@ const Header = () => {
                                 onMouseEnter={handleDropdownToggle}
                                 onMouseLeave={handleDropdownToggle}
                             >
-                                <LinkContainer to="/home">
+                                <LinkContainer to="/">
                                     <NavDropdown.Item>
                                         Home
                                     </NavDropdown.Item>

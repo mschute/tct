@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using backend.Helpers;
 using backend.Models;
+using backend.DTOs;
 
 namespace backend.Controllers
 {
@@ -24,14 +26,51 @@ namespace backend.Controllers
         // Retrieve all itineraries
         //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Itinerary>>> GetItineraries()
+        public async Task<ActionResult<IEnumerable<ItineraryDTO>>> GetItineraries()
         {
             try
             {
-                var itineraries = await _context.Itineraries.ToListAsync();
+                var itineraries = await _context.Itineraries
+                    .Include(i => i.ItineraryLocations)
+                        .ThenInclude(il => il.Location)
+                    .Include(i => i.Customer)
+                    .ToListAsync();
+
+                var itineraryDTOs = await Task.WhenAll(itineraries.Select(async itinerary =>
+                {
+                    var LocationIds = itinerary.ItineraryLocations.Select(il => il.LocationId).ToList();
+                    var customer = await _context.Customers.FindAsync(itinerary.CustomerId);
+
+                    var itineraryDTO = new ItineraryDTO
+                    {
+                        ItineraryId = itinerary.ItineraryId,
+                        TripDate = itinerary.TripDate,
+                        TripStartTime = itinerary.TripStartTime,
+                        TripEndTime = itinerary.TripEndTime,
+                        CustomerName = customer != null ? $"{customer.FirstName} {customer.LastName}" : null,
+                        PassengerCount = itinerary.PassengerCount,
+                        LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                        LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                        StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
+                        StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
+                        TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
+                        ItineraryNotes = itinerary.ItineraryNotes,
+                    };
+
+                    // foreach (var itineraryLocation in itinerary.ItineraryLocations)
+                    // {
+                    //     itineraryDTO.LocationNames.Add(itineraryLocation.Location.LocationName);
+                    //     itineraryDTO.LocationAddresses.Add(itineraryLocation.Location.LocationAddress);
+                    //     itineraryDTO.StopOvers.Add(itineraryLocation.StopOver);
+                    //     itineraryDTO.StopOrders.Add(itineraryLocation.StopOrder);
+                    //     itineraryDTO.TravelTimesNextLocale.Add(itineraryLocation.TravelTimeNextLocale);
+                    // }
+
+                    return itineraryDTO;
+                }));
             
                 _logger.LogInformationEx("Successfully retrieved Itinerariess");
-                return Ok(itineraries);
+                return Ok(itineraryDTOs);
             }
             catch (Exception ex)
             {
@@ -44,7 +83,7 @@ namespace backend.Controllers
         // Retrieve specific itinerariess
         //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Itinerary>> GetItinerary(int id)
+        public async Task<ActionResult<ItineraryDTO>> GetItinerary(int id)
         {
             try
             {
@@ -53,17 +92,46 @@ namespace backend.Controllers
                     _logger.LogErrorEx($"Invalid request");
                     return BadRequest(ModelState);
                 }
-                
-                var itinerary = await _context.Itineraries.FindAsync(id);
+
+                var itinerary = await _context.Itineraries
+                    .Include(i => i.ItineraryLocations)
+                        .ThenInclude(il => il.Location)
+                    .Include(i => i.Customer)
+                    .FirstOrDefaultAsync(i => i.ItineraryId == id);
 
                 if (itinerary == null)
                 {
                     _logger.LogErrorEx($"Error, itinerary {id} not found.");
                     return NotFound();
                 }
+                
+                var itineraryDTO = new ItineraryDTO
+                {
+                    ItineraryId = itinerary.ItineraryId,
+                    TripDate = itinerary.TripDate,
+                    TripStartTime = itinerary.TripStartTime,
+                    TripEndTime = itinerary.TripEndTime,
+                    CustomerName = itinerary.Customer != null ? $"{itinerary.Customer.FirstName} {itinerary.Customer.LastName}" : null,
+                    PassengerCount = itinerary.PassengerCount,
+                    LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                    LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                    StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
+                    StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
+                    TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
+                    ItineraryNotes = itinerary.ItineraryNotes,
+                };
+
+                // foreach (var itineraryLocation in itinerary.ItineraryLocations)
+                // {
+                //     itineraryDTO.LocationNames.Add(itineraryLocation.Location.LocationName);
+                //     itineraryDTO.LocationAddresses.Add(itineraryLocation.Location.LocationAddress);
+                //     itineraryDTO.StopOvers.Add(itineraryLocation.StopOver);
+                //     itineraryDTO.StopOrders.Add(itineraryLocation.StopOrder);
+                //     itineraryDTO.TravelTimesNextLocale.Add(itineraryLocation.TravelTimeNextLocale);
+                // }
 
                 _logger.LogInformationEx($"Itinerary {id} retrieved successfully.");
-                return Ok(itinerary);
+                return Ok(itineraryDTO);
             }
             catch (Exception ex)
             {
@@ -128,7 +196,7 @@ namespace backend.Controllers
                 if (!ModelState.IsValid)
                 {
                     _logger.LogErrorEx("Invalid request");
-                    return BadRequest(ModelState);
+                    return BadRequest("Model State is invalid: " + ModelState);
                 }
                 
                 _context.Itineraries.Add(itinerary);

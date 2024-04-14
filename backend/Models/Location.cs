@@ -1,4 +1,6 @@
 namespace backend.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public class Location
 {
@@ -9,6 +11,8 @@ public class Location
     public string LocationLng { get; set; }
     public string LocationDescription { get; set; }
     
+    [JsonIgnore]
     public ICollection<BookingLocation>? BookingLocations { get; set; }
+    [JsonIgnore]
     public ICollection<ItineraryLocation>? ItineraryLocations { get; set; }
 }

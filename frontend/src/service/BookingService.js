@@ -7,6 +7,7 @@ const service = {
     getBookings: async () => {
         try {
             const response = await axios.get(`${API_URL}`)
+            console.log("This is bookings: " + response.data);
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);

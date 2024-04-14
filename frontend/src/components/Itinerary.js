@@ -3,8 +3,9 @@ import service from '../service/ItineraryService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import ItineraryForm from "./ItineraryForm";
 
-const Itinerary = () => {
+const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -30,8 +31,7 @@ const Itinerary = () => {
         console.log('Selected itinerary:', selected);
         setSelectedItinerary(null);
 
-        // Ensure that the property names match the expected format
-        setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, passengerCount: selected.passengerCount});
+        setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, passengerCount: selected.passengerCount, customerName: selected.customerName, itineraryNotes: selected.itineraryNotes, itineraryLocations: selected.itineraryLocations });
     };
 
     const handleDelete = async (itineraryId) => {
@@ -51,7 +51,7 @@ const Itinerary = () => {
 
     const handleCreate = () => {
         setSelectedItinerary(null);
-        setEditingItinerary({ tripDate: '', passengerCount: ''});
+        setEditingItinerary({ tripDate: '', tripStartTime: '', tripEndTime: '', passengerCount: '', customerName: '', itineraryNotes: '', itineraryLocations: ''});
     };
 
     const handleCancelEdit = () => {
@@ -86,23 +86,34 @@ const Itinerary = () => {
 
     return (
         <div>
-            <List model={itineraries} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedItinerary && <Details model={selectedItinerary} modelName={modelName} />}
-            {editingItinerary && (
-                <Form
-                    fields={[
-                        {name:"itineraryId", label:"Itinerary ID", value:editingItinerary.itineraryId, type:"text", disabled:true, min: null, step: null},
-                        {name:"tripDate", label:"Trip Date", value:editingItinerary.tripDate, type:"date", disabled:false, min: null, step: null},
-                        {name:"passengerCount", label:"Passenger Count", value:editingItinerary.passengerCount, type:"text", disabled:false, min: 1, step: 1},
-                    ]}
-                    model={editingItinerary}
-                    modelName={modelName}
-                    handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}
-                    handleSubmit={handleFormSubmit}
-                    handleCancel={handleCancelEdit}
-                />
-            )}
-            <button onClick={handleCreate}>Add new</button>
+            {/*<List model={itineraries} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />*/}
+            {/*{selectedItinerary && <Details model={selectedItinerary} modelName={modelName} />}*/}
+            {/*{editingItinerary && (*/}
+            {/*    <Form*/}
+            {/*        fields={[*/}
+            {/*            {name:"itineraryId", label:"Itinerary ID", value:editingItinerary.itineraryId, type:"text", disabled:true, min: null, step: null},*/}
+            {/*            {name:"tripDate", label:"Trip Date", value:editingItinerary.tripDate, type:"date", disabled:false, min: null, step: null},*/}
+            {/*            {name:"passengerCount", label:"Passenger Count", value:editingItinerary.passengerCount, type:"text", disabled:false, min: 1, step: 1},*/}
+            {/*        ]}*/}
+            {/*        model={editingItinerary}*/}
+            {/*        modelName={modelName}*/}
+            {/*        handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
+            {/*        handleSubmit={handleFormSubmit}*/}
+            {/*        handleCancel={handleCancelEdit}*/}
+            {/*    />*/}
+            {/*)}*/}
+            {/*<button onClick={handleCreate}>Add new</button>*/}
+            <ItineraryForm
+                itineraryDTO={itineraryDTO}
+                handleRouteUpdate={handleRouteUpdate}
+                handleTripDateChange={handleTripDateChange}
+                handleStartTimeChange={handleStartTimeChange}
+                handleEndTimeChange={handleEndTimeChange}
+                handleDeleteItineraryButtonClick={handleDeleteItineraryButtonClick}
+                handleStopTime={handleStopTime}
+                // handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
+            />
+           
         </div>
     );
 };

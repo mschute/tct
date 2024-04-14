@@ -1,0 +1,24 @@
+.date-list li {
+    display: inline-flex;
+}
+
+.info-window{
+   text-align: center;
+}
+
+.info-window-name {
+    color: black;
+    font-weight: bold;
+}
+
+.info-window-image {
+    width: 200px;
+    max-height: 100%;
+}
+
+.info-window-description {
+    color: black;
+    width: 200px;
+    padding: 10px;
+    margin: 0px;
+}

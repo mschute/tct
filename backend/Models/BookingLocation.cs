@@ -8,5 +8,4 @@ public class BookingLocation
     public Booking? Booking { get; set; }
     public int LocationId { get; set; }
     public Location? Location { get; set; }
-    
 }

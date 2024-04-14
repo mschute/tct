@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-//using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models;
 
-public class TCTravelContext : DbContext
+public class TCTravelContext : IdentityDbContext<IdentityUser>
 {
     public TCTravelContext(DbContextOptions<TCTravelContext> options)
         : base(options)
@@ -18,7 +18,6 @@ public class TCTravelContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Itinerary> Itineraries { get; set; }
-
     public DbSet<BookingLocation> BookingLocations { get; set; } = default!;
     public DbSet<ItineraryLocation> ItineraryLocations { get; set; } = default!;
 

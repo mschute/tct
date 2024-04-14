@@ -83,7 +83,7 @@ const Bookings = () => {
         setSelectedBooking(null);
 
         // Ensure that the property names match the expected format
-        setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, date: selected.date, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId, locationIds: selected.locationIds});
+        setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId, locationIds: selected.locationIds, bookingNotes: selected.bookingNotes});
     };
 
     const handleDelete = async (bookingId) => {
@@ -103,7 +103,7 @@ const Bookings = () => {
 
     const handleCreate = () => {
         setSelectedBooking(null);
-        setEditingBooking({ bookingId: '', totalPrice: '', date: '', vehicleId: '', driverId: '', customerId: '', locationIds: '' });
+        setEditingBooking({ bookingId: '', totalPrice: '', tripDate: '', tripStartTime: '', tripEndTime: '', vehicleId: '', driverId: '', customerId: '', locationIds: '', bookingNotes: '' });
     };
 
     const handleCancelEdit = () => {
@@ -117,6 +117,7 @@ const Bookings = () => {
 
             if (editingBooking) {
                 if (editingBooking.bookingId) {
+                    //TODO Need to extract booking location logic out
                     console.log('Updating existing booking:', editingBooking);
                     
                     await service.updateBooking(editingBooking.bookingId, editingBooking);
@@ -143,7 +144,7 @@ const Bookings = () => {
                     await Promise.all([...createBookingLocationPromises, ...deleteBookingLocationPromises]);
 
                 } else {
-                    // Remove the existing bookingId property for new bookings
+                    //TODO Need to extract booking location logic out
                     const { bookingId, ...newBooking } = editingBooking;
 
                     const createdBooking = await service.createBooking(newBooking);
@@ -176,12 +177,15 @@ const Bookings = () => {
                 <Form
                     fields={[
                         {name:"bookingID", label: "Booking ID", value:editingBooking.bookingId, type:"text", disabled:true, min: null, step: null},
-                        {name:"totalPrice", label: "Total Price", value:editingBooking.totalPrice, type:"number", disabled:false, min: 50, step: 15},
-                        {name:"date", label: "Date", value:editingBooking.date, type:"datetime-local", disabled:false, min: null, step: null},
+                        {name:"totalPrice", label: "Total Price", value:editingBooking.totalPrice, type:"number", disabled:false, min: 0, step: 10},
+                        {name:"tripDate", label: "Trip Date", value:editingBooking.tripDate, type:"date", disabled:false, min: null, step: null},
+                        {name:"tripStartTime", label: "Trip Start Time", value:editingBooking.tripStartTime, type:"time", disabled:false, min: null, step: null},
+                        {name:"tripEndTime", label: "Trip End Time", value:editingBooking.tripEndTime, type:"time", disabled:false, min: null, step: null},
                         {name:"vehicleId", label: "Vehicle", value:editingBooking.vehicleId, type:"select", disabled:false, min: null, step: null, options: vehicles},
                         {name:"driverId", label: "Driver", value:editingBooking.driverId, type:"select", disabled:false, min: null, step: null, options: drivers},
                         {name:"customerId", label: "Customer", value:editingBooking.customerId, type:"select", disabled:false, min: null, step: null, options: customers},
                         {name:"locationIds", label: "Location(s)", value:editingBooking.locationIds, type:"select", disabled:false, min: null, step: null, options: locations},
+                        {name:"bookingNotes", label: "Booking Notes", value:editingBooking.bookingNotes, type:"text", disabled:false},
                     ]}
                     model={editingBooking}
                     modelName={modelName}
