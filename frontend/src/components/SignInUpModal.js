@@ -1,5 +1,6 @@
 import ReactModal from 'react-modal';
 import React, {useState} from "react";
+import service from '../service/AccountService';
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
@@ -11,8 +12,13 @@ const SignInUpModal = ({isOpen}) => {
         const {name, value} = event.target
         setUser({...user, [name]: value})
     }
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        if(formType === formTypes.signIn){
+            const result = await service.login(user);
+            return
+        } 
+        const result = await service.register(user);
     }
     
     const handleFormSwitch = () => {

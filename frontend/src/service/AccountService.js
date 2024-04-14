@@ -4,50 +4,32 @@ const API_URL = 'http://localhost:5255/api/account'
 
 const service = {
 
-    register: async () => {
+    register: async (userData) => {
         try {
-            const response = await axios.get(`${API_URL}/register`)
+            const response = await axios.post(`${API_URL}/register`, userData)
             return response.data;
         } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
+            throw new Error(`Error registering user: ${error.message}`);
         }
     },
 
-    getSpecificCustomer: async (customerId) => {
+    login: async (credentials) => {
         try {
-            const response = await axios.get(`${API_URL}/${customerId}`)
+            const response = await axios.get(`${API_URL}/login`, credentials)
             return response.data;
         } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
+            throw new Error(`Error signing in: ${error.message}`);
         }
     },
 
-    createCustomer: async (newCustomer) => {
+    logout: async () => {
         try {
-            const response = await axios.post(`${API_URL}`, newCustomer)
+            const response = await axios.post(`${API_URL}/logout`)
             return response.data;
         } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
+            throw new Error(`Error signing out: ${error.message}`);
         }
     },
-
-    updateCustomer: async (customerId, editingCustomer) => {
-        try {
-            const response = await axios.put(`${API_URL}/${customerId}`, editingCustomer)
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
-        }
-    },
-
-    deleteCustomer: async (customerId) => {
-        try {
-            const response = await axios.delete(`${API_URL}/${customerId}`)
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
-        }
-    }
 }
 
 export default service;

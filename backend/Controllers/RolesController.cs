@@ -24,7 +24,7 @@ namespace backend.Controllers;
             _logger = logger;
         }
 
-        // GET: api/Location
+        // GET: api/roles
         // Retrieve all Roles
         [HttpGet]
         public IActionResult GetRoles()

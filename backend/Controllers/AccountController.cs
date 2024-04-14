@@ -105,8 +105,11 @@ public class AccountController : ControllerBase
 
         if (result.Succeeded)
         {
+            
             _logger.LogInformationEx("Email verification successful");
-            return Ok("Email verification for Tay Country Travel was successful! Welcome new user!");
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            // return Ok("Email verification for Tay Country Travel was successful! Welcome new user!");
         }
 
         _logger.LogErrorEx($"Failed with error: {string.Join(", ", result.Errors)}");
