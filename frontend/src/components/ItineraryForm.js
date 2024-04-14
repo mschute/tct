@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Marker} from "@vis.gl/react-google-maps";
 import {formatTime, formatToClock} from "../helpers/helpers";
 import SignInUpModal from "./SignInUpModal";
 //import '../styles/itinerary-form-style.css'
 
 const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
-    
+    const [isSignInUpOpen, setIsSignInUpOpen] = useState(false);
     
     return (
         <div>
@@ -163,7 +163,12 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                 <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
             </form>
             
-            <SignInUpModal/>
+            <SignInUpModal isOpen={isSignInUpOpen}/>
+            
+            <button onClick={(event) => {
+                setIsSignInUpOpen(true)
+                
+            }}>Sign In</button>
             <button type="submit">Save</button>
             {/*//TODO implement clear button*/}
             {/*<button type="button" onClick={handleClear}>Clear</button>*/}

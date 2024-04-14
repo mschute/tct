@@ -3,7 +3,7 @@ import React, {useState} from "react";
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
-const SignInUpModal = () => {
+const SignInUpModal = ({isOpen}) => {
     const [user, setUser] = useState({email: '', password: ''});
     const [formType, setFormType] = useState(formTypes.signIn);
     
@@ -25,7 +25,7 @@ const SignInUpModal = () => {
     
     return(
         <ReactModal
-        isOpen
+        isOpen={isOpen}
         style={{content: {width: "500px", height: "500px"}}}
         > 
             <h4>{title}</h4>
