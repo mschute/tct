@@ -13,6 +13,25 @@ import bookingLocationService from "../service/BookingLocationService";
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
+const calcTotalTime = (locations) => {
+    let totalTimeSeconds = 0;
+
+    locations.forEach(location => {
+        totalTimeSeconds += location.stopOver * 60 || 0;
+
+        if (location.travelTimeNextLocale) {
+            totalTimeSeconds += location.travelTimeNextLocale;
+        }
+    });
+    return formatTime(totalTimeSeconds)
+}
+
+const formatTime = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    return (`${hours} hours ${minutes} mins`);
+}
+
 const MapComponent = () => {
         const map = useMap();
         const routesLibrary = useMapsLibrary('routes');
@@ -27,7 +46,7 @@ const MapComponent = () => {
         
         // Itninerary Data
         const currentDate = new Date().toISOString().slice(0, 16);
-        const [ itineraryDTO , setItineraryDTO] = useState({
+        const [itineraryDTO , setItineraryDTO] = useState({
             tripDate: currentDate.slice(0, 10),
             tripStartTime: currentDate.slice(10, 8),
             tripEndTime: currentDate.slice(10, 8),
@@ -54,7 +73,7 @@ const MapComponent = () => {
                 }
             ],
             itineraryNotes: 'test notes',
-            totalTravelTime: 0
+            totalTravelTime: formatTime(0)
         });
         const [locations, setLocations] = useState([])
 
@@ -71,29 +90,43 @@ const MapComponent = () => {
         };
 
         const handleAddItineraryButtonClick = () => {
-            const isAddressAlreadyAdded = locations.some((locations) => locations.address === activeMarker.address)
+            //console.log("handleAddItineraryButtonClick activeMarker=" + JSON.stringify(activeMarker))
+            //console.log("handleAddItineraryButtonClick itineraryDTO.locations=" + JSON.stringify(itineraryDTO.locations))
+            const isAddressAlreadyAdded = itineraryDTO.locations.some((location) => location.index === activeMarker.index)
             if (isAddressAlreadyAdded) {
+                //console.log("handleAddItineraryButtonClick isAddressAlreadyAdded")
                 return;
             } 
 
-            const insertAt = locations.length - 1;
+            const insertAt = itineraryDTO.locations.length - 1;
             const newLocation = {
                 index: activeMarker.index,
                 position: activeMarker.position,
-                name: activeMarker.locationName,
+                name: activeMarker.name,
                 address: activeMarker.address,
                 stopOver: 0,
-                stopOrders: insertAt,
+                stopOrders: 0,
                 travelTimeNextLocale: 0
             }
+            const newLocations = [...itineraryDTO.locations.slice(0, insertAt), newLocation, ...itineraryDTO.locations.slice(insertAt)]
             
-            setLocations([...locations.slice(0, insertAt), newLocation, ...locations.slice(insertAt)]);
+            for (let i = 0; i < newLocations.length; i++) {
+                newLocations[i].stopOrders = i + 1;
+            }
+            
+            setLocations(newLocations);
             handleInfoWindowClose();
         };
-
+        
+        // TODO move to ItineraryForm and update MapComponent via the route update handler
         const handleDeleteItineraryButtonClick = (index) => {
-            locations.splice(index, 1);
-            setLocations(locations);
+            const newLocations = itineraryDTO.locations.splice(index, 1);
+
+            for (let i = 0; i < newLocations.length; i++) {
+                newLocations[i].stopOrders = i + 1;
+            }
+            
+            setLocations(newLocations);
         }
 
         // const handleStartDateChange = (event) => {
@@ -107,58 +140,53 @@ const MapComponent = () => {
         // }
 
         const handleAddStopTimeHour = (index) => {
-            itineraryDTO.locations[index].stopOver += 15;
+            const newLocations = itineraryDTO.locations.map((location, idx) => {
+                if (idx === index) {
+                    return { ...location, stopOver: location.stopOver + 15 }
+                }
+                return location;
+            })
+            
+            const totalTravelTime = calcTotalTime(itineraryDTO.locations);
+            
             setItineraryDTO(itineraryDTO);
+            setItineraryDTO({...itineraryDTO, totalTravelTime, locations:newLocations});
         }
 
         const handleDeleteStopTimeHour = (index) => {
             if (itineraryDTO.locations[index].stopOver === 0) {
                 return;
             }
+            
             itineraryDTO.locations[index].stopOver -= 15;
+            itineraryDTO.totalTravelTime = calcTotalTime(itineraryDTO.locations);
+            
             setItineraryDTO(itineraryDTO);
         }
         
+        // TODO not tested
         const handleRouteUpdate = (event) => {
-            const {value} = event.target;
-            setLocations(value);
+            console.log("handleRouteUpdate event.target.value=" + event.target.value);
+            const locations = event.target.value;
+            setLocations(locations);
         }
 
         const handleTripDateChange = (event) => {
-            const {value} = event.target;
-            itineraryDTO.tripDate = value;
-            setItineraryDTO(itineraryDTO);
+            console.log("handleTripDateChange event.target.value=" + event.target.value);
+            const tripDate = event.target.value;
+            setItineraryDTO({...itineraryDTO, tripDate});
         }
 
         const handleStartTimeChange = (event) => {
-            const {value} = event.target;
-            itineraryDTO.tripStartTime = value;
-            setItineraryDTO(itineraryDTO);
+            console.log("handleStartTimeChange event.target.value=" + event.target.value);
+            const tripStartTime = event.target.value;
+            setItineraryDTO({...itineraryDTO, tripStartTime});
         }
 
         const handleEndTimeChange = (event) => {
-            const {value} = event.target;
-            itineraryDTO.tripEndTime = value;
-            setItineraryDTO(itineraryDTO);
-        }
-
-        const calcTotalTime = (locations) => {
-            let totalTimeSeconds = 0;
-
-            locations.forEach(location => {
-                totalTimeSeconds += location.stopOver * 60 || 0;
-
-                if (location.travelTimeNextLocale) {
-                    totalTimeSeconds += location.travelTimeNextLocale;
-                }
-            });
-            return formatTime(totalTimeSeconds)
-        }
-        
-        const formatTime = (totalSeconds) => {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            return (`${hours} hours ${minutes} mins`);
+            console.log("handleEndTimeChange event.target.value=" + event.target.value);
+            const tripEndTime = event.target.value;
+            setItineraryDTO({...itineraryDTO, tripEndTime});
         }
 
         // Initialize directions service and renderer
@@ -172,57 +200,39 @@ const MapComponent = () => {
 
         useEffect(() => {
             (async () => {
-                console.log("useEffect that calls setMarkers");
+                console.log("useEffect []]");
                 const response = await LocationService.getLocations();
 
                 const newMarkers = response.map(location => ({
                     index: location.locationId,
                     position: {lat: JSON.parse(location.locationLat), lng: JSON.parse(location.locationLng)},
                     name: location.locationName,
-                    address: location.address,
+                    address: location.locationAddress,
                     image: `images/${location.locationId}.jpeg`,
                     description: location.locationDescription
                 }));
 
                 setMarkers(newMarkers);
-
-                if (locations.length === 0)
-                {
-                    setLocations([
-                        {
-                            index: newMarkers[0].index,
-                            position: newMarkers[0].position,
-                            name: newMarkers[0].locationName,
-                            address: newMarkers[0].address,
-                            stopOver: 0,
-                            stopOrders: 0,
-                            travelTimeNextLocale: 0
-                        },
-                        {
-                            index: newMarkers[1].index,
-                            position: newMarkers[1].position,
-                            name: newMarkers[1].locationName,
-                            address: newMarkers[1].address,
-                            stopOver: 0,
-                            stopOrders: 0,
-                            travelTimeNextLocale: 0
-                        }
-                    ]);
-                }
             })();
         }, []);
         
         useEffect(() => {
+            console.log("useEffect [locations] \nlocations=" + locations + "\nitineraryDTO.locations=" + itineraryDTO.locations);
             if (!directionsRenderer) return;
             if (!directionsService) return;
 
             if (locations.length < 3) {
-                itineraryDTO.locations = locations;
-                setItineraryDTO(itineraryDTO);
+                setItineraryDTO({...itineraryDTO, locations});
                 return;
             }
 
-            const origin = {location: {lat: locations[0].position.lat, lng: locations[0].position.lng}};
+            const origin = {
+                location: {
+                    lat: locations[0].position.lat,
+                    lng: locations[0].position.lng
+                }
+            };
+            
             const destination = {
                 location: {
                     lat: locations[locations.length - 1].position.lat,
@@ -249,9 +259,9 @@ const MapComponent = () => {
                         // locations[i + 1].travelTimeText = legs[i].duration.text;
                         locations[i + 1].travelTimeNextLocale = legs[i].duration.value;
                     }
-                    itineraryDTO.locations = locations;
-                    itineraryDTO.totalTravelTime = calcTotalTime(locations);
-                    setItineraryDTO(itineraryDTO);
+                    
+                    const totalTravelTime = calcTotalTime(locations);
+                    setItineraryDTO({...itineraryDTO, locations, totalTravelTime});
                 });
 
             return () => {
@@ -259,6 +269,7 @@ const MapComponent = () => {
             }
         }, [locations]);
 
+        // TODO move to ItineraryForm and update MapComponent via the route update handler
         const ItineraryRemovable = (props) => {
             return (<>
                 <p>Via {props.address} travel-time={props.travelTime} stopTime={props.stopOver} mins</p>

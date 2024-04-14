@@ -1,5 +1,6 @@
 import React from 'react';
 import {Marker} from "@vis.gl/react-google-maps";
+//import '../styles/itinerary-form-style.css'
 
 const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange }) => {
     
@@ -79,50 +80,102 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                     {/*               disabled={true}/>*/}
                     {/*    </td>*/}
                     {/*</tr>*/}
-                    {itineraryDTO.locations.map((location) => (
-                        <tr>
-                            <td>
-                                <input type="text" name="locationName"
-                                       value={location.stopOrders}
-                                       disabled={true}
-                                    /*//onChange={() => handle(location)}*/
-                                    /*TODO only map middle locations*/
-                                />
-                            </td>
-                            <td>
-                                <input type="text" name="locationName"
-                                       value={location.name}
-                                       disabled={true}
-                                    /*//onChange={() => handle(location)}*/
-                                    /*TODO only map middle locations*/
-                                />
-                            </td>
-                            <td>
-                                <input type="text" name="locationAddress"
-                                       value={location.address}
-                                       disabled={true}
-                                       /*//onChange={() => handle(location)}*/
-                                       /*TODO only map middle locations*/
-                                />
-                            </td>
-                            <td>
-                                <input type="text" name="travelTime"
-                                       value={location.travelTimeNextLocale}
-                                       disabled={true}
-                                       /*//onChange={() => handle(location)}*/
-                                       /*TODO only map middle locations*/
-                                />
-                            </td>
-                            <td>
-                                <input type="text" name="stopOver"
-                                       value={location.stopOver}
-                                       disabled={true}
-                                       /*//onChange={() => handle(location)}*/
-                                       /*TODO only map middle locations*/
-                                />
-                            </td>
-                        </tr>
-                    ))}
+                    {itineraryDTO.locations.map((location, index) => {
+                        if (index === 0 || index === itineraryDTO.locations.length - 1)
+                        {
+                            return (
+                                <tr>
+                                    <td>
+                                        <input type="text" name="locationName"
+                                               value={location.stopOrders}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="locationName"
+                                               value={location.name}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="locationAddress"
+                                               value={location.address}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="travelTime"
+                                               value={location.travelTimeNextLocale}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="stopOver"
+                                               value={location.stopOver}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                </tr>
+                            )
+                        }
+                            return (
+                                <tr>
+                                    <td>
+                                        <input type="text" name="locationName"
+                                               value={location.stopOrders}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="locationName"
+                                               value={location.name}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="locationAddress"
+                                               value={location.address}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="travelTime"
+                                               value={location.travelTimeNextLocale}
+                                               disabled={true}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="stopOver"
+                                               value={location.stopOver}
+                                               disabled={false}
+                                               min={0}
+                                               step={15}
+                                            /*//onChange={() => handle(location)}*/
+                                            /*TODO only map middle locations*/
+                                        />
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    )}
                     {/*<tr>*/}
                     {/*    <td>Drop off Location</td>*/}
                     {/*    <td>*/}
@@ -154,7 +207,7 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                        readOnly/>
                 <br/>
                 <label>Itinerary Notes: </label>
-                <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={true}/>
+                <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
             </form>
 
             {/*<button type="submit">Save</button>*/
