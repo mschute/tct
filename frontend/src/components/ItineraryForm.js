@@ -1,6 +1,7 @@
 import React from 'react';
 import {Marker} from "@vis.gl/react-google-maps";
 import {formatTime, formatToClock} from "../helpers/helpers";
+import SignInUpModal from "./SignInUpModal";
 //import '../styles/itinerary-form-style.css'
 
 const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
@@ -56,29 +57,6 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                     </tr>
                     </thead>
                     <tbody>
-                    {/*<tr>*/}
-                    {/*    <td>Pick up Location</td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="locationName"*/}
-                    {/*               value={itineraryDTO.locations[0].name}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="locationAddress"*/}
-                    {/*               value={itineraryDTO.locations[0].address}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="travelTime"*/}
-                    {/*               value={itineraryDTO.locations[0].travelTimeNextLocale}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="stopOver"*/}
-                    {/*               value={itineraryDTO.locations[0].stopOver}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*</tr>*/}
                     {itineraryDTO.locations.map((location, index) => {
                         if (index === 0 || index === itineraryDTO.locations.length - 1)
                         {
@@ -174,29 +152,6 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                             )
                         }
                     )}
-                    {/*<tr>*/}
-                    {/*    <td>Drop off Location</td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="locationName"*/}
-                    {/*               value={itineraryDTO.locations[itineraryDTO.locations.length - 1].name}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="locationAddress"*/}
-                    {/*               value={itineraryDTO.locations[itineraryDTO.locations.length - 1].address}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="travelTime"*/}
-                    {/*               value={itineraryDTO.locations[itineraryDTO.locations.length - 1].travelTimeNextLocale}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*    <td>*/}
-                    {/*        <input type="text" name="stopOver"*/}
-                    {/*               value={itineraryDTO.locations[itineraryDTO.locations.length-1].stopOver}*/}
-                    {/*               disabled={true}/>*/}
-                    {/*    </td>*/}
-                    {/*</tr>*/}
                     </tbody>
                 </table>
                 <br/>
@@ -207,11 +162,11 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                 <label>Itinerary Notes: </label>
                 <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
             </form>
-
-            {/*<button type="submit">Save</button>*/
-            }
-            {/*<button type="button" onClick={handleCancel}>Cancel</button>*/
-            }
+            
+            <SignInUpModal/>
+            <button type="submit">Save</button>
+            {/*//TODO implement clear button*/}
+            {/*<button type="button" onClick={handleClear}>Clear</button>*/}
         </div>
     );
 };
