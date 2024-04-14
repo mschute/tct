@@ -1,8 +1,9 @@
 import React from 'react';
 import {Marker} from "@vis.gl/react-google-maps";
+import {formatTime, formatToClock} from "../helpers/helpers";
 //import '../styles/itinerary-form-style.css'
 
-const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange }) => {
+const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
     
     
     return (
@@ -38,9 +39,7 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                         </td>
                         <td>
                             <label>
-                                <input type="time" name="tripEndTime" value={itineraryDTO.tripEndTime}
-                                       onChange={handleEndTimeChange}
-                                       disabled={true}/>
+                                <input type="time" name="tripEndTime" value={formatToClock(itineraryDTO.tripEndTime)} readOnly/>
                             </label>
                         </td>
                     </tr>
@@ -89,32 +88,24 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                         <input type="text" name="locationName"
                                                value={location.stopOrders}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="locationName"
                                                value={location.name}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="locationAddress"
                                                value={location.address}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="travelTime"
-                                               value={location.travelTimeNextLocale}
+                                               value={formatTime(location.travelTimeNextLocale)}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
@@ -156,21 +147,26 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                     </td>
                                     <td>
                                         <input type="text" name="travelTime"
-                                               value={location.travelTimeNextLocale}
+                                               value={formatTime(location.travelTimeNextLocale)}
                                                disabled={true}
                                             /*//onChange={() => handle(location)}*/
                                             /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
-                                        <input type="text" name="stopOver"
+                                        <input type="number" name="stopOver"
                                                value={location.stopOver}
                                                disabled={false}
-                                               min={0}
-                                               step={15}
-                                            /*//onChange={() => handle(location)}*/
+                                               min="0"
+                                               step="15"
+                                               onChange={(event) => handleStopTime(event, index)}
                                             /*TODO only map middle locations*/
                                         />
+                                    </td>
+                                    <td>
+                                        <button onClick={() => handleDeleteItineraryButtonClick(index)}>
+                                            Remove from Itinerary
+                                        </button>
                                     </td>
                                 </tr>
                             )
@@ -203,7 +199,7 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                 </table>
                 <br/>
                 <label>Total Tour Time: </label>
-                <input type="text" name="totalTourTime" defaultValue={itineraryDTO.totalTravelTime} disabled={true}
+                <input type="text" name="totalTourTime" value={formatTime(itineraryDTO.totalTravelTime)} disabled={true}
                        readOnly/>
                 <br/>
                 <label>Itinerary Notes: </label>
