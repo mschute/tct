@@ -90,21 +90,14 @@ const MapComponent = () => {
             setLocations(newLocations);
             handleInfoWindowClose();
         };
-
-        // TODO move to ItineraryForm and update MapComponent via the route update handler
+        
         const handleDeleteItineraryButtonClick = (index) => {
-            console.log("The delete index is: " + index);
-            
             const newLocations = [...itineraryDTO.locations];
-            console.log("Locations before removal: " + newLocations);
-            
             newLocations.splice(index, 1);
-            console.log("Locations after removal: " + newLocations);
 
             for (let i = 0; i < newLocations.length; i++) {
                 newLocations[i].stopOrders = i + 1;
             }
-            // TODO BUG completely rerenders page and removes all added itineraries
             setLocations(newLocations);
         }
 

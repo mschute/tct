@@ -164,7 +164,9 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                         />
                                     </td>
                                     <td>
-                                        <button onClick={() => handleDeleteItineraryButtonClick(index)}>
+                                        <button onClick={(event) => {
+                                            event.preventDefault();
+                                            handleDeleteItineraryButtonClick(index)}}>
                                             Remove from Itinerary
                                         </button>
                                     </td>
