@@ -16,9 +16,10 @@ const SignInUpModal = ({isOpen}) => {
         event.preventDefault();
         if(formType === formTypes.signIn){
             const result = await service.login(user);
-            return
-        } 
-        const result = await service.register(user);
+        } else {
+            await service.register(user);
+        }
+        onClose();
     }
     
     const handleFormSwitch = () => {
@@ -32,6 +33,7 @@ const SignInUpModal = ({isOpen}) => {
     return(
         <ReactModal
         isOpen={isOpen}
+        onRequestClose={onClose}
         style={{content: {width: "500px", height: "500px"}}}
         > 
             <h4>{title}</h4>
