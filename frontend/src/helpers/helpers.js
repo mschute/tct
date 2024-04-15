@@ -16,3 +16,33 @@ export function formatCamelCase(input){
     const formatted = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     return formatted;
 }
+
+//TODO Bug to solve time issue
+
+// export function isFirstTwoDigitsOver24 (timeString){
+//     const [hours] = timeString.split(':').map(Number);
+//     return hours > 24;
+// }
+
+// export function calcPastMidnight(startTime, totalTravelTime){
+//     const startingTime = timeToMilliseconds(startTime);
+//     console.log("Starting time: " + startingTime);
+//     const secondsToAdd = totalTravelTime;
+//     const currentTime = new Date();
+//
+//     const newTime = new Date(currentTime.getTime() + secondsToAdd * 1000);
+//
+//     //const startTimeMilliseconds = timeToMilliseconds(startingTime);
+//     const newTimeMilliseconds = newTime.getHours() * 3600000 + newTime.getMinutes() * 60000 + newTime.getSeconds() * 1000;
+//
+//     if (newTimeMilliseconds < startingTime){
+//         return true
+//     } else {
+//         return false
+//     }
+// }
+//
+// const timeToMilliseconds = (time) => {
+//     const [hours, minutes, seconds] = time.split(':').map(Number);
+//     return hours * 3600000 + minutes * 60000 + seconds * 1000;
+// };

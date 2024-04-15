@@ -10,7 +10,7 @@ import LocationService from "../service/LocationService";
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
-const MapComponent = ({isAuthenticated, setIsAuthenticated}) => {
+const MapComponent = ({isAuthenticated}) => {
     const map = useMap();
     const routesLibrary = useMapsLibrary('routes');
     // https://github.com/visgl/react-google-maps/blob/main/examples/directions/src/app.tsx#L98
@@ -51,7 +51,7 @@ const MapComponent = ({isAuthenticated, setIsAuthenticated}) => {
                 travelTimeNextLocale: 0
             }
         ],
-        itineraryNotes: 'test notes',
+        itineraryNotes: ' ',
         totalTravelTime: 0
     });
     const [locations, setLocations] = useState([])
@@ -64,6 +64,14 @@ const MapComponent = ({isAuthenticated, setIsAuthenticated}) => {
     const handleInfoWindowClose = () => {
         setActiveMarker(null)
         setIsInfoWindowOpen(false);
+    };
+
+    const handleNoteChange = (event) => {
+        const newNote = event.target.value;
+        setItineraryDTO(note => ({
+            ...note,
+            itineraryNotes: newNote
+        }));
     };
 
     const handleAddItineraryButtonClick = () => {
@@ -308,6 +316,8 @@ const MapComponent = ({isAuthenticated, setIsAuthenticated}) => {
                 handleStartTimeChange={handleStartTimeChange}
                 handleDeleteItineraryButtonClick={handleDeleteItineraryButtonClick}
                 handleStopTime={handleStopTime}
+                handleNoteChange={handleNoteChange}
+                isAuthenticated={isAuthenticated}
             />
         </>
     );

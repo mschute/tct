@@ -1,4 +1,4 @@
-import {formatTime, formatToClock} from "../helpers/helpers";
+import {calcPastMidnight, formatTime, formatToClock, isFirstTwoDigitsOver24} from "../helpers/helpers";
 import "../styles/itinerary-form-style.css"
 
 const ItineraryForm = ({
@@ -7,7 +7,9 @@ const ItineraryForm = ({
                            handleTripDateChange,
                            handleStartTimeChange,
                            handleDeleteItineraryButtonClick,
-                           handleStopTime
+                           handleStopTime,
+                           handleNoteChange,
+                           isAuthenticated
                        }) => {
 
     return (
@@ -168,10 +170,14 @@ const ItineraryForm = ({
                 <div className="input-group">
                     <label>Itinerary Notes: </label>
                     <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}
-                           id="itinerary-notes"/>
+                           id="itinerary-notes" onChange={handleNoteChange}/>
                 </div>
             </form>
-            <button className="primary-button" type="submit">Save</button>
+            {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
+            {!isAuthenticated ? (
+                <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button> ) : (
+                <button className="primary-button" type="submit">Submit Itinerary</button>
+            )}
         </div>
     );
 };
