@@ -6,7 +6,7 @@ import {APIProvider} from "@vis.gl/react-google-maps";
 import '../styles/home-section.css';
 
 const Home = () => {
-    
+
     return (
         <>
             <main>
@@ -36,20 +36,39 @@ const Home = () => {
                         WORDS!
                     </p>
                 </div>
-                <div className="section-background section-background-even">
+                <div className="section-background section-background-even marquee">
                     <h2 className='section-text section-text-title'>
                         Locations
                     </h2>
-                    <p className='section-text section-text-paragraph'>
-                        WORDS!
-                    </p>
+                    <div className="marquee-container">
+                        <img src="/images/4.jpeg"/>
+                        <img src="/images/5.jpeg"/>
+                        <img src="/images/6.jpeg"/>
+                        <img src="/images/7.jpeg"/>
+                        <img src="/images/8.jpeg"/>
+                        <img src="/images/9.jpeg"/>
+                        <img src="/images/10.jpeg"/>
+                        <img src="/images/11.jpeg"/>
+                        <img src="/images/12.jpeg"/>
+                        <img src="/images/13.jpeg"/>
+                        <img src="/images/14.jpeg"/>
+                        <img src="/images/15.jpeg"/>
+                        <img src="/images/16.jpeg"/>
+                        <img src="/images/17.jpeg"/>
+                        <img src="/images/18.jpeg"/>
+                        <img src="/images/19.jpeg"/>
+                        <img src="/images/20.jpeg"/>
+                        <img src="/images/21.jpeg"/>
+                        <img src="/images/22.jpeg"/>
+                        <img src="/images/24.jpeg"/>
+                    </div>
                 </div>
                 <div className="section-background section-background-odd">
                     <h2 className='section-text section-text-title'>
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent />
+                        <MapComponent/>
                     </APIProvider>
                 </div>
             </main>

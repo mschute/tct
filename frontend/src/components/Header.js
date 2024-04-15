@@ -12,16 +12,16 @@ const Header = ({isAuthenticated, handleSignOut}) => {
 
     return (
         <div>
-            <Navbar expand="lg">
+            <Navbar className="nav-background" expand="lg">
                 <Container style={{marginRight: '40px'}}>
                     <Navbar.Toggle aria-controls="basic"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="justify-content-end" style={{width: "100%"}}>
                             <NavDropdown
-                                title="Dropdown"
+                                title={<span style={{ color: 'white'}}>Menu</span>}
                                 id="basic-nav-dropdown"
                                 show={dropdownOpen}
-                                className="dropdown-menu-right"
+                                className="dropdown-menu-right navbar-text"
                                 onMouseEnter={handleDropdownToggle}
                                 onMouseLeave={handleDropdownToggle}
                             >

@@ -23,5 +23,34 @@
 
 .section-text-paragraph{
     padding: 1rem;
+    font-size: 20px;
 }
+
+.marquee-container {
+    display: flex;
+    overflow-x: auto;
+}
+
+/*.marquee {*/
+/*    width: 100%;*/
+/*    overflow: hidden;*/
+/*    white-space: nowrap;*/
+/*}*/
+
+.image-container {
+    width: 300px; 
+    height: 200px; 
+    margin-right: 20px;
+}
+
+/*.marquee img {*/
+/*    display: inline-block;*/
+/*    margin-right: 20px; !* Adjust as needed *!*/
+/*    animation: marquee 10s linear infinite; !* Adjust duration as needed *!*/
+/*}*/
+
+/*@keyframes marquee {*/
+/*    0% { transform: translateX(100%); }*/
+/*    100% { transform: translateX(-100%); }*/
+/*}*/
 

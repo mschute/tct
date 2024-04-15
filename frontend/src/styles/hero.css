@@ -9,25 +9,16 @@
     background-size: cover;
     background-position: center;
     height: 1000px;
-    
 }
 
 .logo-overlay {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.ReactModal__Overlay {
-    z-index: 1000;
-}
-
-.ReactModel__Content {
-    z-index: 1001;
 }
 
