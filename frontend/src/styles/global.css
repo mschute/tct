@@ -1,9 +1,11 @@
-
+.html, body{
+    
+}
 .primary-button {
     background-color: #365baa;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     margin: 10px;
     text-align: center;
     text-decoration: none;
@@ -20,10 +22,10 @@
 }
 
 .secondary-button {
-    background-color: #a97b57;
+    background-color: #037205;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     margin: 10px;
     text-align: center;
     text-decoration: none;
@@ -36,7 +38,7 @@
 }
 
 .secondary-button:hover {
-    background-color: #604531;
+    background-color: #024903;
 }
 
 .delete-button {

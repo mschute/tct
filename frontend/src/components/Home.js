@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import Hero from "./Hero";
-import Footer from "./Footer";
 import MapComponent from "./MapComponent";
 import {APIProvider} from "@vis.gl/react-google-maps";
 import '../styles/home-section.css';
 
-const Home = () => {
+const Home = ({isAuthenticated, setIsAuthenticated}) => {
 
     return (
         <>
@@ -68,11 +67,10 @@ const Home = () => {
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent/>
+                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
                     </APIProvider>
                 </div>
             </main>
-            <Footer/>
         </>
     );
 }

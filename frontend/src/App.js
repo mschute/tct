@@ -6,6 +6,7 @@ import AdminPage from './components/AdminPage';
 import SignInPage from "./components/SignInPage";
 import Header from "./components/Header";
 import service from "./service/AccountService";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Footer from "./Footer";
 import Customers from "./Customers";
 import '../styles/tabs.css';
 
@@ -37,7 +36,6 @@ const AdminPage = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </div>
     );
 }
