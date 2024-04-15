@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Header from "./Header";
 import Hero from "./Hero";
 import ContactForm from "./ContactForm";
@@ -7,11 +7,10 @@ import MapComponent from "./MapComponent";
 import {APIProvider} from "@vis.gl/react-google-maps";
 import '../styles/home-section.css';
 
-
 const Home = () => {
+    
     return (
         <>
-            <Header/>
             <main>
                 <Hero/>
                 <div className="section-background section-background-odd">
@@ -60,7 +59,7 @@ const Home = () => {
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent/>
+                        <MapComponent />
                     </APIProvider>
                 </div>
                 <ContactForm className="section-background section-background-even"/>

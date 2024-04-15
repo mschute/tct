@@ -9,7 +9,6 @@ import '../styles/BasicPage.css';
 const AdminPage = () => {
     return (
         <div className='page-dimensions'>
-            <Header/>
             <div>
                 <h2 className='title'>
                     Admin
