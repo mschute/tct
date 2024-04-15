@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Form.css';
 
-const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handleCancel}) => {
+const Form = ({fields, modelName, handleInputChange, handleSubmit, handleCancel}) => {
 
     return (
         <div className='form-container'>
@@ -72,7 +72,6 @@ const Form = ({fields, model, modelName, handleInputChange, handleSubmit, handle
                     <button type="submit" className='primary-button'>Save</button>
                     <button type="button" onClick={handleCancel} className='secondary-button'>Cancel</button>
                 </div>
-
             </form>
         </div>
     );

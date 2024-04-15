@@ -53,7 +53,6 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
                 </form>
                 <button className="secondary-button" onClick={handleFormSwitch}>{switchButtonText}</button>
             </div>
-
         );
     }
 ;

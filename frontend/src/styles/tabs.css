@@ -1,0 +1,39 @@
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.tabs button {
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tabs button:hover {
+    background-color: #f0f0f0;
+}
+
+.tabs button.active {
+    background-color: #365baa;
+    color: #fff;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+#tab1, #tab2, #tab3, #tab4 {
+    display: none;
+}
+
+#tab1.active, #tab2.active, #tab3.active, #tab4.active {
+    display: block;
+}

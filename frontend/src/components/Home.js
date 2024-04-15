@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import Header from "./Header";
 import Hero from "./Hero";
-import ContactForm from "./ContactForm";
 import Footer from "./Footer";
 import MapComponent from "./MapComponent";
 import {APIProvider} from "@vis.gl/react-google-maps";
@@ -13,14 +11,6 @@ const Home = () => {
         <>
             <main>
                 <Hero/>
-                <div className="section-background section-background-odd">
-                    <h2 className='section-text section-text-title'>
-                        Our Service
-                    </h2>
-                    <p className='section-text section-text-paragraph'>
-                        WORDS!
-                    </p>
-                </div>
                 <div className="section-background section-background-even">
                     <h2 className='section-text section-text-title'>
                         About us
@@ -62,7 +52,6 @@ const Home = () => {
                         <MapComponent />
                     </APIProvider>
                 </div>
-                <ContactForm className="section-background section-background-even"/>
             </main>
             <Footer/>
         </>

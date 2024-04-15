@@ -3,6 +3,7 @@ import service from '../service/LocationService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import "../styles/table.css";
 
 const Locations = () => {
     const [locations, setLocations] = useState([]);
@@ -105,7 +106,7 @@ const Locations = () => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Add new</button>
+            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

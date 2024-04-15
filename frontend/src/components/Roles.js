@@ -3,6 +3,7 @@ import service from '../service/RolesService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import "../styles/table.css";
 
 //TODO NONE OF THE ROLES ARE WORKING
 const Roles = () => {
@@ -102,7 +103,7 @@ const Roles = () => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Add new</button>
+            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

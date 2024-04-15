@@ -1,0 +1,33 @@
+.table-container {
+    font-family: Arial, sans-serif;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #d9d9d9;
+}
+
+.table th:last-child, .table td:last-child {
+    text-align: center;
+}
+
+.table th:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.table td:last-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
