@@ -163,15 +163,13 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                 <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
             </form>
             
-            <SignInUpModal isOpen={isSignInUpOpen}/>
+            <SignInUpModal isOpen={isSignInUpOpen} setIsOpen={setIsSignInUpOpen}/>
             
             <button onClick={(event) => {
                 setIsSignInUpOpen(true)
                 
             }}>Sign In</button>
             <button type="submit">Save</button>
-            {/*//TODO implement clear button*/}
-            {/*<button type="button" onClick={handleClear}>Clear</button>*/}
         </div>
     );
 };

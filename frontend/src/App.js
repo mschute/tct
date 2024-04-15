@@ -3,20 +3,18 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from './components/Home';
 import CustomerPage from './components/CustomerPage';
 import AdminPage from './components/AdminPage';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import SignInUpModal from "./components/SignInUpModal";
 
 function App() {
     return (
-        //TODO BUG WITH NAVIGATION BACK TO HOME
             <BrowserRouter>
                 <div>
                     <Routes>
                         <Route path="/" element={<Home/>} exact/>
                         <Route path="/customerpage" element={<CustomerPage/>} exact/>
                         <Route path="/adminpage" element={<AdminPage/>} exact/>
-                        <Route path="/signin" element={<SignIn/>} exact/>
-                        <Route path="/signup" element={<SignUp/>} exact/>
+                        <Route path="/signinupmodal" element={<SignInUpModal/>} exact/>
+                        <Route path="/signinupmodal" element={<SignInUpModal/>} exact/>
                     </Routes>
                 </div>
             </BrowserRouter>

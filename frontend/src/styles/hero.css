@@ -23,3 +23,11 @@
     align-items: center;
 }
 
+.ReactModal__Overlay {
+    z-index: 1000;
+}
+
+.ReactModel__Content {
+    z-index: 1001;
+}
+

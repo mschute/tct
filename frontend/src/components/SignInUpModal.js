@@ -1,10 +1,12 @@
 import ReactModal from 'react-modal';
 import React, {useState} from "react";
 import service from '../service/AccountService';
+import "../styles/sign-in-sign-up.css";
+import "../styles/global.css";
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
-const SignInUpModal = ({isOpen}) => {
+const SignInUpModal = ({isOpen, setIsOpen}) => {
     const [user, setUser] = useState({email: '', password: ''});
     const [formType, setFormType] = useState(formTypes.signIn);
     
@@ -15,11 +17,15 @@ const SignInUpModal = ({isOpen}) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if(formType === formTypes.signIn){
-            const result = await service.login(user);
+            await service.login(user);
         } else {
             await service.register(user);
         }
-        onClose();
+        await onClose();
+    }
+    
+    const onClose = async () => {
+        setIsOpen(false);
     }
     
     const handleFormSwitch = () => {
@@ -33,16 +39,18 @@ const SignInUpModal = ({isOpen}) => {
     return(
         <ReactModal
         isOpen={isOpen}
+        className='modal-container'
         onRequestClose={onClose}
         style={{content: {width: "500px", height: "500px"}}}
         > 
-            <h4>{title}</h4>
+            <h4 className="form=title">{title}</h4>
             <form>
-                <input name="email" placeholder="Email Address" onChange={handleInputChange}/>
-                <input name="password" type="password" placeholder="Password" onChange={handleInputChange} />
-                <button type="submit" onClick={handleSubmit}>{submitButtonText}</button>
+                <input className="form-input" name="email" placeholder="Email Address" onChange={handleInputChange}/>
+                <input className="form-input" name="password" type="password" placeholder="Password" onChange={handleInputChange} />
+                <button className="primary-button" type="submit" onClick={handleSubmit}>{submitButtonText}</button>
             </form>
-           <button onClick={handleFormSwitch}>{switchButtonText}</button>
+           <button className="secondary-button" onClick={handleFormSwitch}>{switchButtonText}</button>
+            <button className="delete-button" onClick={onClose}>Close</button>
         </ReactModal>
     );
 };

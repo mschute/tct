@@ -15,7 +15,7 @@ const service = {
 
     login: async (credentials) => {
         try {
-            const response = await axios.get(`${API_URL}/login`, credentials)
+            const response = await axios.post(`${API_URL}/login`, credentials)
             return response.data;
         } catch (error) {
             throw new Error(`Error signing in: ${error.message}`);
