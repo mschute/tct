@@ -57,7 +57,7 @@ const AdminPage = () => {
                     <div id="tab5" className={activeTab === 'tab5' ? 'tab-pane active' : 'tab-pane'}>
                         <Vehicles/>
                     </div>
-                    <div id="tab6" className={activeTab === 'tab5' ? 'tab-pane active' : 'tab-pane'}>
+                    <div id="tab6" className={activeTab === 'tab6' ? 'tab-pane active' : 'tab-pane'}>
                         <Roles/>
                     </div>
                 </div>

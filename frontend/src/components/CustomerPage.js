@@ -6,7 +6,7 @@ function Itineraries() {
     return null;
 }
 
-const AdminPage = () => {
+const CustomerPage = () => {
     const [activeTab, setActiveTab] = useState('tab1');
 
     const handleTabClick = (tab) => {
@@ -17,7 +17,7 @@ const AdminPage = () => {
         <div className='page-dimensions'>
             <div>
                 <h2 className='title'>
-                    Admin
+                    Customers
                 </h2>
                 <div className="tabs">
                     <button className={activeTab === 'tab1' ? 'active' : ''} onClick={() => handleTabClick('tab1')}>
@@ -40,4 +40,4 @@ const AdminPage = () => {
     );
 }
 
-export default AdminPage;
+export default CustomerPage;

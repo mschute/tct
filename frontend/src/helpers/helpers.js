@@ -25,24 +25,30 @@ export function formatCamelCase(input){
 // }
 
 // export function calcPastMidnight(startTime, totalTravelTime){
-//     const startingTime = timeToMilliseconds(startTime);
-//     console.log("Starting time: " + startingTime);
+//     const startTimeMilliseconds = timeToMilliseconds(startTime);
 //     const secondsToAdd = totalTravelTime;
 //     const currentTime = new Date();
 //
 //     const newTime = new Date(currentTime.getTime() + secondsToAdd * 1000);
 //
-//     //const startTimeMilliseconds = timeToMilliseconds(startingTime);
 //     const newTimeMilliseconds = newTime.getHours() * 3600000 + newTime.getMinutes() * 60000 + newTime.getSeconds() * 1000;
-//
-//     if (newTimeMilliseconds < startingTime){
-//         return true
-//     } else {
-//         return false
-//     }
+//    
+//     return newTimeMilliseconds < startTimeMilliseconds;
 // }
 //
 // const timeToMilliseconds = (time) => {
 //     const [hours, minutes, seconds] = time.split(':').map(Number);
 //     return hours * 3600000 + minutes * 60000 + seconds * 1000;
 // };
+
+export function calculateTomorrow() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const year = tomorrow.getFullYear();
+    const month = tomorrow.getMonth() + 1;
+    const day = tomorrow.getDate();
+
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}

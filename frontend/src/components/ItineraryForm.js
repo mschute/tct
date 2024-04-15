@@ -1,4 +1,10 @@
-import {calcPastMidnight, formatTime, formatToClock, isFirstTwoDigitsOver24} from "../helpers/helpers";
+import {
+    calcPastMidnight,
+    calculateTomorrow,
+    formatTime,
+    formatToClock,
+    isFirstTwoDigitsOver24
+} from "../helpers/helpers";
 import "../styles/itinerary-form-style.css"
 
 const ItineraryForm = ({
@@ -11,7 +17,7 @@ const ItineraryForm = ({
                            handleNoteChange,
                            isAuthenticated
                        }) => {
-
+    
     return (
         <div className="itinerary-form">
             <form>
@@ -34,7 +40,7 @@ const ItineraryForm = ({
                         <td>
                             <label>
                                 <input type="date" name="tripDate" value={itineraryDTO.tripDate}
-                                       onChange={handleTripDateChange} disabled={false}/>
+                                       onChange={handleTripDateChange} disabled={false} min={calculateTomorrow()}/>
                             </label>
                         </td>
                         <td>
@@ -174,6 +180,8 @@ const ItineraryForm = ({
                 </div>
             </form>
             {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
+            {/*calcPastMidnight(`${itineraryDTO.startTime}`, `${itineraryDTO.totalTravelTime}`)*/}
+            
             {!isAuthenticated ? (
                 <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button> ) : (
                 <button className="primary-button" type="submit">Submit Itinerary</button>
