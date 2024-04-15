@@ -105,13 +105,10 @@ public class AccountController : ControllerBase
 
         if (result.Succeeded)
         {
-            
             _logger.LogInformationEx("Email verification successful");
-
-            //await _signInManager.SignInAsync(user, isPersistent: true);
-
-			//return RedirectToAction("Index", "Home");
-            return Ok("Email verification for Tay Country Travel was successful! Welcome new user!");
+            
+            // return Ok("Email verification for Tay Country Travel was successful! Welcome new user!");
+            return Redirect("http://localhost:3000/");
         }
 
         _logger.LogErrorEx($"Failed with error: {string.Join(", ", result.Errors)}");
@@ -158,6 +155,20 @@ public class AccountController : ControllerBase
         _logger.LogInformationEx("Logged out");
         return Ok("Logged out");
     }
+
+    //TODO Need to figure out how to revoke JWT token
+    // [HttpPost("revoke")]
+    // public IActionResult RevokeToken([FromBody] RevokeTokenRequest request)
+    // {
+    //     if (request == null || string.IsNullOrEmpty(request.Token))
+    //     {
+    //         return BadRequest("Invalid token data");
+    //     }
+    //
+    //     _tokenRevocationService.RevokeToken(request.Token);
+    //
+    //     return Ok("Token revoked successfully");
+    // }
 
     // Generate JSON Web Token for user authentication
     private string GenerateJwtToken(IdentityUser user, IList<string> roles)

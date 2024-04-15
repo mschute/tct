@@ -86,23 +86,6 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
 
     return (
         <div>
-            {/*<List model={itineraries} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />*/}
-            {/*{selectedItinerary && <Details model={selectedItinerary} modelName={modelName} />}*/}
-            {/*{editingItinerary && (*/}
-            {/*    <Form*/}
-            {/*        fields={[*/}
-            {/*            {name:"itineraryId", label:"Itinerary ID", value:editingItinerary.itineraryId, type:"text", disabled:true, min: null, step: null},*/}
-            {/*            {name:"tripDate", label:"Trip Date", value:editingItinerary.tripDate, type:"date", disabled:false, min: null, step: null},*/}
-            {/*            {name:"passengerCount", label:"Passenger Count", value:editingItinerary.passengerCount, type:"text", disabled:false, min: 1, step: 1},*/}
-            {/*        ]}*/}
-            {/*        model={editingItinerary}*/}
-            {/*        modelName={modelName}*/}
-            {/*        handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
-            {/*        handleSubmit={handleFormSubmit}*/}
-            {/*        handleCancel={handleCancelEdit}*/}
-            {/*    />*/}
-            {/*)}*/}
-            {/*<button onClick={handleCreate}>Add new</button>*/}
             <ItineraryForm
                 itineraryDTO={itineraryDTO}
                 handleRouteUpdate={handleRouteUpdate}

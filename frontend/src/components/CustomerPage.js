@@ -5,7 +5,6 @@ import Footer from "./Footer";
 const CustomerPage = () => {
     return (
         <div>
-            <Header/>
             <div>
                 <h2>
                     Customers

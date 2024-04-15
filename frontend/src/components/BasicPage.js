@@ -4,7 +4,6 @@ import Footer from "./Footer";
 
 const BasicPage = () => {
     <div>
-        <Header/>
             <div>
                 <h2>
                     Our Service

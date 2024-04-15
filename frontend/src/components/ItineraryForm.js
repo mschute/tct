@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {Marker} from "@vis.gl/react-google-maps";
 import {formatTime, formatToClock} from "../helpers/helpers";
-import SignInUpModal from "./SignInUpModal";
 //import '../styles/itinerary-form-style.css'
 
 const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
-    const [isSignInUpOpen, setIsSignInUpOpen] = useState(false);
     
     return (
         <div>
@@ -103,32 +101,24 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                         <input type="text" name="locationName"
                                                value={location.stopOrders}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="locationName"
                                                value={location.name}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="locationAddress"
                                                value={location.address}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
                                         <input type="text" name="travelTime"
                                                value={formatTime(location.travelTimeNextLocale)}
                                                disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
@@ -138,7 +128,6 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                                min="0"
                                                step="15"
                                                onChange={(event) => handleStopTime(event, index)}
-                                            /*TODO only map middle locations*/
                                         />
                                     </td>
                                     <td>
@@ -163,15 +152,7 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                 <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
             </form>
             
-            <SignInUpModal isOpen={isSignInUpOpen}/>
-            
-            <button onClick={(event) => {
-                setIsSignInUpOpen(true)
-                
-            }}>Sign In</button>
             <button type="submit">Save</button>
-            {/*//TODO implement clear button*/}
-            {/*<button type="button" onClick={handleClear}>Clear</button>*/}
         </div>
     );
 };

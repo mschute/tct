@@ -3,9 +3,9 @@ import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 import '../styles/header.css';
 
-const Header = () => {
+const Header = ({isAuthenticated, handleSignOut}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
+    
     const handleDropdownToggle = () => {
         setDropdownOpen(!dropdownOpen);
     };
@@ -41,12 +41,17 @@ const Header = () => {
                                     </NavDropdown.Item>
                                 </LinkContainer>
                                 <NavDropdown.Divider/>
-                                {/*Need to add conditional rendering to change this to sign out once user accounts are created*/}
-                                <LinkContainer to="/signin">
-                                    <NavDropdown.Item>
-                                        Sign In
+                                {isAuthenticated ? (
+                                    <NavDropdown.Item onClick={handleSignOut}>
+                                        Sign Out
                                     </NavDropdown.Item>
-                                </LinkContainer>
+                                ) : (
+                                    <LinkContainer to="/signinpage">
+                                        <NavDropdown.Item>
+                                            Sign In
+                                        </NavDropdown.Item>
+                                    </LinkContainer>
+                                )}
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

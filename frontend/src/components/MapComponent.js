@@ -4,7 +4,6 @@ import '@react-google-maps/api'
 import "../styles/MapComponent.css";
 import Itinerary from "./Itinerary";
 import LocationService from "../service/LocationService";
-import {formatTime} from "../helpers/helpers.js";
 
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
@@ -100,17 +99,6 @@ const MapComponent = () => {
             }
             setLocations(newLocations);
         }
-
-    // const handleDeleteItineraryButtonClick = (index) => {
-    //     const newLocations = [...itineraryDTO.locations];
-    //     newLocations.splice(index, 1);
-    //
-    //     for (let i = 0; i < newLocations.length; i++) {
-    //         newLocations[i].stopOrders = i + 1;
-    //     }
-    //     // TODO BUG completely rerenders page and removes all added itineraries
-    //     setLocations(newLocations);
-    // }
 
         const handleStopTime = (event, index) => {
             const newLocations = locations.map((location, idx) => {
@@ -247,18 +235,6 @@ const MapComponent = () => {
             }
         }, [locations]);
 
-        // TODO move to ItineraryForm and update MapComponent via the route update handler
-        // const ItineraryRemovable = (props) => {
-        //     return (<>
-        //         <p>Via {props.address} travel-time={props.travelTime} stopTime={props.stopOver} mins</p>
-        //         <button onClick={() => handleDeleteItineraryButtonClick(props.index)}>Remove from Itinerary</button>
-        //         <>
-        //             <button onClick={() => (handleDeleteStopTimeHour(props.index))}>-</button>
-        //             <button onClick={() => (handleAddStopTimeHour(props.index))}>+</button>
-        //         </>
-        //     </>)
-        // }
-
         return (
             <>
                 <Map
@@ -327,7 +303,6 @@ const MapComponent = () => {
                     handleRouteUpdate={handleRouteUpdate}
                     handleTripDateChange={handleTripDateChange}
                     handleStartTimeChange={handleStartTimeChange}
-                    //handleEndTimeChange={handleEndTimeChange}
                     handleDeleteItineraryButtonClick={handleDeleteItineraryButtonClick}
                     handleStopTime={handleStopTime}
                 />
