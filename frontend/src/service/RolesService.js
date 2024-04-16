@@ -24,31 +24,33 @@ const service = {
 
     createRole: async (newRoleName) => {
         try {
-            console.log("new role name: " + JSON.stringify(newRoleName))
-            const response = await axios.post(`${API_URL}`, newRoleName)
-            console.log("This is the create role response: " + JSON.stringify(response));
+            const response = await axios.post(`${API_URL}`, newRoleName, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
             return response.data;
         } catch (error) {
-            throw new Error(`Error signing in: ${error.message}`);
+            throw new Error(`Error creating role: ${error.message}`);
         }
     },
     
 //TODO Believe this is wrong
     updateRole: async (roleModel) => {
         try {
-            const response = await axios.post(`${API_URL}/${roleModel.roleId}`, roleModel)
+            const response = await axios.post(`${API_URL}`, roleModel)
             return response.data;
         } catch (error) {
-            throw new Error(`Error signing in: ${error.message}`);
+            throw new Error(`Error updating role: ${error.message}`);
         }
     },
 
     deleteRole: async (roleId) => {
         try {
-            const response = await axios.post(`${API_URL}/${roleId}`)
+            console.log("roleId in the service " + roleId);
+            const response = await axios.delete(`${API_URL}/${roleId}`, roleId)
             return response.data;
         } catch (error) {
-            throw new Error(`Error signing in: ${error.message}`);
+            throw new Error(`Error deleting role: ${error.message}`);
         }
     },
 

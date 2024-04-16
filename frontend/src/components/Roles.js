@@ -5,7 +5,6 @@ import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-//TODO NONE OF THE ROLES ARE WORKING
 const Roles = () => {
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
@@ -26,34 +25,36 @@ const Roles = () => {
         }
     }
 
-    const handleEdit = (roleId) => {
-        console.log('Edit button clicked for role roleId:', roleId);
-        const selected = roles.find((role) => role.roleId === roleId);
+    const handleEdit = (id) => {
+        console.log('Edit button clicked for role roleId:', id);
+        console.log("All roles" + JSON.stringify(roles));
+        const selected = roles.find((role) => role.id === id);
         console.log('Selected role:', selected);
         setSelectedRole(null);
 
         // Ensure that the property names match the expected format
-        setEditingRole({ roleId: selected.roleId, newRoleName: selected.newRoleName});
+        setEditingRole({ id: selected.id, name: selected.name});
     };
 
-    const handleDelete = async (roleId) => {
+    const handleDelete = async (id) => {
         try {
-            await service.deleteRole(roleId)
+            console.log("Role ID" + id);
+            await service.deleteRole(id)
             fetchRoles();
         } catch (error) {
             console.error('Error deleting role:', error);
         }
     };
 
-    const handleViewDetails = (roleId) => {
-        const selected = roles.find((role) => role.roleId === roleId);
+    const handleViewDetails = (id) => {
+        const selected = roles.find((role) => role.id === id);
         setSelectedRole(selected);
         setEditingRole(null);
     };
 
     const handleCreate = () => {
         setSelectedRole(null);
-        setEditingRole({ newRoleName: '' });
+        setEditingRole({ name: '' });
     };
 
     const handleCancelEdit = () => {
@@ -66,15 +67,13 @@ const Roles = () => {
             console.log('Editing Role:', editingRole);
 
             if (editingRole) {
-                if (editingRole.roleId) {
-                    console.log('Updating existing role:', editingRole);
-                    await service.updateRole(editingRole.roleId, editingRole);
+                if (editingRole.id) {
+                    console.log("updating role " + editingRole)
+                    await service.updateRole(editingRole);
 
                 } else {
-                    // Remove the existing roleId property for new roles
-                    const { roleId, ...newRole } = editingRole;
-                    console.log('Creating new role:', newRole);
-                    await service.createRole(newRole)
+                    const name = editingRole.name;
+                    await service.createRole(name)
                 }
                 fetchRoles();
             }
@@ -93,8 +92,8 @@ const Roles = () => {
             {editingRole && (
                 <Form
                     fields={[
-                        {name:"roleId", label:"Role ID", value:editingRole.roleId, type:"text", disabled:true},
-                        {name:"newRoleName", label:"Role Name", value:editingRole.newRoleName, type:"text", disabled:false},
+                        {name:"roleId", label:"Role ID", value:editingRole.id, type:"text", disabled:true},
+                        {name:"name", label:"Role Name", value:editingRole.name, type:"text", disabled:false},
                     ]}
                     model={editingRole}
                     modelName={modelName}

@@ -7,8 +7,9 @@ using backend.Models;
 
 namespace backend.Controllers;
 
-    [Route("api/[controller]")]
+    
     [ApiController]
+    [Route("api/[controller]")]
     // Authorize only SuperAdmin to manage user roles
     //[Authorize(Roles = "SuperAdmin")]
     public class RolesController : ControllerBase
@@ -109,6 +110,7 @@ namespace backend.Controllers;
         // PUT: api/Roles/5
         // Update specific role
         [HttpPut]
+        //[HttpPut("{roleId")]
         public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleModel model)
         {
             if (!ModelState.IsValid)
@@ -140,7 +142,7 @@ namespace backend.Controllers;
 
         // DELETE: api/Roles/5
         // Delete specific role
-        [HttpDelete]
+        [HttpDelete("{roleId}")]
         public async Task<IActionResult> DeleteRole(string roleId)
         {
             if (!ModelState.IsValid)
