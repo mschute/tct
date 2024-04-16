@@ -182,7 +182,7 @@ const ItineraryForm = ({
             {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
             {/*calcPastMidnight(`${itineraryDTO.startTime}`, `${itineraryDTO.totalTravelTime}`)*/}
             
-            {!isAuthenticated ? (
+            {isAuthenticated===true ? (
                 <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button> ) : (
                 <button className="primary-button" type="submit">Submit Itinerary</button>
             )}

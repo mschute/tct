@@ -46,7 +46,6 @@ const service = {
 
     deleteRole: async (roleId) => {
         try {
-            console.log("roleId in the service " + roleId);
             const response = await axios.delete(`${API_URL}/${roleId}`, roleId)
             return response.data;
         } catch (error) {
