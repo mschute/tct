@@ -1,3 +1,8 @@
+.google-map{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .date-list li {
     display: inline-flex;
 }
@@ -21,4 +26,8 @@
     width: 200px;
     padding: 10px;
     margin: 0px;
+}
+
+.sign-in-warning{
+    font-weight: bold;
 }

@@ -1,12 +1,25 @@
-import React, {useState} from 'react';
-import {Marker} from "@vis.gl/react-google-maps";
-import {formatTime, formatToClock} from "../helpers/helpers";
-//import '../styles/itinerary-form-style.css'
+import {
+    calcPastMidnight,
+    calculateTomorrow,
+    formatTime,
+    formatToClock,
+    isFirstTwoDigitsOver24
+} from "../helpers/helpers";
+import "../styles/itinerary-form-style.css"
 
-const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleDeleteItineraryButtonClick, handleStopTime }) => {
+const ItineraryForm = ({
+                           itineraryDTO,
+                           handleRouteUpdate,
+                           handleTripDateChange,
+                           handleStartTimeChange,
+                           handleDeleteItineraryButtonClick,
+                           handleStopTime,
+                           handleNoteChange,
+                           isAuthenticated
+                       }) => {
     
     return (
-        <div>
+        <div className="itinerary-form">
             <form>
                 <table>
                     <thead>
@@ -27,7 +40,7 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                         <td>
                             <label>
                                 <input type="date" name="tripDate" value={itineraryDTO.tripDate}
-                                       onChange={handleTripDateChange} disabled={false}/>
+                                       onChange={handleTripDateChange} disabled={false} min={calculateTomorrow()}/>
                             </label>
                         </td>
                         <td>
@@ -38,12 +51,14 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                         </td>
                         <td>
                             <label>
-                                <input type="time" name="tripEndTime" value={formatToClock(itineraryDTO.tripEndTime)} readOnly/>
+                                <input type="time" name="tripEndTime" value={formatToClock(itineraryDTO.tripEndTime)}
+                                       readOnly/>
                             </label>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+                <br/>
                 <table>
                     <thead>
                     <tr>
@@ -56,73 +71,79 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                     </thead>
                     <tbody>
                     {itineraryDTO.locations.map((location, index) => {
-                        if (index === 0 || index === itineraryDTO.locations.length - 1)
-                        {
+                            if (index === 0 || index === itineraryDTO.locations.length - 1) {
+                                return (
+                                    <tr>
+                                        <td>
+                                            <input type="text"
+                                                   name="locationName"
+                                                   value={location.stopOrders}
+                                                   disabled={true}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   name="locationName"
+                                                   value={location.name}
+                                                   disabled={true}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   name="locationAddress"
+                                                   value={location.address}
+                                                   disabled={true}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   name="travelTime"
+                                                   value={formatTime(location.travelTimeNextLocale)}
+                                                   disabled={true}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="stopOver"
+                                                   value={location.stopOver}
+                                                   disabled={true}
+                                            />
+                                        </td>
+                                    </tr>
+                                )
+                            }
                             return (
                                 <tr>
                                     <td>
-                                        <input type="text" name="locationName"
+                                        <input type="text"
+                                               name="locationName"
                                                value={location.stopOrders}
                                                disabled={true}
                                         />
                                     </td>
                                     <td>
-                                        <input type="text" name="locationName"
+                                        <input type="text"
+                                               name="locationName"
                                                value={location.name}
                                                disabled={true}
                                         />
                                     </td>
                                     <td>
-                                        <input type="text" name="locationAddress"
+                                        <input type="text"
+                                               name="locationAddress"
                                                value={location.address}
                                                disabled={true}
                                         />
                                     </td>
                                     <td>
-                                        <input type="text" name="travelTime"
+                                        <input type="text"
+                                               name="travelTime"
                                                value={formatTime(location.travelTimeNextLocale)}
                                                disabled={true}
                                         />
                                     </td>
                                     <td>
-                                        <input type="text" name="stopOver"
-                                               value={location.stopOver}
-                                               disabled={true}
-                                            /*//onChange={() => handle(location)}*/
-                                            /*TODO only map middle locations*/
-                                        />
-                                    </td>
-                                </tr>
-                            )
-                        }
-                            return (
-                                <tr>
-                                    <td>
-                                        <input type="text" name="locationName"
-                                               value={location.stopOrders}
-                                               disabled={true}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" name="locationName"
-                                               value={location.name}
-                                               disabled={true}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" name="locationAddress"
-                                               value={location.address}
-                                               disabled={true}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="text" name="travelTime"
-                                               value={formatTime(location.travelTimeNextLocale)}
-                                               disabled={true}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input type="number" name="stopOver"
+                                        <input type="number"
+                                               name="stopOver"
                                                value={location.stopOver}
                                                disabled={false}
                                                min="0"
@@ -131,10 +152,11 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                                         />
                                     </td>
                                     <td>
-                                        <button onClick={(event) => {
+                                        <button className="secondary-button" onClick={(event) => {
                                             event.preventDefault();
-                                            handleDeleteItineraryButtonClick(index)}}>
-                                            Remove from Itinerary
+                                            handleDeleteItineraryButtonClick(index)
+                                        }}>
+                                            Remove
                                         </button>
                                     </td>
                                 </tr>
@@ -144,15 +166,26 @@ const ItineraryForm = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, 
                     </tbody>
                 </table>
                 <br/>
-                <label>Total Tour Time: </label>
-                <input type="text" name="totalTourTime" value={formatTime(itineraryDTO.totalTravelTime)} disabled={true}
-                       readOnly/>
+                <div className="input-group">
+                    <label>Total Tour Time: </label>
+                    <input type="text" name="totalTourTime" value={formatTime(itineraryDTO.totalTravelTime)}
+                           disabled={true}
+                           readOnly/>
+                </div>
                 <br/>
-                <label>Itinerary Notes: </label>
-                <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}/>
+                <div className="input-group">
+                    <label>Itinerary Notes: </label>
+                    <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}
+                           id="itinerary-notes" onChange={handleNoteChange}/>
+                </div>
             </form>
+            {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
+            {/*calcPastMidnight(`${itineraryDTO.startTime}`, `${itineraryDTO.totalTravelTime}`)*/}
             
-            <button type="submit">Save</button>
+            {!isAuthenticated ? (
+                <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button> ) : (
+                <button className="primary-button" type="submit">Submit Itinerary</button>
+            )}
         </div>
     );
 };

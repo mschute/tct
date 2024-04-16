@@ -3,6 +3,7 @@ import service from '../service/VehicleService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import "../styles/table.css";
 
 const Vehicles = () => {
     const [vehicles, setVehicles] = useState([]);
@@ -106,7 +107,7 @@ const Vehicles = () => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Add new</button>
+            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

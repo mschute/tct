@@ -11,7 +11,7 @@ const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
         const [user, setUser] = useState({email: '', password: ''});
         const [formType, setFormType] = useState(formTypes.signIn);
-        const navigation= useNavigate();
+        const navigation = useNavigate();
         const [error, setError] = useState('');
 
         const handleInputChange = (event) => {
@@ -19,7 +19,7 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
             setUser({...user, [name]: value})
         }
         //TODO Need to add verification if the user signed in successfully or not 
-    //TODO Need to add user input validation to make sure they have both a username or password
+        //TODO Need to add user input validation to make sure they have both a username or password
         const handleSubmit = async (event) => {
             event.preventDefault();
             if (formType === formTypes.signIn) {
@@ -40,22 +40,33 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
 
         const title = formType === formTypes.signIn ? "Sign In" : "Sign Up";
         const submitButtonText = formType === formTypes.signIn ? "Sign In" : "Sign Up";
-        const switchButtonText = formType === formTypes.signUp ? "Or sign In instead" : "Or sign Up instead";
+        const switchButtonText = formType === formTypes.signUp ? "Sign into your account" : "Create an account";
 
         return (
             <div className="page-dimensions">
                 <h4 className="title">{title}</h4>
                 <form method="POST">
-                    <input className="form-input" name="email" placeholder="Email Address" onChange={handleInputChange}/>
-                    <input className="form-input" name="password" type="password" placeholder="Password"
-                           onChange={handleInputChange}/>
-                    <button className="primary-button" type="submit" onClick={handleSubmit}>{submitButtonText}</button>
+                    <div className="sign-in-container">
+                        <div>
+                            <input className="form-input sign-in-field" name="email" placeholder="Email Address"
+                                   onChange={handleInputChange}/>
+                        </div>
+                        <div>
+                            <input className="form-input sign-in-field" name="password" type="password"
+                                   placeholder="Password"
+                                   onChange={handleInputChange}/>
+                        </div>
+                        <div>
+                            <button className="primary-button" type="submit"
+                                    onClick={handleSubmit}>{submitButtonText}</button>
+                        </div>
+                    </div>
                 </form>
-                <button className="secondary-button" onClick={handleFormSwitch}>{switchButtonText}</button>
+                <div className="sign-in-container">
+                    <button className="text-link-button" onClick={handleFormSwitch}>{switchButtonText}</button>
+                </div>
             </div>
-
         );
-    }
-;
+};
 
 export default SignInPage

@@ -3,6 +3,7 @@ import service from '../service/DriverService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
+import "../styles/table.css";
 
 const Drivers = () => {
     const [drivers, setDrivers] = useState([]);

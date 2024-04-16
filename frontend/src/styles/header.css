@@ -3,10 +3,12 @@
     right: 0;
 }
 
-/*.hero-container {*/
-/*    background-image: url('../../public/images/PrayingHandsOfMaryGlenLyon.jpg');*/
-/*    background-size: cover;*/
-/*    background-position: center;*/
-/*    height: 1000px;*/
-/*}*/
+.nav-background {
+    background-color: #0b1b28;
+}
+
+.navbar-text {
+    color: #ffffff;
+    font-size: 20px;
+}
 

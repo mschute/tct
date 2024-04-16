@@ -1,26 +1,15 @@
 import React, {useState} from 'react';
-import Header from "./Header";
 import Hero from "./Hero";
-import ContactForm from "./ContactForm";
-import Footer from "./Footer";
 import MapComponent from "./MapComponent";
 import {APIProvider} from "@vis.gl/react-google-maps";
 import '../styles/home-section.css';
 
-const Home = () => {
-    
+const Home = ({isAuthenticated, setIsAuthenticated}) => {
+
     return (
         <>
             <main>
                 <Hero/>
-                <div className="section-background section-background-odd">
-                    <h2 className='section-text section-text-title'>
-                        Our Service
-                    </h2>
-                    <p className='section-text section-text-paragraph'>
-                        WORDS!
-                    </p>
-                </div>
                 <div className="section-background section-background-even">
                     <h2 className='section-text section-text-title'>
                         About us
@@ -46,25 +35,42 @@ const Home = () => {
                         WORDS!
                     </p>
                 </div>
-                <div className="section-background section-background-even">
+                <div className="section-background section-background-even marquee">
                     <h2 className='section-text section-text-title'>
                         Locations
                     </h2>
-                    <p className='section-text section-text-paragraph'>
-                        WORDS!
-                    </p>
+                    <div className="marquee-container">
+                        <img src="/images/4.jpeg"/>
+                        <img src="/images/5.jpeg"/>
+                        <img src="/images/6.jpeg"/>
+                        <img src="/images/7.jpeg"/>
+                        <img src="/images/8.jpeg"/>
+                        <img src="/images/9.jpeg"/>
+                        <img src="/images/10.jpeg"/>
+                        <img src="/images/11.jpeg"/>
+                        <img src="/images/12.jpeg"/>
+                        <img src="/images/13.jpeg"/>
+                        <img src="/images/14.jpeg"/>
+                        <img src="/images/15.jpeg"/>
+                        <img src="/images/16.jpeg"/>
+                        <img src="/images/17.jpeg"/>
+                        <img src="/images/18.jpeg"/>
+                        <img src="/images/19.jpeg"/>
+                        <img src="/images/20.jpeg"/>
+                        <img src="/images/21.jpeg"/>
+                        <img src="/images/22.jpeg"/>
+                        <img src="/images/24.jpeg"/>
+                    </div>
                 </div>
                 <div className="section-background section-background-odd">
                     <h2 className='section-text section-text-title'>
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent />
+                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
                     </APIProvider>
                 </div>
-                <ContactForm className="section-background section-background-even"/>
             </main>
-            <Footer/>
         </>
     );
 }

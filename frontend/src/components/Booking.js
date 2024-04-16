@@ -8,6 +8,7 @@ import driverService from "../service/DriverService";
 import locationService from "../service/LocationService";
 import service from "../service/BookingService";
 import bookingLocationService from "../service/BookingLocationService";
+import "../styles/table.css";
 
 const Bookings = () => {
     const [bookings, setBookings] = useState([]);
@@ -203,7 +204,7 @@ const Bookings = () => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Add new</button>
+            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

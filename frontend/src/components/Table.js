@@ -1,4 +1,6 @@
 import React from 'react';
+import {formatCamelCase} from "../helpers/helpers";
+import "../styles/table.css";
 
 const Table = ({ model, handleEdit, handleDelete }) => {
     if(!model || model.length === 0){
@@ -14,7 +16,7 @@ const Table = ({ model, handleEdit, handleDelete }) => {
                 <thead>
                 <tr>
                     {attributeNames.map((attributeName, index) => (
-                        <th key={index}>{attributeName}</th>
+                        <th key={index}>{formatCamelCase(attributeName)}</th>
                     ))}
                     <th>Action</th>
                 </tr>
