@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using backend.Helpers;
 using backend.Models;
+using backend.DTOs;
 
 
 namespace backend.Controllers;
@@ -34,8 +35,14 @@ namespace backend.Controllers;
             {
                 var roles = _roleManager.Roles.ToList();
                 
+				var rolesDTO = roles.Select(role => new RolesDTO 
+				{
+					Id = role.Id,
+					Name = role.Name
+				}).ToList();
+
                 _logger.LogInformationEx("Roles retrieved successfully");
-                return Ok(roles);
+                return Ok(rolesDTO);
             }
             catch (Exception ex)
             {
