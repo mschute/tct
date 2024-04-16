@@ -248,7 +248,7 @@ namespace backend.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.BookingLocation", b =>
@@ -263,7 +263,7 @@ namespace backend.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("BookingLocations");
+                    b.ToTable("BookingLocations", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Customer", b =>
@@ -288,7 +288,7 @@ namespace backend.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Driver", b =>
@@ -314,7 +314,7 @@ namespace backend.Migrations
 
                     b.HasKey("DriverId");
 
-                    b.ToTable("Drivers");
+                    b.ToTable("Drivers", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Itinerary", b =>
@@ -346,7 +346,7 @@ namespace backend.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Itineraries");
+                    b.ToTable("Itineraries", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.ItineraryLocation", b =>
@@ -370,7 +370,7 @@ namespace backend.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("ItineraryLocations");
+                    b.ToTable("ItineraryLocations", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Location", b =>
@@ -401,7 +401,7 @@ namespace backend.Migrations
 
                     b.HasKey("LocationId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Vehicle", b =>
@@ -427,7 +427,7 @@ namespace backend.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

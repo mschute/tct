@@ -6,6 +6,7 @@ import Roles from "./Roles";
 import '../styles/tabs.css';
 import Driver from "./Driver";
 import Customers from "./Customers";
+import Users from "./Users";
 
 const AdminPage = () => {
     const [activeTab, setActiveTab] = useState('tab1');
@@ -28,15 +29,18 @@ const AdminPage = () => {
                         Customers
                     </button>
                     <button className={activeTab === 'tab3' ? 'active' : ''} onClick={() => handleTabClick('tab3')}>
-                        Locations
+                        Users
                     </button>
                     <button className={activeTab === 'tab4' ? 'active' : ''} onClick={() => handleTabClick('tab4')}>
-                        Drivers
+                        Locations
                     </button>
                     <button className={activeTab === 'tab5' ? 'active' : ''} onClick={() => handleTabClick('tab5')}>
-                        Vehicles
+                        Drivers
                     </button>
                     <button className={activeTab === 'tab6' ? 'active' : ''} onClick={() => handleTabClick('tab6')}>
+                        Vehicles
+                    </button>
+                    <button className={activeTab === 'tab7' ? 'active' : ''} onClick={() => handleTabClick('tab7')}>
                         Roles
                     </button>
                 </div>
@@ -49,15 +53,18 @@ const AdminPage = () => {
                         <Customers/>
                     </div>
                     <div id="tab3" className={activeTab === 'tab3' ? 'tab-pane active' : 'tab-pane'}>
-                        <Locations/>
+                        <Users/>
                     </div>
                     <div id="tab4" className={activeTab === 'tab4' ? 'tab-pane active' : 'tab-pane'}>
-                        <Driver/>
+                        <Locations/>
                     </div>
                     <div id="tab5" className={activeTab === 'tab5' ? 'tab-pane active' : 'tab-pane'}>
-                        <Vehicles/>
+                        <Driver/>
                     </div>
                     <div id="tab6" className={activeTab === 'tab6' ? 'tab-pane active' : 'tab-pane'}>
+                        <Vehicles/>
+                    </div>
+                    <div id="tab7" className={activeTab === 'tab7' ? 'tab-pane active' : 'tab-pane'}>
                         <Roles/>
                     </div>
                 </div>
