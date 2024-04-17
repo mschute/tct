@@ -12,10 +12,10 @@ public class Customer
     public DateOnly? Dob { get; set; }
     public string? Nationality { get; set; }
     
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
     
     [JsonIgnore]
-    public IdentityUser User { get; set;  }
+    public IdentityUser? User { get; set;  }
     
     [JsonIgnore]
     public ICollection<Booking>? Bookings { get; set; } 

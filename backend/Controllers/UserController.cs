@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Helpers;
 using backend.Models;
+using backend.DTOs;
 
 namespace backend.Controllers;
 
@@ -16,16 +17,37 @@ namespace backend.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly ILogger<RolesController> _logger;
 
-    public UserController(UserManager<IdentityUser> userManager)
+    public UserController(UserManager<IdentityUser> userManager, ILogger<RolesController> logger)
     {
-        _userManager = _userManager;
+        _userManager = userManager;
+        _logger = logger;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-        var users = await _userManager.Users.ToListAsync();
-        return Ok(users);
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            List<UserDTO> usersDTO = null;
+            
+            try
+            {
+                var users = await _userManager.Users.ToListAsync();
+
+                usersDTO = users.Select(user => new UserDTO
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                }).ToList();
+
+                _logger.LogInformationEx("Users retrieved successfully");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogErrorEx($"Failed with error: {ex}");
+                return StatusCode(500, $"Failed with error: {ex}");
+            }
+
+            return Ok(usersDTO);
+        }
     }
-}
