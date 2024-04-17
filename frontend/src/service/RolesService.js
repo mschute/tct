@@ -34,7 +34,6 @@ const service = {
         }
     },
     
-//TODO Believe this is wrong
     updateRole: async (roleModel) => {
         try {
             const response = await axios.post(`${API_URL}`, roleModel)
@@ -52,11 +51,19 @@ const service = {
             throw new Error(`Error deleting role: ${error.message}`);
         }
     },
-
-    //TODO Believe this will have an error as it needs UserID and RoleName
+    
     assignRoleToUser: async (roleModel) => {
         try {
-            const response = await axios.post(`${API_URL}`, roleModel)
+            const response = await axios.post(`${API_URL}/assign-role-to-user`, roleModel)
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error signing in: ${error.message}`);
+        }
+    },
+
+    updateUserRole: async (roleModel) => {
+        try {
+            const response = await axios.put(`${API_URL}/update-role-assignment`, roleModel)
             return response.data;
         } catch (error) {
             throw new Error(`Error signing in: ${error.message}`);

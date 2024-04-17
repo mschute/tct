@@ -190,10 +190,10 @@ const Bookings = () => {
                     ]}
                     model={editingBooking}
                     modelName={modelName}
-                    handleInputChange={(e) => {
-                        const { name, value } = e.target;
+                    handleInputChange={(event) => {
+                        const { name, value } = event.target;
                         if (name === 'locationIds') {
-                            const selectedLocations = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                            const selectedLocations = Array.from(event.target.selectedOptions, option => parseInt(option.value));
                             setEditingBooking({...editingBooking, [name]: selectedLocations});
                         } else {
                             setEditingBooking({...editingBooking, [name]: value });

@@ -2,14 +2,14 @@ import React from 'react';
 import {formatCamelCase} from "../helpers/helpers";
 import "../styles/table.css";
 
-const Table = ({ model, handleEdit, handleDelete }) => {
-    if(!model || model.length === 0){
+const Table = ({model, modelName, handleEdit, handleDelete}) => {
+    if (!model || model.length === 0) {
         return <div>No data available.</div>
     }
-    
+
     const attributeNames = Object.keys(model[0]);
     console.log(attributeNames);
-    
+
     return (
         <div className='table-container'>
             <table className='table'>
@@ -36,8 +36,15 @@ const Table = ({ model, handleEdit, handleDelete }) => {
                             </td>
                         ))}
                         <td>
-                            <button className='primary-button' onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>
-                            <button className="delete-button" onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>
+                            {modelName === "User" ? (
+                                <button className='primary-button'
+                                        onClick={() => handleEdit(entry[attributeNames[0]])}>Edit Role</button>
+                            ) : (<button className='primary-button'
+                                         onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>)}
+                            {modelName === "User" ?
+                                ("") : (<button className="delete-button"
+                                                onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>)
+                            }
                         </td>
                     </tr>
                 ))}

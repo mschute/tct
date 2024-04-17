@@ -70,6 +70,8 @@ public class AccountController : ControllerBase
             };
 
             _context.Customers.Add(customer);
+            
+            await _context.SaveChangesAsync();
 
             await _userManager.AddToRoleAsync(user, "Customer");
             

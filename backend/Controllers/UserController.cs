@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Helpers;
@@ -33,21 +34,35 @@ public class UserController : ControllerBase
             try
             {
                 var users = await _userManager.Users.ToListAsync();
+                usersDTO = new List<UserDTO>();
 
-                usersDTO = users.Select(user => new UserDTO
+                foreach (var user in users)
                 {
-                    Id = user.Id,
-                    Email = user.Email,
-                }).ToList();
+                    var role = await GetUserRole(user);
+                    
+                    var userDTO = new UserDTO
+                    {
+                        UserId = user.Id,
+                        Email = user.Email,
+                        RoleName = role
+                    };
+
+                    usersDTO.Add(userDTO);
+                }
 
                 _logger.LogInformationEx("Users retrieved successfully");
+                return Ok(usersDTO);
             }
             catch(Exception ex)
             {
                 _logger.LogErrorEx($"Failed with error: {ex}");
                 return StatusCode(500, $"Failed with error: {ex}");
             }
+        }
 
-            return Ok(usersDTO);
+        private async Task<string> GetUserRole(IdentityUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.FirstOrDefault() ?? "No Role";
         }
     }

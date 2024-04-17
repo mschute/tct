@@ -5,7 +5,7 @@ const List = ({ model, modelName, handleEdit, handleDelete }) => {
     return (
         <div>
             <h2>{modelName}</h2>
-            <Table model={model} handleEdit={handleEdit} handleDelete={handleDelete} />
+            <Table model={model} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
         </div>
     );
 };
