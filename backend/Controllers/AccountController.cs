@@ -19,16 +19,18 @@ public class AccountController : ControllerBase
     private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccountController> _logger;
+    private readonly TCTravelContext _context;
 
     // Used dependency injection to pass the logger to AccountController
     public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-        EmailService emailService, IConfiguration configuration, ILogger<AccountController> logger)
+        EmailService emailService, IConfiguration configuration, ILogger<AccountController> logger, TCTravelContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailService = emailService;
         _configuration = configuration;
         _logger = logger;
+        _context = context;
     }
     
     // Method to register user to website using password and email
@@ -58,6 +60,21 @@ public class AccountController : ControllerBase
 
         if (result.Succeeded)
         {
+            var customer = new Customer
+            {
+                FirstName = null,
+                LastName = null,
+                Dob = null,
+                Nationality = null,
+                UserId = user.Id,
+            };
+
+            _context.Customers.Add(customer);
+            
+            await _context.SaveChangesAsync();
+
+            await _userManager.AddToRoleAsync(user, "Customer");
+            
             // Generate an email verification token, user can now communicate with endpoint services
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             

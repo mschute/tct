@@ -30,8 +30,7 @@ const Customers = () => {
         const selected = customers.find((customer) => customer.customerId === customerId);
         console.log('Selected customer:', selected);
         setSelectedCustomer(null);
-
-        // Ensure that the property names match the expected format
+        
         setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
     };
     

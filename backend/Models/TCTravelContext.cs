@@ -26,6 +26,12 @@ public class TCTravelContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
         
+        modelBuilder.Entity<Customer>()
+            .HasOne(c => c.User)
+            .WithOne()
+            .HasForeignKey<Customer>(c => c.UserId)
+            .IsRequired(false);
+        
         modelBuilder.Entity<ItineraryLocation>()
             .HasKey(il => new { il.ItineraryId, il.LocationId });
         modelBuilder.Entity<ItineraryLocation>()
