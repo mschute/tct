@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         // GET: api/ItineraryLocation
         // Retrieve itinerary locations
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItineraryLocation>>> GetItineraryLocations()
         {
@@ -44,6 +44,7 @@ namespace backend.Controllers
 
         // GET: api/ItineraryLocation/itineraryId
         // Retrieve itinerary locations by itinerary Id
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{itineraryId}")]
         public async Task<ActionResult<IEnumerable<ItineraryLocation>>> GetItineraryLocationsByItineraryId([FromRoute] int itineraryId)
         {
@@ -86,7 +87,7 @@ namespace backend.Controllers
         
         // GET: api/ItineraryLocation/itineraryId/locationId
         // Retrieve specific itinerary location
-        //[Authorize(Roles = "SuperAdmin,Admin,Customer,Driver")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{itineraryId}/{locationId}")]
         public async Task<ActionResult<ItineraryLocation>> GetItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId)
         {
@@ -117,7 +118,7 @@ namespace backend.Controllers
         }
 
         // POST: api/ItineraryLocation
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public async Task<ActionResult<ItineraryLocation>> PostItineraryLocation([FromBody] ItineraryLocationDTO itineraryLocationDTO)
         {
@@ -164,7 +165,7 @@ namespace backend.Controllers
         
         // PUT: api/ItineraryLocation/itineraryId/locationId
         // Update specific ItineraryLocation
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{itineraryId}/{locationId}")]
         public async Task<IActionResult> PutItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId, [FromBody] ItineraryLocation itineraryLocation)
         {
@@ -209,8 +210,8 @@ namespace backend.Controllers
 
         // DELETE: api/ItineraryLocation/5
         // Delete specific itinerary
+        [Authorize(Roles = "Admin, Customer")]
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> DeleteItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId)
         {
             try

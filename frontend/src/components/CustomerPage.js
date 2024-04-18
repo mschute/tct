@@ -6,6 +6,10 @@ function Itineraries() {
     return null;
 }
 
+function Bookings() {
+    return null;
+}
+
 const CustomerPage = () => {
     const [activeTab, setActiveTab] = useState('tab1');
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import service from '../service/CustomerService'; 
+import service from '../service/CustomerService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-const Customers = ({jwtToken}) => {
+const Customers = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [editingCustomer, setEditingCustomer] = useState(null);
@@ -13,12 +13,12 @@ const Customers = ({jwtToken}) => {
 
     useEffect(() => {
         // Fetch customers data when component mounts
-        fetchCustomers(jwtToken);
+        fetchCustomer();
     }, []);
-    
-    const fetchCustomers = async () => {
+
+    const fetchCustomer = async () => {
         try {
-            const customersData = await service.getCustomers(jwtToken);
+            const customersData = await service.getSpecificCustomer();
             setCustomers(customersData);
         } catch (error) {
             console.error(error.message)
@@ -26,33 +26,32 @@ const Customers = ({jwtToken}) => {
     }
 
     const handleEdit = (customerId) => {
-        console.log('Edit button clicked for customer customerId:', customerId);
         const selected = customers.find((customer) => customer.customerId === customerId);
         console.log('Selected customer:', selected);
         setSelectedCustomer(null);
-        
+
         setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
     };
-    
-    const handleDelete = async (customerId) => {
-        try {
-            await service.deleteCustomer(customerId, jwtToken)
-            fetchCustomers(jwtToken);
-        } catch (error) {
-            console.error('Error deleting customer:', error);
-        }
-    };
 
-    const handleViewDetails = (customerId) => {
-        const selected = customers.find((customer) => customer.customerId === customerId);
-        setSelectedCustomer(selected);
-        setEditingCustomer(null);
-    };
+    // const handleDelete = async (customerId) => {
+    //     try {
+    //         await service.deleteCustomer(customerId)
+    //         fetchCustomer();
+    //     } catch (error) {
+    //         console.error('Error deleting customer:', error);
+    //     }
+    // };
 
-    const handleCreate = () => {
-        setSelectedCustomer(null);
-        setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
-    };
+    // const handleViewDetails = (customerId) => {
+    //     const selected = customers.find((customer) => customer.customerId === customerId);
+    //     setSelectedCustomer(selected);
+    //     setEditingCustomer(null);
+    // };
+
+    // const handleCreate = () => {
+    //     setSelectedCustomer(null);
+    //     setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
+    // };
 
     const handleCancelEdit = () => {
         setEditingCustomer(null);
@@ -66,15 +65,10 @@ const Customers = ({jwtToken}) => {
             if (editingCustomer) {
                 if (editingCustomer.customerId) {
                     console.log('Updating existing customer:', editingCustomer);
-                    await service.updateCustomer(editingCustomer.customerId, editingCustomer, jwtToken);
+                    await service.updateCustomer(editingCustomer.customerId, editingCustomer);
 
-                } else {
-                    // Remove the existing customerId property for new customers
-                    const { customerId, ...newCustomer } = editingCustomer;
-                    console.log('Creating new customer:', newCustomer);
-                    await service.createCustomer(newCustomer, jwtToken)
-                }
-                fetchCustomers();
+                } 
+                fetchCustomer();
             }
         } catch (error) {
             console.error('Error saving customer:', error);
@@ -83,7 +77,7 @@ const Customers = ({jwtToken}) => {
             setEditingCustomer(null);
         }
     };
-    
+
     return (
         <div>
             <List model={customers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
@@ -104,7 +98,6 @@ const Customers = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

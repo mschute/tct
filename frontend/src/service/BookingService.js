@@ -4,10 +4,13 @@ const API_URL = 'http://localhost:5255/api/Booking'
 
 const service = {
 
-    getBookings: async () => {
+    getBookings: async (userRole) => {
         try {
-            const response = await axios.get(`${API_URL}`)
-            console.log("This is bookings: " + response.data);
+            const response = await axios.get(`${API_URL}`, {
+                headers: {
+                    'Authorization': `Bearer ${userRole}`
+                }
+            });
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);

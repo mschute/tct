@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-const Vehicles = () => {
+const Vehicles = ({jwtToken}) => {
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [editingVehicle, setEditingVehicle] = useState(null);
@@ -13,12 +13,12 @@ const Vehicles = () => {
 
     useEffect(() => {
         // Fetch vehicles data when component mounts
-        fetchVehicles();
+        fetchVehicles(jwtToken);
     }, []);
 
     const fetchVehicles = async () => {
         try {
-            const vehiclesData = await service.getVehicles();
+            const vehiclesData = await service.getVehicles(jwtToken);
             setVehicles(vehiclesData);
             console.log("This is vehicles data:", JSON.stringify(vehiclesData))
         } catch (error) {
@@ -27,19 +27,16 @@ const Vehicles = () => {
     }
 
     const handleEdit = (vehicleId) => {
-        console.log('Edit button clicked for vehicle vehicleId:', vehicleId);
         const selected = vehicles.find((vehicle) => vehicle.vehicleId === vehicleId);
-        console.log('Selected vehicle:', selected);
         setSelectedVehicle(null);
-
-        // Ensure that the property names match the expected format
+        
         setEditingVehicle({ vehicleId: selected.vehicleId, make: selected.make, model: selected.model, gasType: selected.gasType, seats: selected.seats, pricePerDay: selected.pricePerDay});
     };
 
     const handleDelete = async (vehicleId) => {
         try {
-            await service.deleteVehicle(vehicleId)
-            fetchVehicles();
+            await service.deleteVehicle(vehicleId, jwtToken)
+            fetchVehicles(jwtToken);
         } catch (error) {
             console.error('Error deleting vehicle:', error);
         }
@@ -63,18 +60,14 @@ const Vehicles = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Vehicle:', editingVehicle);
 
             if (editingVehicle) {
                 if (editingVehicle.vehicleId) {
-                    console.log('Updating existing vehicle:', editingVehicle);
-                    await service.updateVehicle(editingVehicle.vehicleId, editingVehicle);
+                    await service.updateVehicle(editingVehicle.vehicleId, editingVehicle, jwtToken);
 
                 } else {
-                    // Remove the existing vehicleId property for new vehicles
                     const { vehicleId, ...newVehicle } = editingVehicle;
-                    console.log('Creating new vehicle:', newVehicle);
-                    await service.createVehicle(newVehicle)
+                    await service.createVehicle(newVehicle, jwtToken)
                 }
                 fetchVehicles();
             }

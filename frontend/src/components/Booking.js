@@ -10,7 +10,7 @@ import service from "../service/BookingService";
 import bookingLocationService from "../service/BookingLocationService";
 import "../styles/table.css";
 
-const Bookings = () => {
+const Bookings = ({jwtToken}) => {
     const [bookings, setBookings] = useState([]);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [editingBooking, setEditingBooking] = useState(null);
@@ -22,16 +22,16 @@ const Bookings = () => {
 
     useEffect(() => {
         // Fetch bookings data when component mounts
-        fetchBookings();
-        fetchVehicles();
-        fetchCustomers();
-        fetchDrivers();
-        fetchLocations();
+        fetchBookings(jwtToken);
+        fetchVehicles(jwtToken);
+        fetchCustomers(jwtToken);
+        fetchDrivers(jwtToken);
+        fetchLocations(jwtToken);
     }, []);
 
     const fetchBookings = async () => {
         try {
-            const bookingsData = await service.getBookings();
+            const bookingsData = await service.getBookings(jwtToken);
             setSelectedBooking(null);
             setEditingBooking(null);
             setBookings(bookingsData);
@@ -43,7 +43,7 @@ const Bookings = () => {
 
     const fetchVehicles = async () => {
         try {
-            const vehiclesData = await vehicleService.getVehicles();
+            const vehiclesData = await vehicleService.getVehicles(jwtToken);
             setVehicles(vehiclesData);
         } catch (error) {
             console.error(error.message)
@@ -52,7 +52,7 @@ const Bookings = () => {
 
     const fetchCustomers = async () => {
         try {
-            const customersData = await customerService.getCustomers();
+            const customersData = await customerService.getCustomers(jwtToken);
             setCustomers(customersData);
         } catch (error) {
             console.error(error.message)
@@ -61,7 +61,7 @@ const Bookings = () => {
 
     const fetchDrivers = async () => {
         try {
-            const driversData = await driverService.getDrivers();
+            const driversData = await driverService.getDrivers(jwtToken);
             setDrivers(driversData);
         } catch (error) {
             console.error(error.message)
@@ -78,19 +78,17 @@ const Bookings = () => {
     }
 
     const handleEdit = (bookingId) => {
-        console.log('Edit button clicked for booking bookingId:', bookingId);
         const selected = bookings.find((booking) => booking.bookingId === bookingId);
-        console.log('Selected booking:', selected);
         setSelectedBooking(null);
 
         // Ensure that the property names match the expected format
         setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId, locationIds: selected.locationIds, bookingNotes: selected.bookingNotes});
     };
 
-    const handleDelete = async (bookingId) => {
+    const handleDelete = async (bookingId, jwtToken) => {
         try {
-            await service.deleteBooking(bookingId)
-            fetchBookings();
+            await service.deleteBooking(bookingId, jwtToken)
+            fetchBookings(jwtToken);
         } catch (error) {
             console.error('Error deleting booking:', error);
         }
@@ -114,16 +112,14 @@ const Bookings = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Booking:', editingBooking);
-
             if (editingBooking) {
                 if (editingBooking.bookingId) {
                     //TODO Need to extract booking location logic out
                     console.log('Updating existing booking:', editingBooking);
                     
-                    await service.updateBooking(editingBooking.bookingId, editingBooking);
+                    await service.updateBooking(editingBooking.bookingId, editingBooking, jwtToken);
                     
-                    const existingBookingLocations = await bookingLocationService.getSpecificBookingLocation(editingBooking.bookingId);
+                    const existingBookingLocations = await bookingLocationService.getSpecificBookingLocation(editingBooking.bookingId, jwtToken);
 
                     const existingLocationIds = existingBookingLocations.map(location => location.locationId);
                     
@@ -132,13 +128,13 @@ const Bookings = () => {
                     
                     const createBookingLocationPromises = locationsToAdd.map(locationId => {
                         const newBookingLocation = { bookingId: editingBooking.bookingId, locationId };
-                        return bookingLocationService.createBookingLocation(newBookingLocation);
+                        return bookingLocationService.createBookingLocation(newBookingLocation, jwtToken);
                     });
 
                     const deleteBookingLocationPromises = locationsToRemove.map(locationId => {
                         const bookingLocation = existingBookingLocations.find(location => location.locationId === locationId);
                         if (bookingLocation) {
-                            return bookingLocationService.deleteBookingLocation(editingBooking.bookingId, locationId);
+                            return bookingLocationService.deleteBookingLocation(editingBooking.bookingId, locationId, jwtToken);
                         }
                     });
 
@@ -148,19 +144,19 @@ const Bookings = () => {
                     //TODO Need to extract booking location logic out
                     const { bookingId, ...newBooking } = editingBooking;
 
-                    const createdBooking = await service.createBooking(newBooking);
+                    const createdBooking = await service.createBooking(newBooking, jwtToken);
                     
                     const _bookingId = createdBooking.bookingId;
                     const _locationIds = newBooking.locationIds;
 
                     const createBookingLocationPromise = _locationIds.map((location) => {
                         const newBookingLocation = { bookingId: _bookingId, locationId: location };
-                        return bookingLocationService.createBookingLocation(newBookingLocation);
+                        return bookingLocationService.createBookingLocation(newBookingLocation, jwtToken);
                     });
                     
                     await Promise.all(createBookingLocationPromise);
                 }
-                fetchBookings();
+                fetchBookings(jwtToken);
             }
         } catch (error) {
             console.error('Error saving booking:', error);

@@ -22,7 +22,7 @@ namespace backend.Controllers
 
         // GET: api/Customer
         // Retrieve all customer
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
@@ -42,7 +42,7 @@ namespace backend.Controllers
 
         // GET: api/Customer/5
         // Retrieve specific customer
-        //[Authorize(Roles = "SuperAdmin,Admin,Customer")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
         {
@@ -83,7 +83,7 @@ namespace backend.Controllers
 
         // PUT: api/Customer/5
         // Update specific customer
-        //[Authorize(Roles = "SuperAdmin,Admin,Customer")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
@@ -127,7 +127,7 @@ namespace backend.Controllers
 
         // POST: api/Customer
         // Create Customer
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
@@ -154,7 +154,7 @@ namespace backend.Controllers
 
         // DELETE: api/Customer/5
         // Delete specific customer
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {

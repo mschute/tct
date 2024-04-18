@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         // GET: api/Booking
         // Retrieve all bookings
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookings()
         {
@@ -72,7 +72,7 @@ namespace backend.Controllers
 
         // GET: api/Booking/5
         // Retrieve specific bookings
-        //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
@@ -125,7 +125,7 @@ namespace backend.Controllers
 
         // PUT: api/Booking/5
         // Update specific booking
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBooking(int id, Booking booking)
         {
@@ -170,7 +170,7 @@ namespace backend.Controllers
 
         // POST: api/Booking
         // Create booking
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking(Booking booking)
         {
@@ -198,7 +198,7 @@ namespace backend.Controllers
         // DELETE: api/Booking/5
         // Delete specific booking
         //[Authorize(Roles = "SuperAdmin,Admin")]
-        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
             try

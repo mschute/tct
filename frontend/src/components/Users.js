@@ -6,20 +6,20 @@ import Details from "./Details";
 import "../styles/table.css";
 import UserForm from "./UserForm";
 
-const Users = () => {
+const Users = ({jwtToken}) => {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [roles, setRoles] = useState()
     const modelName = "User";
 
     useEffect(() => {
-        fetchUsers();
-        fetchRoles();
+        fetchUsers(jwtToken);
+        fetchRoles(jwtToken);
     }, []);
 
     const fetchUsers = async () => {
         try {
-            const usersData = await service.getUsers();
+            const usersData = await service.getUsers(jwtToken);
             setUsers(usersData);
         } catch (error) {
             console.error(error.message)
@@ -28,7 +28,7 @@ const Users = () => {
     
     const fetchRoles = async () => {
         try {
-            const rolesData = await roleService.getRoles();
+            const rolesData = await roleService.getRoles(jwtToken);
             setRoles(rolesData);
         } catch (error) {
             console.error(error.message);
@@ -36,9 +36,7 @@ const Users = () => {
     }
 
     const handleEdit = (userId) => {
-        console.log('Edit button clicked for user userId:', userId);
         const selected = users.find((user) => user.userId === userId);
-        console.log('Selected user:', selected);
         setEditingUser(null);
 
         setEditingUser({userId: selected.userId, email: selected.email, roleName: selected.roleName});
@@ -71,7 +69,7 @@ const Users = () => {
         event.preventDefault();
         try {
             await roleService.updateUserRole({userId: editingUser.userId, roleName: editingUser.roleName });
-            fetchUsers();
+            fetchUsers(jwtToken);
         } catch (error) {
             console.error('Error assigning role: ', error);
             console.error('Response data: ', error.response?.data);

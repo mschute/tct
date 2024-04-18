@@ -25,47 +25,6 @@ public class UserController : ControllerBase
         _userManager = userManager;
         _logger = logger;
     }
-    
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
-        {
-            List<UserDTO> usersDTO = null;
-            
-            try
-            {
-                var users = await _userManager.Users.ToListAsync();
-                usersDTO = new List<UserDTO>();
-
-                foreach (var user in users)
-                {
-                    var role = await GetUserRole(user);
-                    
-                    var userDTO = new UserDTO
-                    {
-                        UserId = user.Id,
-                        Email = user.Email,
-                        RoleName = role
-                    };
-
-                    usersDTO.Add(userDTO);
-                }
-
-                _logger.LogInformationEx("Users retrieved successfully");
-                return Ok(usersDTO);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogErrorEx($"Failed with error: {ex}");
-                return StatusCode(500, $"Failed with error: {ex}");
-            }
-        }
-
-        private async Task<string> GetUserRole(IdentityUser user)
-        {
-            var roles = await _userManager.GetRolesAsync(user);
-            return roles.FirstOrDefault() ?? "No Role";
-        }
-    }
 
     [Authorize(Roles = "Admin")]
     [HttpGet]

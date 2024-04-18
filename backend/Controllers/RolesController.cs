@@ -222,59 +222,6 @@ namespace backend.Controllers;
             _logger.LogErrorEx($"Invalid request: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             return BadRequest(result.Errors);
         }
-		
-        // PUT: api/Roles/assign-role-to-user
-        // Update user role
-		[HttpPut("update-role-assignment")]
-		public async Task<IActionResult> UpdateRoleAssignment([FromBody] AssignRoleModel model)
-		{
-    		if (!ModelState.IsValid)
-    		{
-        		_logger.LogErrorEx("Error. Invalid request.");
-        		return BadRequest(ModelState);
-    		}
-
-    		var user = await _userManager.FindByIdAsync(model.UserId);
-
-    		if (user == null)
-    		{
-        		_logger.LogErrorEx($"Error. User not found.");
-        		return NotFound("User not found.");
-    		}
-
-    		var roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
-    		if (!roleExists)
-    		{
-        		_logger.LogErrorEx($"Error. Role not found.");
-        		return NotFound("Role not found.");
-    		}
-
-    		var userRoles = await _userManager.GetRolesAsync(user);
-    		if (userRoles.Contains(model.RoleName))
-    		{
-        		_logger.LogInformationEx($"User already has the role {model.RoleName} assigned.");
-       		 	return Ok("User already has the role assigned.");
-    		}
-
-    		// Remove existing roles and assign the new one
-    		var removeResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
-    		if (!removeResult.Succeeded)
-    		{
-        		_logger.LogErrorEx($"Failed to remove existing roles: {string.Join(", ", removeResult.Errors)}");
-        		return BadRequest("Failed to update role assignment.");
-    		}
-
-    		var addResult = await _userManager.AddToRoleAsync(user, model.RoleName);
-    		if (addResult.Succeeded)
-    		{
-        		_logger.LogInformationEx($"Role {model.RoleName} assigned to user {model.UserId} updated successfully!");
-        		return Ok("Role assignment updated successfully.");
-    		}
-
-    		_logger.LogErrorEx($"Failed to assign role: {string.Join(", ", addResult.Errors)}");
-    		return BadRequest("Failed to update role assignment.");
-		}
-    }
        
         // PUT: api/Roles/assign-role-to-user
         // Update user role
@@ -328,3 +275,4 @@ namespace backend.Controllers;
            return BadRequest("Failed to update role assignment.");
        }
     }
+    

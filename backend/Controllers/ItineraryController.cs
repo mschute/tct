@@ -24,7 +24,6 @@ namespace backend.Controllers
 
         // GET: api/Itinerary
         // Retrieve all itineraries
-        //[Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItineraryDTO>>> GetItineraries()
         {
@@ -57,15 +56,6 @@ namespace backend.Controllers
                         ItineraryNotes = itinerary.ItineraryNotes,
                     };
 
-                    // foreach (var itineraryLocation in itinerary.ItineraryLocations)
-                    // {
-                    //     itineraryDTO.LocationNames.Add(itineraryLocation.Location.LocationName);
-                    //     itineraryDTO.LocationAddresses.Add(itineraryLocation.Location.LocationAddress);
-                    //     itineraryDTO.StopOvers.Add(itineraryLocation.StopOver);
-                    //     itineraryDTO.StopOrders.Add(itineraryLocation.StopOrder);
-                    //     itineraryDTO.TravelTimesNextLocale.Add(itineraryLocation.TravelTimeNextLocale);
-                    // }
-
                     return itineraryDTO;
                 }));
             
@@ -81,7 +71,7 @@ namespace backend.Controllers
 
         // GET: api/Itinerary/5
         // Retrieve specific itinerariess
-        //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<ItineraryDTO>> GetItinerary(int id)
         {
@@ -121,15 +111,6 @@ namespace backend.Controllers
                     ItineraryNotes = itinerary.ItineraryNotes,
                 };
 
-                // foreach (var itineraryLocation in itinerary.ItineraryLocations)
-                // {
-                //     itineraryDTO.LocationNames.Add(itineraryLocation.Location.LocationName);
-                //     itineraryDTO.LocationAddresses.Add(itineraryLocation.Location.LocationAddress);
-                //     itineraryDTO.StopOvers.Add(itineraryLocation.StopOver);
-                //     itineraryDTO.StopOrders.Add(itineraryLocation.StopOrder);
-                //     itineraryDTO.TravelTimesNextLocale.Add(itineraryLocation.TravelTimeNextLocale);
-                // }
-
                 _logger.LogInformationEx($"Itinerary {id} retrieved successfully.");
                 return Ok(itineraryDTO);
             }
@@ -142,7 +123,7 @@ namespace backend.Controllers
 
         // PUT: api/Itinerary/5
         // Update specific itinerary
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItinerary(int id, Itinerary itinerary)
         {
@@ -187,7 +168,7 @@ namespace backend.Controllers
 
         // POST: api/Itinerary
         // Create itinerary
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public async Task<ActionResult<Itinerary>> PostItinerary(Itinerary itinerary)
         {
@@ -214,7 +195,7 @@ namespace backend.Controllers
 
         // DELETE: api/Itinerary/5
         // Delete specific itinerary
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItinerary(int id)
         {

@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         // GET: api/BookingLocation
         // Retrieve booking locations
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingLocation>>> GetBookingLocations()
         {
@@ -45,6 +45,7 @@ namespace backend.Controllers
         // GET: api/BookingLocation/bookingId
         // Retrieve booking locations by booking Id
         [HttpGet("{bookingId}")]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<IEnumerable<BookingLocation>>> GetBookingLocationsByBookingId([FromRoute] int bookingId)
         {
             try
@@ -86,7 +87,7 @@ namespace backend.Controllers
 
         // GET: api/BookingLocation/bookingId/locationId
         // Retrieve specific booking location
-        //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{bookingId}/{locationId}")]
         public async Task<ActionResult<BookingLocation>> GetBookingLocation([FromRoute] int bookingId, [FromRoute] int locationId)
         {
@@ -117,7 +118,7 @@ namespace backend.Controllers
         }
 
         // POST: api/BookingLocation
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<BookingLocation>> PostBookingLocation([FromBody] BookingLocation bookingLocation)
         {
@@ -157,7 +158,7 @@ namespace backend.Controllers
         
         // PUT: api/BookingLocation/bookingId/locationId
         // Update specific BookingLocation
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{bookingId}/{locationId}")]
         public async Task<IActionResult> PutBookingLocation([FromRoute] int bookingId, [FromRoute] int locationId, [FromBody] BookingLocation bookingLocation)
         {
@@ -202,8 +203,8 @@ namespace backend.Controllers
 
         // DELETE: api/BookingLocation/bookingId/locationId
         // Delete specific booking
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{bookingId}/{locationId}")]
-        //[Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> DeleteBookingLocation([FromRoute] int bookingId, [FromRoute] int locationId)
         {
             try

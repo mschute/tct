@@ -23,6 +23,7 @@ namespace backend.Controllers
 
         // GET: api/Vehicle
         // Retrieve all vehicles
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
         {
@@ -42,6 +43,7 @@ namespace backend.Controllers
 
         // GET: api/Vehicle/5
         // Retrieve specific vehicle
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {
@@ -73,6 +75,7 @@ namespace backend.Controllers
 
         // PUT: api/Vehicle/5
         // Update specific vehicle
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVehicle(int id, Vehicle vehicle)
         {
@@ -117,6 +120,7 @@ namespace backend.Controllers
 
         // POST: api/Vehicle
         // Create Vehicle
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
@@ -143,6 +147,7 @@ namespace backend.Controllers
 
         // DELETE: api/Vehicle/5
         // Delete specific vehicle
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {

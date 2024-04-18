@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import ItineraryForm from "./ItineraryForm";
 
-const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime, handleNoteChange, isAuthenticated }) => {
+const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime, handleNoteChange, isAuthenticated, jwtToken }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -26,17 +26,15 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
     }
 
     const handleEdit = (itineraryId) => {
-        console.log('Edit button clicked for itinerary itineraryId:', itineraryId);
         const selected = itineraries.find((itinerary) => itinerary.itineraryId === itineraryId);
-        console.log('Selected itinerary:', selected);
         setSelectedItinerary(null);
 
         setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, passengerCount: selected.passengerCount, customerName: selected.customerName, itineraryNotes: selected.itineraryNotes, itineraryLocations: selected.itineraryLocations });
     };
 
-    const handleDelete = async (itineraryId) => {
+    const handleDelete = async (itineraryId, jwtToken) => {
         try {
-            await service.deleteItinerary(itineraryId)
+            await service.deleteItinerary(itineraryId, jwtToken)
             fetchItineraries();
         } catch (error) {
             console.error('Error deleting itinerary:', error);
@@ -61,18 +59,16 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Itinerary:', editingItinerary);
-
             if (editingItinerary) {
                 if (editingItinerary.itineraryId) {
                     console.log('Updating existing itinerary:', editingItinerary);
-                    await service.updateItinerary(editingItinerary.itineraryId, editingItinerary);
+                    await service.updateItinerary(editingItinerary.itineraryId, editingItinerary, jwtToken);
 
                 } else {
                     // Remove the existing itineraryId property for new itineraries
                     const { itineraryId, ...newItinerary } = editingItinerary;
                     console.log('Creating new itinerary:', newItinerary);
-                    await service.createItinerary(newItinerary)
+                    await service.createItinerary(newItinerary, jwtToken)
                 }
                 fetchItineraries();
             }

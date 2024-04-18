@@ -8,7 +8,7 @@ import Driver from "./Driver";
 import Customers from "./Customers";
 import Users from "./Users";
 
-const AdminPage = () => {
+const AdminPage = ({userRole, jwtToken}) => {
     const [activeTab, setActiveTab] = useState('tab1');
 
     const handleTabClick = (tab) => {
@@ -47,25 +47,25 @@ const AdminPage = () => {
 
                 <div className="tab-content">
                     <div id="tab1" className={activeTab === 'tab1' ? 'tab-pane active' : 'tab-pane'}>
-                        <Booking/>
+                        <Booking jwtToken={jwtToken}/>
                     </div>
                     <div id="tab2" className={activeTab === 'tab2' ? 'tab-pane active' : 'tab-pane'}>
-                        <Customers/>
+                        <Customers jwtToken={jwtToken}/>
                     </div>
                     <div id="tab3" className={activeTab === 'tab3' ? 'tab-pane active' : 'tab-pane'}>
-                        <Users/>
+                        <Users jwtToken={jwtToken}/>
                     </div>
                     <div id="tab4" className={activeTab === 'tab4' ? 'tab-pane active' : 'tab-pane'}>
-                        <Locations/>
+                        <Locations jwtToken={jwtToken}/>
                     </div>
                     <div id="tab5" className={activeTab === 'tab5' ? 'tab-pane active' : 'tab-pane'}>
-                        <Driver/>
+                        <Driver jwtToken={jwtToken}/>
                     </div>
                     <div id="tab6" className={activeTab === 'tab6' ? 'tab-pane active' : 'tab-pane'}>
-                        <Vehicles/>
+                        <Vehicles jwtToken={jwtToken}/>
                     </div>
                     <div id="tab7" className={activeTab === 'tab7' ? 'tab-pane active' : 'tab-pane'}>
-                        <Roles/>
+                        <Roles jwtToken={jwtToken}/>
                     </div>
                 </div>
             </div>

@@ -136,32 +136,40 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(AuthModel model)
     {
-        // Handle invalid user input during login process
-        if (!ModelState.IsValid)
+        try
         {
-            _logger.LogErrorEx("Invalid request");
-            // If data is not valid, prevent further processing
-            return BadRequest("Invalid request");
-        }
-        
-        // Asynchronous method that attempts to sign in user with email and password
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false,
-            lockoutOnFailure: false);
+            // Handle invalid user input during login process
+            if (!ModelState.IsValid)
+            {
+                _logger.LogErrorEx("Invalid request");
+                // If data is not valid, prevent further processing
+                return BadRequest("Invalid request");
+            }
 
-        // Log user in if email and password combination are valid
-        if (result.Succeeded)
+            // Asynchronous method that attempts to sign in user with email and password
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false,
+                lockoutOnFailure: false);
+
+            // Log user in if email and password combination are valid
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                var roles = await _userManager.GetRolesAsync(user);
+                // Generating token
+                var token = GenerateJwtToken(user, roles);
+                _logger.LogInformationEx($"Login for {model.Email} was successful");
+                // Return JWT Token for user authentication
+                return Ok(new { Token = token });
+            }
+
+            _logger.LogErrorEx($"Unauthorized login attempt for {model.Email}");
+            return Unauthorized($"Unauthorized login attempt for {model.Email}");
+        }
+        catch
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            var roles = await _userManager.GetRolesAsync(user);
-            // Generating token
-            var token = GenerateJwtToken(user, roles);
-            _logger.LogInformationEx($"Login for {model.Email} was successful");
-            // Return JWT Token for user authentication
-            return Ok(new { Token = token });
+            _logger.LogErrorEx($"Failed to generate JWT tokenr {model.Email}");
+            return StatusCode(500, "Failed to generate JWT token");
         }
-
-        _logger.LogErrorEx($"Unauthorized login attempt for {model.Email}");
-        return Unauthorized($"Unauthorized login attempt for {model.Email}");
     }
     
     // Log user out of their account

@@ -4,45 +4,45 @@ const API_URL = 'http://localhost:5255/api/Itinerary'
 
 const service = {
 
-    getItineraries: async () => {
+    getItineraries: async (jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}`)
+            const response = await axios.get(`${API_URL}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);
         }
     },
 
-    getSpecificItinerary: async (itineraryId) => {
+    getSpecificItinerary: async (itineraryId, jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}/${itineraryId}`)
+            const response = await axios.get(`${API_URL}/${itineraryId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);
         }
     },
 
-    createItinerary: async (newItinerary) => {
+    createItinerary: async (newItinerary, jwtToken) => {
         try {
-            const response = await axios.post(`${API_URL}`, newItinerary)
+            const response = await axios.post(`${API_URL}`, newItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);
         }
     },
 
-    updateItinerary: async (itineraryId, editingItinerary) => {
+    updateItinerary: async (itineraryId, editingItinerary, jwtToken) => {
         try {
-            const response = await axios.put(`${API_URL}/${itineraryId}`, editingItinerary)
+            const response = await axios.put(`${API_URL}/${itineraryId}`, editingItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);
         }
     },
 
-    deleteItinerary: async (itineraryId) => {
+    deleteItinerary: async (itineraryId, jwtToken) => {
         try {
-            const response = await axios.delete(`${API_URL}/${itineraryId}`)
+            const response = await axios.delete(`${API_URL}/${itineraryId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);

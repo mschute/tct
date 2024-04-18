@@ -22,27 +22,27 @@ const service = {
         }
     },
 
-    createLocation: async (newLocation) => {
+    createLocation: async (newLocation, jwtToken) => {
         try {
-            const response = await axios.post(`${API_URL}`, newLocation)
+            const response = await axios.post(`${API_URL}`, newLocation, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching locations: ${error.message}`);
         }
     },
 
-    updateLocation: async (locationId, editingLocation) => {
+    updateLocation: async (locationId, editingLocation, jwtToken) => {
         try {
-            const response = await axios.put(`${API_URL}/${locationId}`, editingLocation)
+            const response = await axios.put(`${API_URL}/${locationId}`, editingLocation, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching locations: ${error.message}`);
         }
     },
 
-    deleteLocation: async (locationId) => {
+    deleteLocation: async (locationId, jwtToken) => {
         try {
-            const response = await axios.delete(`${API_URL}/${locationId}`)
+            const response = await axios.delete(`${API_URL}/${locationId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching locations: ${error.message}`);
