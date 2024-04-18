@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         // GET: api/BookingLocation
         // Retrieve booking locations
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingLocation>>> GetBookingLocations()
         {

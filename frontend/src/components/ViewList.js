@@ -1,13 +1,13 @@
 import React from 'react';
 import ViewTable from './ViewTable';
 
-const List = ({ model, modelName }) => {
+const ViewList = ({ model, modelName, handleEdit, handleDelete}) => {
     return (
         <div>
             <h2>{modelName}</h2>
-            <ViewTable model={model} />
+            <ViewTable model={model} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
         </div>
     );
 };
 
-export default List;
+export default ViewList;

@@ -4,7 +4,7 @@ import MapComponent from "./MapComponent";
 import {APIProvider} from "@vis.gl/react-google-maps";
 import '../styles/home-section.css';
 
-const Home = ({isAuthenticated, setIsAuthenticated}) => {
+const Home = ({isAuthenticated, setIsAuthenticated, activeCustomerId}) => {
 
     return (
         <>
@@ -67,7 +67,7 @@ const Home = ({isAuthenticated, setIsAuthenticated}) => {
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} activeCustomerId={activeCustomerId}/>
                     </APIProvider>
                 </div>
             </main>

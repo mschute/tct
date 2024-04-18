@@ -23,7 +23,7 @@ namespace backend.Controllers
 
         // GET: api/Vehicle
         // Retrieve all vehicles
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
         {
@@ -43,7 +43,7 @@ namespace backend.Controllers
 
         // GET: api/Vehicle/5
         // Retrieve specific vehicle
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {

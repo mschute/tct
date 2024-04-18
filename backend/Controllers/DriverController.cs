@@ -26,7 +26,7 @@ namespace backend.Controllers
 
         // GET: api/Driver
         // Retrieve all Drivers
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> GetDrivers()
         {
@@ -46,7 +46,7 @@ namespace backend.Controllers
 
         // GET: api/Driver/5
         // Retrieve specific driver
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Driver>> GetDriver(int id)
         {

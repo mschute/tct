@@ -165,7 +165,7 @@ namespace backend.Controllers
         
         // PUT: api/ItineraryLocation/itineraryId/locationId
         // Update specific ItineraryLocation
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPut("{itineraryId}/{locationId}")]
         public async Task<IActionResult> PutItineraryLocation([FromRoute] int itineraryId, [FromRoute] int locationId, [FromBody] ItineraryLocation itineraryLocation)
         {

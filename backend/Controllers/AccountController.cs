@@ -74,15 +74,12 @@ public class AccountController : ControllerBase
             await _context.SaveChangesAsync();
 
             await _userManager.AddToRoleAsync(user, "Customer");
-            
-            // Generate an email verification token, user can now communicate with endpoint services
+
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             
-            // Create the verification link
             var verificationLink = Url.Action("VerifyEmail", "Account", new { userId = user.Id, token = token },
                 Request.Scheme);
-
-            // Send the verification email
+            
             var emailSubject = "Email Verification for Tay Country Travel";
             var emailBody = $"Welcome to Tay Country Travel! We are pleased you are interest in our luxury travel service. Thank you for creating an account. " +
                             $"To finish the sign-up process, please verify your email by clicking the following link: \n {verificationLink}" +
@@ -155,8 +152,10 @@ public class AccountController : ControllerBase
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var roles = await _userManager.GetRolesAsync(user);
+                string customerId = GetCustomerIdFromDatabase(user);
+                
                 // Generating token
-                var token = GenerateJwtToken(user, roles);
+                var token = GenerateJwtToken(user, roles, customerId);
                 _logger.LogInformationEx($"Login for {model.Email} was successful");
                 // Return JWT Token for user authentication
                 return Ok(new { Token = token });
@@ -171,6 +170,28 @@ public class AccountController : ControllerBase
             return StatusCode(500, "Failed to generate JWT token");
         }
     }
+
+    private string GetCustomerIdFromDatabase(IdentityUser user)
+    {
+        try
+        {
+            var customer = _context.Customers.FirstOrDefault(c => c.UserId == user.Id);
+
+            if (customer != null)
+            {
+                return customer.CustomerId.ToString();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error retrieving customer ID for user {user.UserName}: {ex.Message}");
+            return null;
+        }
+    }
     
     // Log user out of their account
     [HttpPost("logout")]
@@ -181,27 +202,14 @@ public class AccountController : ControllerBase
         return Ok("Logged out");
     }
 
-    //TODO Need to figure out how to revoke JWT token
-    // [HttpPost("revoke")]
-    // public IActionResult RevokeToken([FromBody] RevokeTokenRequest request)
-    // {
-    //     if (request == null || string.IsNullOrEmpty(request.Token))
-    //     {
-    //         return BadRequest("Invalid token data");
-    //     }
-    //
-    //     _tokenRevocationService.RevokeToken(request.Token);
-    //
-    //     return Ok("Token revoked successfully");
-    // }
-
     // Generate JSON Web Token for user authentication
-    private string GenerateJwtToken(IdentityUser user, IList<string> roles)
+    private string GenerateJwtToken(IdentityUser user, IList<string> roles, string customerId)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("customerId", customerId ?? "")
         };
 
         // Add roles as claims

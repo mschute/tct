@@ -13,11 +13,11 @@ import {useNavigate} from 'react-router-dom';
 
 function App() {
     const [jwtToken, setJwtToken] = useState(window.localStorage.getItem('jwtToken'));
-    const [userRole, setUserRole] = useState(window.localStorage.getItem('userRole'))
+    const [userRole, setUserRole] = useState(window.localStorage.getItem('userRole'));
+    const [activeCustomerId, setActiveCustomerId] = useState(window.localStorage.getItem('customerId'))
     const navigation = useNavigate();
 
     const handleSignOut = async () => {
-        console.log("Sign out called");
         try {
             await service.logout();
 
@@ -27,6 +27,7 @@ function App() {
 
             window.localStorage.removeItem('userRole');
             setUserRole(null);
+            setActiveCustomerId(null);
 
             navigation('/');
         } catch (error) {
@@ -35,14 +36,16 @@ function App() {
     }
 
     const handleSetJwtToken = (token) => {
+        console.log("handleSetJwtToken is called")
         const decodedToken = jwtDecode(token);
         const expirationTime = decodedToken.exp * 1000;
-        console.log('token in set token ', expirationTime)
         window.localStorage.setItem('jwtToken', token);
         window.localStorage.setItem('expirationTime', expirationTime.toString())
         setJwtToken(token);
         
+        console.log("The token to send to the handle sets")
         handleSetUserRole(token)
+        handleSetCustomerId(token)
         timeOut(expirationTime);
     }
     
@@ -53,18 +56,28 @@ function App() {
     }
 
     const handleSetUserRole = (token) => {
+        console.log("Handle set user role was called")
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         window.localStorage.setItem('userRole', userRole);
         setUserRole(userRole);
     }
 
+    const handleSetCustomerId = (token) => {
+        console.log("Handle set customer Id was called")
+        const decodedToken = jwtDecode(token);
+        const customerId = decodedToken["customerId"];
+        window.localStorage.setItem('customerId', customerId);
+        console.log("Customer Id in the handle set", customerId)
+        setActiveCustomerId(customerId);
+    }
+
     return (
             <div>
                 <Header handleSignOut={handleSignOut} jwtToken={jwtToken} userRole={userRole}/>
                 <Routes>
-                    <Route path="/" element={<Home/>} exact/>
-                    <Route path="/customerpage" element={<CustomerPage jwtToken={jwtToken} userRole={userRole}/>} exact/>
+                    <Route path="/" element={<Home activeCustomerId={activeCustomerId}/>} exact/>
+                    <Route path="/customerpage" element={<CustomerPage jwtToken={jwtToken} userRole={userRole} activeCustomerId={activeCustomerId}/>} exact/>
                     <Route path="/adminpage" element={<AdminPage jwtToken={jwtToken} userRole={userRole}/>} exact/>
                     <Route path="/signinpage" element={<SignInPage handleSetJwtToken={handleSetJwtToken}/>} exact/>
                 </Routes>

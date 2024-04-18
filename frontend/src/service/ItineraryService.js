@@ -22,6 +22,17 @@ const service = {
         }
     },
 
+    getItinerariesByCustomer: async (customerId, jwtToken) => {
+        try {
+            const response = await axios.get(`${API_URL}/Itinerary/ByCustomer/${customerId}`, {
+                headers: { Authorization: `Bearer ${jwtToken}` }
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching itineraries: ${error.message}`);
+        }
+    },
+
     createItinerary: async (newItinerary, jwtToken) => {
         try {
             const response = await axios.post(`${API_URL}`, newItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
