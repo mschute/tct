@@ -29,6 +29,7 @@ namespace backend.Controllers;
 
         // GET: api/roles
         // Retrieve all Roles
+       [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetRoles()
         {
@@ -54,6 +55,7 @@ namespace backend.Controllers;
 
         // Get: api/Roles/5
         // Retrieve specific role
+       [Authorize(Roles = "Admin")]
         [HttpGet("{roleId}")]
         public async Task<IActionResult> GetRole(string roleId)
         {
@@ -85,6 +87,7 @@ namespace backend.Controllers;
 
         // POST: api/Roles
         // Create role
+       [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateRole([FromBody] string roleName)
         {
@@ -117,6 +120,7 @@ namespace backend.Controllers;
 
         // PUT: api/Roles/5
         // Update specific role
+       [Authorize(Roles = "Admin")]
         [HttpPut]
         //[HttpPut("{roleId")]
         public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleModel model)
@@ -150,6 +154,7 @@ namespace backend.Controllers;
 
         // DELETE: api/Roles/5
         // Delete specific role
+       [Authorize(Roles = "Admin")]
         [HttpDelete("{roleId}")]
         public async Task<IActionResult> DeleteRole(string roleId)
         {
@@ -181,6 +186,7 @@ namespace backend.Controllers;
 
         // POST: api/Roles/assign-role-to-user
         // Assign role to user
+       [Authorize(Roles = "Admin")]
         [HttpPost("assign-role-to-user")]
         public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleModel model)
         {
@@ -268,4 +274,57 @@ namespace backend.Controllers;
     		_logger.LogErrorEx($"Failed to assign role: {string.Join(", ", addResult.Errors)}");
     		return BadRequest("Failed to update role assignment.");
 		}
+    }
+       
+        // PUT: api/Roles/assign-role-to-user
+        // Update user role
+       [Authorize(Roles = "Admin")]
+       [HttpPut("update-role-assignment")]
+       public async Task<IActionResult> UpdateRoleAssignment([FromBody] AssignRoleModel model)
+       {
+           if (!ModelState.IsValid)
+           {
+               _logger.LogErrorEx("Error. Invalid request.");
+               return BadRequest(ModelState);
+           }
+
+           var user = await _userManager.FindByIdAsync(model.UserId);
+
+           if (user == null)
+           {
+               _logger.LogErrorEx($"Error. User not found.");
+               return NotFound("User not found.");
+           }
+
+           var roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
+           if (!roleExists)
+           {
+               _logger.LogErrorEx($"Error. Role not found.");
+               return NotFound("Role not found.");
+           }
+
+           var userRoles = await _userManager.GetRolesAsync(user);
+           if (userRoles.Contains(model.RoleName))
+           {
+               _logger.LogInformationEx($"User already has the role {model.RoleName} assigned.");
+              return Ok("User already has the role assigned.");
+           }
+
+           var removeResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
+           if (!removeResult.Succeeded)
+           {
+               _logger.LogErrorEx($"Failed to remove existing roles: {string.Join(", ", removeResult.Errors)}");
+               return BadRequest("Failed to update role assignment.");
+           }
+
+           var addResult = await _userManager.AddToRoleAsync(user, model.RoleName);
+           if (addResult.Succeeded)
+           {
+               _logger.LogInformationEx($"Role {model.RoleName} assigned to user {model.UserId} updated successfully!");
+               return Ok("Role assignment updated successfully.");
+           }
+
+           _logger.LogErrorEx($"Failed to assign role: {string.Join(", ", addResult.Errors)}");
+           return BadRequest("Failed to update role assignment.");
+       }
     }
