@@ -68,6 +68,60 @@ namespace backend.Controllers
                 return StatusCode(500, $"Failed with error: {ex}");
             }
         }
+        
+        // GET: api/Itinerary/ByCustomer/{customerId}
+        // Retrieve itineraries by customer ID
+        [Authorize(Roles = "Admin, Customer")]
+        [HttpGet("ByCustomer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<ItineraryDTO>>> GetItinerariesByCustomer(int customerId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogErrorEx("Invalid request");
+                    return BadRequest(ModelState);
+                }
+
+                var itineraries = await _context.Itineraries
+                    .Include(i => i.ItineraryLocations)
+                        .ThenInclude(il => il.Location)
+                    .Include(i => i.Customer)
+                    .Where(i => i.CustomerId == customerId)
+                    .ToListAsync();
+
+                var itineraryDTOs = await Task.WhenAll(itineraries.Select(async itinerary =>
+                {
+                    var customer = await _context.Customers.FindAsync(itinerary.CustomerId);
+
+                    var itineraryDTO = new ItineraryDTO
+                    {
+                        ItineraryId = itinerary.ItineraryId,
+                        TripDate = itinerary.TripDate,
+                        TripStartTime = itinerary.TripStartTime,
+                        TripEndTime = itinerary.TripEndTime,
+                        CustomerName = customer != null ? $"{customer.FirstName} {customer.LastName}" : null,
+                        PassengerCount = itinerary.PassengerCount,
+                        LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                        LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
+                        StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
+                        StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
+                        TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
+                        ItineraryNotes = itinerary.ItineraryNotes,
+                    };
+
+                    return itineraryDTO;
+                }));
+
+                _logger.LogInformationEx($"Successfully retrieved itineraries for customer {customerId}");
+                return Ok(itineraryDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorEx($"Failed with error: {ex}");
+                return StatusCode(500, $"Failed with error: {ex}");
+            }
+        }
 
         // GET: api/Itinerary/5
         // Retrieve specific itinerariess

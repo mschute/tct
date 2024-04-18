@@ -15,7 +15,8 @@ const ItineraryForm = ({
                            handleDeleteItineraryButtonClick,
                            handleStopTime,
                            handleNoteChange,
-                           isAuthenticated
+                           isAuthenticated,
+                           customerId
                        }) => {
     
     return (
