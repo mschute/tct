@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import ItineraryForm from "./ItineraryForm";
 
-const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime, handleNoteChange, isAuthenticated, jwtToken, activeCustomerId }) => {
+const ItinerarySpecific = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime, handleNoteChange, isAuthenticated, jwtToken, activeCustomerId }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -49,7 +49,7 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
 
     const handleCreate = () => {
         setSelectedItinerary(null);
-        setEditingItinerary({ tripDate: '', tripStartTime: '', tripEndTime: '', passengerCount: '', customerName: '', itineraryNotes: '', itineraryLocations: '', activeCustomerId});
+        setEditingItinerary({ tripDate: '', tripStartTime: '', tripEndTime: '', passengerCount: '', customerName: '', itineraryNotes: '', itineraryLocations: ''});
     };
 
     const handleCancelEdit = () => {
@@ -92,12 +92,11 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
                 handleStopTime={handleStopTime}
                 handleNoteChange={handleNoteChange}
                 isAuthenicated={isAuthenticated}
-                activeCustomerId={activeCustomerId}
-                handleFormSubmit={handleFormSubmit}
+                customerId={activeCustomerId}
                 // handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
             />
         </div>
     );
 };
 
-export default Itinerary;
+export default ItinerarySpecific;

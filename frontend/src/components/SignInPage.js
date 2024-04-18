@@ -1,14 +1,13 @@
 import React, {useState} from "react";
 import accountService from '../service/AccountService';
-import customerService from "../service/CustomerService";
 import "../styles/global.css";
-import Header from "./Header";
 import "../styles/BasicPage.css";
 import {useNavigate} from 'react-router-dom';
+import { jwtDecode} from "jwt-decode";
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
-const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
+const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, handleSetUserRole}) => {
         const [user, setUser] = useState({email: '', password: ''});
         const [formType, setFormType] = useState(formTypes.signIn);
         const navigation = useNavigate();
@@ -18,21 +17,27 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
             const {name, value} = event.target
             setUser({...user, [name]: value})
         }
-        //TODO Need to add verification if the user signed in successfully or not 
+
         //TODO Need to add user input validation to make sure they have both a username or password
         const handleSubmit = async (event) => {
             event.preventDefault();
-            if (formType === formTypes.signIn) {
-                await accountService.login(user);
-                setIsAuthenticated(true);
-                navigation('/');
-            } else {
-                //TODO Need to add pop-up asking user to go to their email address to verify their email.
-                //TODO Need to assign customer ID to user at registration
-                await accountService.register(user);
-                navigation('/');
+            try {
+                if (formType === formTypes.signIn) {
+                    const response = await accountService.login(user);
+                    const token = response.token
+
+                    handleSetJwtToken(token);
+
+                    navigation('/');
+                } else {
+                    //TODO Need to add pop-up asking user to go to their email address to verify their email.
+                    await accountService.register(user);
+                    navigation('/');
+                }
+            } catch (error) {
+                setError(error.message || "An error occurred during login.");
             }
-        }
+        };
 
         const handleFormSwitch = () => {
             setFormType(formType === formTypes.signIn ? formTypes.signUp : formTypes.signIn)
@@ -67,6 +72,7 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated}) => {
                 </div>
             </div>
         );
-};
+    }
+;
 
 export default SignInPage

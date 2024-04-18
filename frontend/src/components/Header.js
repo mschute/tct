@@ -3,7 +3,7 @@ import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 import '../styles/header.css';
 
-const Header = ({isAuthenticated, handleSignOut}) => {
+const Header = ({userRole, jwtToken, handleSignOut}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     
     const handleDropdownToggle = () => {
@@ -30,18 +30,22 @@ const Header = ({isAuthenticated, handleSignOut}) => {
                                         Home
                                     </NavDropdown.Item>
                                 </LinkContainer>
-                                <LinkContainer to="/adminpage">
-                                    <NavDropdown.Item>
-                                        Admin
-                                    </NavDropdown.Item>
-                                </LinkContainer>
-                                <LinkContainer to="/customerpage">
-                                    <NavDropdown.Item>
-                                        Customers
-                                    </NavDropdown.Item>
-                                </LinkContainer>
+                                {jwtToken != null && userRole === 'Admin' && (
+                                    <LinkContainer to="/adminpage">
+                                        <NavDropdown.Item>
+                                            Admin
+                                        </NavDropdown.Item>
+                                    </LinkContainer>
+                                )}
+                                {jwtToken != null && userRole === 'Customer' && (
+                                    <LinkContainer to="/customerpage">
+                                        <NavDropdown.Item>
+                                            Customers
+                                        </NavDropdown.Item>
+                                    </LinkContainer>
+                                )}
                                 <NavDropdown.Divider/>
-                                {isAuthenticated ? (
+                                {jwtToken != null ? (
                                     <NavDropdown.Item onClick={handleSignOut}>
                                         Sign Out
                                     </NavDropdown.Item>

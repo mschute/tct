@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-const Locations = () => {
+const Locations = ({jwtToken}) => {
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [editingLocation, setEditingLocation] = useState(null);
@@ -25,26 +25,23 @@ const Locations = () => {
         }
     }
 
-    const handleEdit = (locationId) => {
-        console.log('Edit button clicked for location locationId:', locationId);
+    const handleEdit = (locationId, jwtToken) => {
         const selected = locations.find((location) => location.locationId === locationId);
-        console.log('Selected location:', selected);
         setSelectedLocation(null);
-
-        // Ensure that the property names match the expected format
+        
         setEditingLocation({ locationId: selected.locationId, locationName: selected.locationName, locationAddress: selected.locationAddress, locationLat: selected.locationLat, locationLng: selected.locationLng, locationDescription: selected.locationDescription});
     };
 
-    const handleDelete = async (locationId) => {
+    const handleDelete = async (locationId, jwtToken) => {
         try {
-            await service.deleteLocation(locationId)
-            fetchLocations();
+            await service.deleteLocation(locationId, jwtToken)
+            fetchLocations(jwtToken);
         } catch (error) {
             console.error('Error deleting location:', error);
         }
     };
 
-    const handleViewDetails = (locationId) => {
+    const handleViewDetails = (locationId, jwtToken) => {
         const selected = locations.find((location) => location.locationId === locationId);
         setSelectedLocation(selected);
         setEditingLocation(null);
@@ -66,14 +63,11 @@ const Locations = () => {
 
             if (editingLocation) {
                 if (editingLocation.locationId) {
-                    console.log('Updating existing location:', editingLocation);
-                    await service.updateLocation(editingLocation.locationId, editingLocation);
+                    await service.updateLocation(editingLocation.locationId, editingLocation, jwtToken);
 
                 } else {
-                    // Remove the existing locationId property for new locations
                     const { locationId, ...newLocation } = editingLocation;
-                    console.log('Creating new location:', newLocation);
-                    await service.createLocation(newLocation)
+                    await service.createLocation(newLocation, jwtToken)
                 }
                 fetchLocations();
             }

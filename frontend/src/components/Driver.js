@@ -5,7 +5,7 @@ import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-const Drivers = () => {
+const Drivers = ({jwtToken}) => {
     const [drivers, setDrivers] = useState([]);
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [editingDriver, setEditingDriver] = useState(null);
@@ -13,12 +13,12 @@ const Drivers = () => {
 
     useEffect(() => {
         // Fetch drivers data when component mounts
-        fetchDrivers();
+        fetchDrivers(jwtToken);
     }, []);
 
-    const fetchDrivers = async () => {
+    const fetchDrivers = async (jwtToken) => {
         try {
-            const driversData = await service.getDrivers();
+            const driversData = await service.getDrivers(jwtToken);
             setDrivers(driversData);
         } catch (error) {
             console.error(error.message)
@@ -38,7 +38,7 @@ const Drivers = () => {
     const handleDelete = async (driverId) => {
         try {
             await service.deleteDriver(driverId)
-            fetchDrivers();
+            fetchDrivers(jwtToken);
         } catch (error) {
             console.error('Error deleting driver:', error);
         }
@@ -67,15 +67,15 @@ const Drivers = () => {
             if (editingDriver) {
                 if (editingDriver.driverId) {
                     console.log('Updating existing driver:', editingDriver);
-                    await service.updateDriver(editingDriver.driverId, editingDriver);
+                    await service.updateDriver(editingDriver.driverId, editingDriver, jwtToken);
 
                 } else {
                     // Remove the existing driverId property for new drivers
                     const { driverId, ...newDriver } = editingDriver;
                     console.log('Creating new driver:', newDriver);
-                    await service.createDriver(newDriver)
+                    await service.createDriver(newDriver, jwtToken)
                 }
-                fetchDrivers();
+                fetchDrivers(jwtToken);
             }
         } catch (error) {
             console.error('Error saving driver:', error);
@@ -105,7 +105,7 @@ const Drivers = () => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button onClick={handleCreate}>Add new</button>
+            <button className="primary-button" onClick={handleCreate}>Add new</button>
         </div>
     );
 };

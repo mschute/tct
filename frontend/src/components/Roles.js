@@ -5,20 +5,19 @@ import Form from "./Form";
 import Details from "./Details";
 import "../styles/table.css";
 
-const Roles = () => {
+const Roles = ({jwtToken}) => {
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
     const [editingRole, setEditingRole] = useState(null);
     const modelName = "Role";
 
     useEffect(() => {
-        // Fetch roles data when component mounts
-        fetchRoles();
+        fetchRoles(jwtToken);
     }, []);
 
-    const fetchRoles = async () => {
+    const fetchRoles = async (jwtToken) => {
         try {
-            const rolesData = await service.getRoles();
+            const rolesData = await service.getRoles(jwtToken);
             setRoles(rolesData);
         } catch (error) {
             console.error(error.message)
@@ -39,7 +38,7 @@ const Roles = () => {
     const handleDelete = async (id) => {
         try {
             console.log("Role ID" + id);
-            await service.deleteRole(id)
+            await service.deleteRole(id, jwtToken)
             fetchRoles();
         } catch (error) {
             console.error('Error deleting role:', error);
@@ -69,11 +68,11 @@ const Roles = () => {
             if (editingRole) {
                 if (editingRole.id) {
                     console.log("updating role " + editingRole)
-                    await service.updateRole(editingRole);
+                    await service.updateRole(editingRole, jwtToken);
 
                 } else {
                     const name = editingRole.name;
-                    await service.createRole(name)
+                    await service.createRole(name, jwtToken)
                 }
                 fetchRoles();
             }

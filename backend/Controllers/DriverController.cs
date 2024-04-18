@@ -26,7 +26,7 @@ namespace backend.Controllers
 
         // GET: api/Driver
         // Retrieve all Drivers
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> GetDrivers()
         {
@@ -46,7 +46,7 @@ namespace backend.Controllers
 
         // GET: api/Driver/5
         // Retrieve specific driver
-        //[Authorize(Roles = "SuperAdmin,Admin,Driver")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Driver>> GetDriver(int id)
         {
@@ -78,7 +78,7 @@ namespace backend.Controllers
 
         // PUT: api/Driver/5
         // Update specific driver
-        //[Authorize(Roles = "SuperAdmin,Admin,Driver")]
+        [Authorize(Roles="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDriver(int id, Driver driver)
         {
@@ -123,7 +123,7 @@ namespace backend.Controllers
 
         // POST: api/Driver
         // Create Driver
-        //[Authorize(Roles = "SuperAdmin,Admin,Driver")]
+        [Authorize(Roles="Admin")]
         [HttpPost]
         public async Task<ActionResult<Driver>> PostDriver(Driver driver)
         {
@@ -150,7 +150,7 @@ namespace backend.Controllers
 
         // DELETE: api/Driver/5
         // Delete specific driver
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDriver(int id)
         {

@@ -9,7 +9,7 @@ const service = {
             const response = await axios.post(`${API_URL}/register`, userData)
             return response.data;
         } catch (error) {
-            throw new Error(`Error registering user: ${error.message}`);
+            throw new Error(`Error registering user: ${error.response.data.message}`);
         }
     },
 

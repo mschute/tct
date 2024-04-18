@@ -24,7 +24,7 @@ namespace backend.Controllers
 
         // GET: api/Booking
         // Retrieve all bookings
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookings()
         {
@@ -72,7 +72,7 @@ namespace backend.Controllers
 
         // GET: api/Booking/5
         // Retrieve specific bookings
-        //[Authorize(Roles = "SuperAdmin,Admin,ClientCompany,Customer,Driver")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
@@ -122,10 +122,63 @@ namespace backend.Controllers
                 return StatusCode(500, $"Failed with error: {ex}");
             }
         }
+        
+        // GET: api/Booking/ByCustomer/{customerId}
+        // Retrieve bookings by customer ID
+        [Authorize(Roles = "Admin, Customer")]
+        [HttpGet("ByCustomer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsByCustomer(int customerId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogErrorEx($"Invalid request");
+                    return BadRequest(ModelState);
+                }
+
+                var bookingsWithLocations = await _context.Bookings
+                    .Include(b => b.BookingLocations)
+                        .ThenInclude(bl => bl.Location)
+                    .Include(b => b.Vehicle)
+                    .Include(b => b.Customer)
+                    .Include(b => b.Driver)
+                    .Where(b => b.CustomerId == customerId)
+                    .ToListAsync();
+
+                var bookingDTOs = await Task.WhenAll(bookingsWithLocations.Select(async booking =>
+                {
+                    var vehicle = await _context.Vehicles.FindAsync(booking.VehicleId);
+                    var driver = await _context.Drivers.FindAsync(booking.DriverId);
+
+                    return new BookingDTO
+                    {
+                        BookingId = booking.BookingId,
+                        TotalPrice = booking.TotalPrice,
+                        TripDate = booking.TripDate,
+                        TripStartTime = booking.TripStartTime,
+                        TripEndTime = booking.TripEndTime,
+                        VehicleName = vehicle != null ? $"{vehicle.Make} {vehicle.Model}" : null,
+                        DriverName = driver != null ? $"{driver.FirstName} {driver.LastName}" : null,
+                        CustomerName = booking.Customer != null ? $"{booking.Customer.FirstName} {booking.Customer.LastName}" : null,
+                        LocationNames = booking.BookingLocations.Select(bl => bl.Location.LocationName).ToList(),
+                        BookingNotes = booking.BookingNotes,
+                    };
+                }));
+
+                _logger.LogInformationEx($"Successfully retrieved Bookings for Customer ID: {customerId}");
+                return Ok(bookingDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorEx($"Failed with error: {ex}");
+                return StatusCode(500, $"Failed with error: {ex}");
+            }
+        }
 
         // PUT: api/Booking/5
         // Update specific booking
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBooking(int id, Booking booking)
         {
@@ -170,7 +223,7 @@ namespace backend.Controllers
 
         // POST: api/Booking
         // Create booking
-        //[Authorize(Roles = "SuperAdmin,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking(Booking booking)
         {
@@ -198,7 +251,7 @@ namespace backend.Controllers
         // DELETE: api/Booking/5
         // Delete specific booking
         //[Authorize(Roles = "SuperAdmin,Admin")]
-        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
             try

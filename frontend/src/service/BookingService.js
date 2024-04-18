@@ -4,51 +4,63 @@ const API_URL = 'http://localhost:5255/api/Booking'
 
 const service = {
 
-    getBookings: async () => {
+    getBookings: async (jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}`)
-            console.log("This is bookings: " + response.data);
+            const response = await axios.get(`${API_URL}`, {headers: {Authorization: `Bearer ${jwtToken}`}});
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    getSpecificBooking: async (bookingId) => {
+    getSpecificBooking: async (bookingId, jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}/${bookingId}`)
+            const response = await axios.get(`${API_URL}/${bookingId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    createBooking: async (newBooking) => {
+    getBookingsByCustomer: async (customerId, jwtToken) => {
         try {
-            const response = await axios.post(`${API_URL}`, newBooking)
+            const response = await axios.get(`${API_URL}/booking/ByCustomer/${customerId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching bookings by customer ID: ${error.message}`);
+        }
+    },
+
+    createBooking: async (newBooking, jwtToken) => {
+        try {
+            const response = await axios.post(`${API_URL}`, newBooking, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    updateBooking: async (bookingId, editingBooking) => {
+    updateBooking: async (bookingId, editingBooking, jwtToken) => {
         try {
-            const response = await axios.put(`${API_URL}/${bookingId}`, editingBooking)
+            const response = await axios.put(`${API_URL}/${bookingId}`, editingBooking, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
     },
 
-    deleteBooking: async (bookingId) => {
+    deleteBooking: async (bookingId, jwtToken) => {
         try {
-            const response = await axios.delete(`${API_URL}/${bookingId}`)
+            const response = await axios.delete(`${API_URL}/${bookingId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching bookings: ${error.message}`);
         }
-    }
+    },
 }
 
 export default service;

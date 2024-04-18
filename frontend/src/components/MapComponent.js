@@ -10,7 +10,7 @@ import LocationService from "../service/LocationService";
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
-const MapComponent = ({isAuthenticated}) => {
+const MapComponent = ({isAuthenticated, activeCustomerId}) => {
     const map = useMap();
     const routesLibrary = useMapsLibrary('routes');
     // https://github.com/visgl/react-google-maps/blob/main/examples/directions/src/app.tsx#L98
@@ -318,6 +318,7 @@ const MapComponent = ({isAuthenticated}) => {
                 handleStopTime={handleStopTime}
                 handleNoteChange={handleNoteChange}
                 isAuthenticated={isAuthenticated}
+                activeCustomerId={activeCustomerId}
             />
         </>
     );

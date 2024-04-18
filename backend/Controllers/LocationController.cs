@@ -74,6 +74,7 @@ namespace backend.Controllers
 
         // PUT: api/Location/5
         // Update specific location
+		[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocation(int id, Location location)
         {
@@ -118,6 +119,7 @@ namespace backend.Controllers
 
         // POST: api/Location
         // Create Location
+		[Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
         {
@@ -144,6 +146,7 @@ namespace backend.Controllers
 
         // DELETE: api/Location/5
         // Delete specific location
+		[Authorize(Roles = "Admin, Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocation(int id)
         {
