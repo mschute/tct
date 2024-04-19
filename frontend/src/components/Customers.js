@@ -9,6 +9,7 @@ const Customers = ({jwtToken}) => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [editingCustomer, setEditingCustomer] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Customer";
 
     useEffect(() => {
@@ -26,9 +27,7 @@ const Customers = ({jwtToken}) => {
     }
 
     const handleEdit = (customerId) => {
-        console.log('Edit button clicked for customer customerId:', customerId);
         const selected = customers.find((customer) => customer.customerId === customerId);
-        console.log('Selected customer:', selected);
         setSelectedCustomer(null);
         
         setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
@@ -52,10 +51,12 @@ const Customers = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedCustomer(null);
         setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
+        setIsFormOpen(true);
     };
 
     const handleCancelEdit = () => {
         setEditingCustomer(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -81,6 +82,7 @@ const Customers = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingCustomer(null);
+            setIsFormOpen(false);
         }
     };
     
@@ -104,7 +106,8 @@ const Customers = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
+
         </div>
     );
 };

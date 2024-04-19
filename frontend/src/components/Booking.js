@@ -18,6 +18,7 @@ const Bookings = ({jwtToken}) => {
     const [customers, setCustomers] = useState([]);
     const [drivers, setDrivers] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Booking";
 
     useEffect(() => {
@@ -103,10 +104,12 @@ const Bookings = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedBooking(null);
         setEditingBooking({ bookingId: '', totalPrice: '', tripDate: '', tripStartTime: '', tripEndTime: '', vehicleId: '', driverId: '', customerId: '', locationIds: '', bookingNotes: '' });
+        setIsFormOpen(true)
     };
 
     const handleCancelEdit = () => {
         setEditingBooking(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -163,6 +166,7 @@ const Bookings = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingBooking(null);
+            setIsFormOpen(false);
         }
     };
 
@@ -200,7 +204,7 @@ const Bookings = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

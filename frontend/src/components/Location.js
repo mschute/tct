@@ -9,6 +9,7 @@ const Locations = ({jwtToken}) => {
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [editingLocation, setEditingLocation] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Location";
 
     useEffect(() => {
@@ -50,10 +51,12 @@ const Locations = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedLocation(null);
         setEditingLocation({ locationName: '', locationAddress: '', locationLat: '', locationLng: '', locationDescription: ''});
+        setIsFormOpen(true)
     };
 
     const handleCancelEdit = () => {
         setEditingLocation(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -76,6 +79,7 @@ const Locations = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingLocation(null);
+            setIsFormOpen(false);
         }
     };
 
@@ -100,7 +104,7 @@ const Locations = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

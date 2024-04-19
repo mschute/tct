@@ -9,6 +9,7 @@ const Roles = ({jwtToken}) => {
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
     const [editingRole, setEditingRole] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Role";
 
     useEffect(() => {
@@ -54,10 +55,12 @@ const Roles = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedRole(null);
         setEditingRole({ name: '' });
+        setIsFormOpen(true);
     };
 
     const handleCancelEdit = () => {
         setEditingRole(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -81,6 +84,7 @@ const Roles = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingRole(null);
+            setIsFormOpen(false);
         }
     };
 
@@ -101,7 +105,7 @@ const Roles = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

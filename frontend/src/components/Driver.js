@@ -9,6 +9,7 @@ const Drivers = ({jwtToken}) => {
     const [drivers, setDrivers] = useState([]);
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [editingDriver, setEditingDriver] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Driver";
 
     useEffect(() => {
@@ -53,10 +54,12 @@ const Drivers = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedDriver(null);
         setEditingDriver({ firstName: '', lastName: '', dob: '', drivingLicenseNo: '' });
+        setIsFormOpen(true)
     };
 
     const handleCancelEdit = () => {
         setEditingDriver(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -82,6 +85,7 @@ const Drivers = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingDriver(null);
+            setIsFormOpen(false);
         }
     };
 
@@ -105,7 +109,7 @@ const Drivers = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };
