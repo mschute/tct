@@ -24,7 +24,7 @@ const service = {
 
     getBookingsByCustomer: async (customerId, jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}/booking/ByCustomer/${customerId}`, {
+            const response = await axios.get(`${API_URL}/ByCustomer/${customerId}`, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
