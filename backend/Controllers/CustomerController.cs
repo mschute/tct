@@ -23,7 +23,7 @@ namespace backend.Controllers
 
         // GET: api/Customer
         // Retrieve all customer
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {

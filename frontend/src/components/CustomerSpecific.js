@@ -11,7 +11,6 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
     const modelName = "Customer";
 
     useEffect(() => {
-        // Fetch customers data when component mounts
         fetchCustomer(activeCustomerId, jwtToken);
     }, []);
 

@@ -36,7 +36,7 @@ const service = {
     },
 
     createBooking: async (newBooking, jwtToken) => {
-        console.log("Create booking data ", JSON.stringify(newBooking));
+        console.log("Create booking data in the service call ", JSON.stringify(newBooking));
         try {
             const response = await axios.post(`${API_URL}`, newBooking, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
@@ -46,8 +46,6 @@ const service = {
     },
 
     updateBooking: async (bookingId, editingBooking, jwtToken) => {
-        console.log("update booking data ", JSON.stringify(editingBooking));
-        console.log("update booking id", JSON.stringify(bookingId));
         try {
             const response = await axios.put(`${API_URL}/${bookingId}`, editingBooking, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
@@ -57,7 +55,6 @@ const service = {
     },
 
     deleteBooking: async (bookingId, jwtToken) => {
-        console.log("Delete booking ID", JSON.stringify(bookingId))
         try {
             const response = await axios.delete(`${API_URL}/${bookingId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
