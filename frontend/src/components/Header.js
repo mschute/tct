@@ -11,17 +11,17 @@ const Header = ({userRole, jwtToken, handleSignOut}) => {
     };
 
     return (
-        <div>
-            <Navbar className="nav-background" expand="lg">
-                <Container style={{marginRight: '40px'}}>
+        <>
+            <Navbar bg="dark" data-bs-theme="dark" expand="lg">
+                <div className="nav-container">
                     <Navbar.Toggle aria-controls="basic"/>
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="justify-content-end" style={{width: "100%"}}>
+                        <Nav className="navbar me-auto">-
                             <NavDropdown
-                                title={<span style={{ color: 'white'}}>Menu</span>}
+                                title="Menu"
                                 id="basic-nav-dropdown"
                                 show={dropdownOpen}
-                                className="dropdown-menu-right navbar-text"
+                                className="navbar-text"
                                 onMouseEnter={handleDropdownToggle}
                                 onMouseLeave={handleDropdownToggle}
                             >
@@ -59,9 +59,9 @@ const Header = ({userRole, jwtToken, handleSignOut}) => {
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
-                </Container>
+                </div>
             </Navbar>
-        </div>
+        </>
     );
 }
 
