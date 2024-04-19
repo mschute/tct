@@ -17,7 +17,12 @@
     cursor: pointer;
 }
 
-.primary-button:hover {
+.primary-button:disabled{
+    background-color: #6c757d;
+    cursor: not-allowed
+}
+
+.primary-button:not(:disabled):hover {
     background-color: #0b1b28;
 }
 
@@ -37,7 +42,12 @@
     cursor: pointer;
 }
 
-.secondary-button:hover {
+.secondary-button:disabled{
+    background-color: #6c757d;
+    cursor: not-allowed
+}
+
+.secondary-button:not(:disabled):hover {
     background-color: #024903;
 }
 
@@ -45,7 +55,7 @@
     background-color: #D90819;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     margin: 10px;
     text-align: center;
     text-decoration: none;

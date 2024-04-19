@@ -27,39 +27,44 @@ const Home = ({isAuthenticated, setIsAuthenticated, activeCustomerId}) => {
                         traveler, let us transport you to the heart of Scotland for a truly unforgettable adventure.
                     </p>
                 </div>
-                <div className="section-background section-background-odd">
+                <div className="section-background section-background-odd marquee">
                     <h2 className='section-text section-text-title'>
                         Fleet
                     </h2>
-                    <p className='section-text section-text-paragraph'>
-                        WORDS!
-                    </p>
+                    <div className="marquee-container">
+                            <img src="/images/Fleet1.jpeg"/>
+                            <img src="/images/Fleet2.jpeg"/>
+                            <img src="/images/Fleet3.jpeg"/>
+                            <img src="/images/Fleet4.jpeg"/>
+                            <img src="/images/Fleet5.jpeg"/>
+                            <img src="/images/Fleet6.jpeg"/>
+                    </div>
                 </div>
                 <div className="section-background section-background-even marquee">
                     <h2 className='section-text section-text-title'>
                         Locations
                     </h2>
                     <div className="marquee-container">
-                        <img src="/images/4.jpeg"/>
-                        <img src="/images/5.jpeg"/>
-                        <img src="/images/6.jpeg"/>
-                        <img src="/images/7.jpeg"/>
-                        <img src="/images/8.jpeg"/>
-                        <img src="/images/9.jpeg"/>
-                        <img src="/images/10.jpeg"/>
-                        <img src="/images/11.jpeg"/>
-                        <img src="/images/12.jpeg"/>
-                        <img src="/images/13.jpeg"/>
-                        <img src="/images/14.jpeg"/>
-                        <img src="/images/15.jpeg"/>
-                        <img src="/images/16.jpeg"/>
-                        <img src="/images/17.jpeg"/>
-                        <img src="/images/18.jpeg"/>
-                        <img src="/images/19.jpeg"/>
-                        <img src="/images/20.jpeg"/>
-                        <img src="/images/21.jpeg"/>
-                        <img src="/images/22.jpeg"/>
-                        <img src="/images/24.jpeg"/>
+                            <img src="/images/4.jpeg"/>
+                            <img src="/images/5.jpeg"/>
+                            <img src="/images/6.jpeg"/>
+                            <img src="/images/7.jpeg"/>
+                            <img src="/images/8.jpeg"/>
+                            <img src="/images/9.jpeg"/>
+                            <img src="/images/10.jpeg"/>
+                            <img src="/images/11.jpeg"/>
+                            <img src="/images/12.jpeg"/>
+                            <img src="/images/13.jpeg"/>
+                            <img src="/images/14.jpeg"/>
+                            <img src="/images/15.jpeg"/>
+                            <img src="/images/16.jpeg"/>
+                            <img src="/images/17.jpeg"/>
+                            <img src="/images/18.jpeg"/>
+                            <img src="/images/19.jpeg"/>
+                            <img src="/images/20.jpeg"/>
+                            <img src="/images/21.jpeg"/>
+                            <img src="/images/22.jpeg"/>
+                            <img src="/images/24.jpeg"/>
                     </div>
                 </div>
                 <div className="section-background section-background-odd">
@@ -67,7 +72,8 @@ const Home = ({isAuthenticated, setIsAuthenticated, activeCustomerId}) => {
                         Itinerary Planner
                     </h2>
                     <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} activeCustomerId={activeCustomerId}/>
+                        <MapComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}
+                                      activeCustomerId={activeCustomerId}/>
                     </APIProvider>
                 </div>
             </main>

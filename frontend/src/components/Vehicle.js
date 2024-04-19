@@ -9,6 +9,7 @@ const Vehicles = ({jwtToken}) => {
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [editingVehicle, setEditingVehicle] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Vehicle";
 
     useEffect(() => {
@@ -20,7 +21,6 @@ const Vehicles = ({jwtToken}) => {
         try {
             const vehiclesData = await service.getVehicles(jwtToken);
             setVehicles(vehiclesData);
-            console.log("This is vehicles data:", JSON.stringify(vehiclesData))
         } catch (error) {
             console.error(error.message)
         }
@@ -46,6 +46,7 @@ const Vehicles = ({jwtToken}) => {
         const selected = vehicles.find((vehicle) => vehicle.vehicleId === vehicleId);
         setSelectedVehicle(selected);
         setEditingVehicle(null);
+        setIsFormOpen(true);
     };
 
     const handleCreate = () => {
@@ -55,6 +56,7 @@ const Vehicles = ({jwtToken}) => {
 
     const handleCancelEdit = () => {
         setEditingVehicle(null);
+        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -76,6 +78,7 @@ const Vehicles = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingVehicle(null);
+            setIsFormOpen(false);
         }
     };
 
@@ -100,7 +103,7 @@ const Vehicles = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            <button className="primary-button" onClick={handleCreate}>Add new</button>
+            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };
