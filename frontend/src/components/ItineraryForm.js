@@ -16,7 +16,6 @@ const ItineraryForm = ({
                            handleStopTime,
                            handleNoteChange,
                            isAuthenticated,
-                           customerId
                        }) => {
     
     return (
