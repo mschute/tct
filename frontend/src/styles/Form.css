@@ -59,7 +59,15 @@
 }
 
 .sign-in-field {
-    width: 400px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sign-in-field-container{
+    width: 100%;
 }
 
 .text-link-button {

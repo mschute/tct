@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import accountService from '../service/AccountService';
 import "../styles/global.css";
 import "../styles/BasicPage.css";
+import "../styles/Form.css"
 import {useNavigate} from 'react-router-dom';
-import { jwtDecode} from "jwt-decode";
+
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
@@ -49,26 +50,30 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
 
         return (
             <div className="page-dimensions">
-                <h4 className="title">{title}</h4>
-                <form method="POST">
+                <div className="form-container">
+
+
+                    <h4 className="title">{title}</h4>
+                    <form method="POST">
+                        <div className="sign-in-container">
+                            <div className="sign-in-field-container">
+                                <input className="sign-in-field" name="email" placeholder="Email Address"
+                                       onChange={handleInputChange}/>
+                            </div>
+                            <div className="sign-in-field-container">
+                                <input className="sign-in-field" name="password" type="password"
+                                       placeholder="Password"
+                                       onChange={handleInputChange}/>
+                            </div>
+                            <div className="button-container">
+                                <button className="primary-button" type="submit"
+                                        onClick={handleSubmit}>{submitButtonText}</button>
+                            </div>
+                        </div>
+                    </form>
                     <div className="sign-in-container">
-                        <div>
-                            <input className="form-input sign-in-field" name="email" placeholder="Email Address"
-                                   onChange={handleInputChange}/>
-                        </div>
-                        <div>
-                            <input className="form-input sign-in-field" name="password" type="password"
-                                   placeholder="Password"
-                                   onChange={handleInputChange}/>
-                        </div>
-                        <div>
-                            <button className="primary-button" type="submit"
-                                    onClick={handleSubmit}>{submitButtonText}</button>
-                        </div>
+                        <button className="text-link-button" onClick={handleFormSwitch}>{switchButtonText}</button>
                     </div>
-                </form>
-                <div className="sign-in-container">
-                    <button className="text-link-button" onClick={handleFormSwitch}>{switchButtonText}</button>
                 </div>
             </div>
         );
