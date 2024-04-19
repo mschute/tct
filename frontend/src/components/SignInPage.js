@@ -12,9 +12,9 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
     const [user, setUser] = useState({email: '', password: ''});
     const [formType, setFormType] = useState(formTypes.signIn);
     const navigation = useNavigate();
-    const [error, setError] = useState('');
+    // const [error, setError] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const [verificationMessage, setVerificationMessage] = useState('');
+    // const [verificationMessage, setVerificationMessage] = useState('');
 
     const handleInputChange = (event) => {
         const {name, value} = event.target
@@ -35,14 +35,15 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
             } else {
                 //TODO Need to add pop-up asking user to go to their email address to verify their email.
                 await accountService.register(user);
-                setVerificationMessage( "Registration successful. An email has been sent to verify your email address.");
-                setUser({email: '', password: ''});
+                // setVerificationMessage( "Registration successful. An email has been sent to verify your email address.");
+                //setUser({email: '', password: ''});
                 navigation('/');
             }
-            setError('');
-            setVerificationMessage('');
+            // setError('');
+            // setVerificationMessage('');
         } catch (error) {
-            setError(error.message || "An error occurred during sign-in. Email and password combination not valid.");
+            console.log("Error in login or registration", error)
+            // setError(error.message || "An error occurred during sign-in. Email and password combination not valid.");
         }
     };
 
@@ -61,19 +62,21 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
                 <form method="POST">
                     <div className="sign-in-container">
                         <div className="sign-in-field-container">
-                            <input className="sign-in-field" name="email" placeholder="Email Address"
-                                   onChange={(e) => {
-                                       handleInputChange(e);
-                                       setError('');
-                                   }}/>
+                            <input className="sign-in-field" name="email" placeholder="Email Address" onChange={handleInputChange} />
+                                   {/*// onChange={(e) => {*/}
+                                   {/*//     handleInputChange(e);*/}
+                                   {/*//     setError('');*/}
+                                   {/*// }}/>*/}
                         </div>
                         <div className="sign-in-field-container">
                             <input className="sign-in-field" name="password" type="password"
                                    placeholder="Password"
-                                   onChange={(e) => {
-                                       handleInputChange(e);
-                                       setError('');
-                                   }}/>
+                                   onChange={handleInputChange}
+                                   // onChange={(e) => {
+                                   //     handleInputChange(e);
+                                   //     setError('');
+                                   // }}
+                            />
                         </div>
                         <div className="button-container">
                             <button className="primary-button" type="submit"
@@ -84,12 +87,12 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
                 <div className="sign-in-container">
                     <button className="text-link-button" onClick={handleFormSwitch}>{switchButtonText}</button>
                 </div>
-                {error === '' ? "" :
-                    <div className="error-message">Sign-in failed. Email and password combination invalid.</div>}
+                {/*{error === '' ? "" :*/}
+                {/*    <div className="error-message">Action failed. Please try again.</div>}*/}
 
-                {verificationMessage === true ? "" :
-                    <div className="registration-message">{verificationMessage}</div>
-                }
+                {/*{verificationMessage === true ? "" :*/}
+                {/*    <div className="registration-message">{verificationMessage}</div>*/}
+                {/*}*/}
             </div>
         </div>
     );

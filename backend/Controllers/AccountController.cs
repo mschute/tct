@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -38,6 +39,7 @@ public class AccountController : ControllerBase
     //Passing AuthNMode to allow user registration through email and password
     public async Task<IActionResult> Register(AuthModel model)
     {
+        Console.WriteLine("This is the model after registration called" + model);
         // Handle invalid user input during registration process
         if (!ModelState.IsValid)
         {

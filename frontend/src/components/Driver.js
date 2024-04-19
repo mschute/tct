@@ -38,7 +38,7 @@ const Drivers = ({jwtToken}) => {
 
     const handleDelete = async (driverId) => {
         try {
-            await service.deleteDriver(driverId)
+            await service.deleteDriver(driverId, jwtToken)
             fetchDrivers(jwtToken);
         } catch (error) {
             console.error('Error deleting driver:', error);

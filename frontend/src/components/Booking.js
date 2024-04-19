@@ -81,12 +81,11 @@ const Bookings = ({jwtToken}) => {
     const handleEdit = (bookingId) => {
         const selected = bookings.find((booking) => booking.bookingId === bookingId);
         setSelectedBooking(null);
-
-        // Ensure that the property names match the expected format
+        
         setEditingBooking({ bookingId: selected.bookingId, totalPrice: selected.totalPrice, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, vehicleId: selected.vehicleId, driverId: selected.driverId, customerId: selected.customerId, locationIds: selected.locationIds, bookingNotes: selected.bookingNotes});
     };
 
-    const handleDelete = async (bookingId, jwtToken) => {
+    const handleDelete = async (bookingId) => {
         try {
             await service.deleteBooking(bookingId, jwtToken)
             fetchBookings(jwtToken);

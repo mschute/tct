@@ -18,7 +18,7 @@ const service = {
             const response = await axios.get(`${API_URL}/${customerId}`,{headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
-            throw new Error(`Error fetching customers: ${error.message}`);
+            throw new Error(`Error fetching specific customer: ${error.message}`);
         }
     },
 
