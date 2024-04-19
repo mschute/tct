@@ -81,4 +81,17 @@
     margin: 0; 
 }
 
+.error-message {
+    color: red;
+    padding: 20px;
+    text-align: center;
+}
+
+.registration-message {
+    color: #0b1b28;
+    padding: 20px;
+    text-align: center;
+}
+
+
 
