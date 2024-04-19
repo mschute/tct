@@ -15,11 +15,11 @@
 
 .section-text {
     text-align: center;
-    
 }
 
 .section-text-title{
-    padding: 1rem;
+    padding: 3rem;
+    margin-top: -100px;
 }
 
 .section-text-paragraph{
@@ -32,26 +32,13 @@
     overflow-x: auto;
 }
 
-/*.marquee {*/
-/*    width: 100%;*/
-/*    overflow: hidden;*/
-/*    white-space: nowrap;*/
-/*}*/
+.marquee-container img {
+    margin-right: 20px;
+}
 
 .image-container {
     width: 300px; 
     height: 200px; 
     margin-right: 20px;
 }
-
-/*.marquee img {*/
-/*    display: inline-block;*/
-/*    margin-right: 20px; !* Adjust as needed *!*/
-/*    animation: marquee 10s linear infinite; !* Adjust duration as needed *!*/
-/*}*/
-
-/*@keyframes marquee {*/
-/*    0% { transform: translateX(100%); }*/
-/*    100% { transform: translateX(-100%); }*/
-/*}*/
 
