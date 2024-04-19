@@ -48,11 +48,11 @@ const Customers = ({jwtToken}) => {
         setEditingCustomer(null);
     };
 
-    const handleCreate = () => {
-        setSelectedCustomer(null);
-        setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
-        setIsFormOpen(true);
-    };
+    // const handleCreate = () => {
+    //     setSelectedCustomer(null);
+    //     setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
+    //     setIsFormOpen(true);
+    // };
 
     const handleCancelEdit = () => {
         setEditingCustomer(null);
@@ -66,13 +66,10 @@ const Customers = ({jwtToken}) => {
 
             if (editingCustomer) {
                 if (editingCustomer.customerId) {
-                    console.log('Updating existing customer:', editingCustomer);
                     await service.updateCustomer(editingCustomer.customerId, editingCustomer, jwtToken);
 
                 } else {
-                    // Remove the existing customerId property for new customers
                     const { customerId, ...newCustomer } = editingCustomer;
-                    console.log('Creating new customer:', newCustomer);
                     await service.createCustomer(newCustomer, jwtToken)
                 }
                 fetchCustomers();
@@ -106,7 +103,7 @@ const Customers = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
+            {/*{isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}*/}
 
         </div>
     );

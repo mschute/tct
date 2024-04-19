@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using backend.Helpers;
 using backend.Models;
 using backend.DTOs;
+using System;
 
 namespace backend.Controllers
 {
@@ -44,7 +45,7 @@ namespace backend.Controllers
         // Retrieve specific customer
         [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
+        public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             try
             {
@@ -62,17 +63,17 @@ namespace backend.Controllers
                     return NotFound($"Customer {id} not found");
                 }
 
-                var customerDTO = new CustomerDTO
-                {
-                    CustomerId = customer.CustomerId,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Dob = customer.Dob,
-                    Nationality = customer.Nationality
-                };
+                // var customerDTO = new CustomerDTO
+                // {
+                //     CustomerId = customer.CustomerId,
+                //     FirstName = customer.FirstName,
+                //     LastName = customer.LastName,
+                //     Dob = customer.Dob,
+                //     Nationality = customer.Nationality
+                // };
 
                 _logger.LogInformationEx($"Customer {id} retrieved successfully");
-                return Ok(customerDTO);
+                return Ok(customer);
             }
             catch (Exception ex)
             {
@@ -83,7 +84,7 @@ namespace backend.Controllers
 
         // PUT: api/Customer/5
         // Update specific customer
-        [Authorize(Roles = "Admin, Customer")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {

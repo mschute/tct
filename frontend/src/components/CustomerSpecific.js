@@ -33,8 +33,10 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
                 firstName: customers.firstName, 
                 lastName: customers.lastName, 
                 dob: customers.dob, 
-                nationality: customers.nationality
+                nationality: customers.nationality,
+                userId: customers.userId
             });
+            console.log("Customer's userId", customers.userId)
         } else {
             console.error('Customer not found: ', customerId)
         }
@@ -76,6 +78,7 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
                         {name:"lastName", label:"Last Name", value:editingCustomer.lastName, type:"text", disabled:false},
                         {name:"dob", label:"Date of Birth", value:editingCustomer.dob, type:"date", disabled:false},
                         {name:"nationality", label:"Nationality", value:editingCustomer.nationality, type:"text", disabled:false},
+                        { name: "userId", type: "hidden", value: editingCustomer.userId}
                     ]}
                     model={editingCustomer}
                     modelName={modelName}
