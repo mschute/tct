@@ -10,7 +10,7 @@ const Form = ({fields, modelName, handleInputChange, handleSubmit, handleCancel}
                 {fields.map(({name, value, label, type, disabled, min, step, options}) => (
                     <div key={name}>
                         <label className='form-label'>
-                            {label}:
+                            {label}
                             {type === "select" ? (
                                 <select
                                     className='form-select'

@@ -15,6 +15,7 @@ const ViewTable = ({model, modelName, handleEdit, handleDelete}) => {
                 <thead>
                     <tr>
                         {attributeNames.map((attributeName, index) => (
+                            attributeName !== "userId" &&
                             <th key={index}>{formatCamelCase(attributeName)}</th>
                         ))}
                         <th>Action</th>
@@ -23,6 +24,7 @@ const ViewTable = ({model, modelName, handleEdit, handleDelete}) => {
                 <tbody>
                     <tr>
                         {attributeNames.map((attributeName, colIndex) => (
+                            attributeName !== "userId" &&
                             <td key={colIndex}>{model[attributeName]}</td>
                         ))}
                         <td>
