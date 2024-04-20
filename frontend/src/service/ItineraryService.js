@@ -24,7 +24,7 @@ const service = {
 
     getItinerariesByCustomer: async (customerId, jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}/Itinerary/ByCustomer/${customerId}`, {
+            const response = await axios.get(`${API_URL}/ByCustomer/${customerId}`, {
                 headers: { Authorization: `Bearer ${jwtToken}` }
             });
             return response.data;

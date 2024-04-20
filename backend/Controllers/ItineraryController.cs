@@ -49,10 +49,8 @@ namespace backend.Controllers
                         CustomerName = customer != null ? $"{customer.FirstName} {customer.LastName}" : null,
                         PassengerCount = itinerary.PassengerCount,
                         LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
-                        LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
                         StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
                         StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
-                        TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
                         ItineraryNotes = itinerary.ItineraryNotes,
                     };
 
@@ -103,10 +101,8 @@ namespace backend.Controllers
                         CustomerName = customer != null ? $"{customer.FirstName} {customer.LastName}" : null,
                         PassengerCount = itinerary.PassengerCount,
                         LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
-                        LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
                         StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
                         StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
-                        TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
                         ItineraryNotes = itinerary.ItineraryNotes,
                     };
 
@@ -158,10 +154,8 @@ namespace backend.Controllers
                     CustomerName = itinerary.Customer != null ? $"{itinerary.Customer.FirstName} {itinerary.Customer.LastName}" : null,
                     PassengerCount = itinerary.PassengerCount,
                     LocationNames = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
-                    LocationAddresses = itinerary.ItineraryLocations.Select(il => il.Location.LocationName).ToList(),
                     StopOvers = itinerary.ItineraryLocations.Select(il => il.StopOver).ToList(),
                     StopOrders = itinerary.ItineraryLocations.Select(il => il.StopOrder).ToList(),
-                    TravelTimesNextLocale = itinerary.ItineraryLocations.Select(il => il.TravelTimeNextLocale).ToList(),
                     ItineraryNotes = itinerary.ItineraryNotes,
                 };
 

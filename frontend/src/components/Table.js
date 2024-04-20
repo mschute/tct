@@ -36,12 +36,9 @@ const Table = ({model, modelName, handleEdit, handleDelete}) => {
                             </td>
                         ))}
                         <td>
-                            {modelName === "User" ? (
-                                <button className='primary-button'
-                                        onClick={() => handleEdit(entry[attributeNames[0]])}>Edit Role</button>
-                            ) : (<button className='primary-button'
+                            {modelName === "Pending Itineraries" || "Pending Customer Itineraries" ? ("") : (<button className='primary-button'
                                          onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>)}
-                            {modelName === "User" ?
+                            {modelName === "User" || "Pending Customer Itineraries" ?
                                 ("") : (<button className="delete-button"
                                                 onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>)
                             }

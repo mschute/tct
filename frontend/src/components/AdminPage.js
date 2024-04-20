@@ -7,6 +7,7 @@ import '../styles/tabs.css';
 import Driver from "./Driver";
 import Customers from "./Customers";
 import Users from "./Users";
+import Itinerary from "./Itinerary";
 
 const AdminPage = ({userRole, jwtToken}) => {
     const [activeTab, setActiveTab] = useState('tab1');
@@ -47,6 +48,7 @@ const AdminPage = ({userRole, jwtToken}) => {
 
                 <div className="tab-content">
                     <div id="tab1" className={activeTab === 'tab1' ? 'tab-pane active' : 'tab-pane'}>
+                        <Itinerary jwtToken={jwtToken}/>
                         <Booking jwtToken={jwtToken}/>
                     </div>
                     <div id="tab2" className={activeTab === 'tab2' ? 'tab-pane active' : 'tab-pane'}>
