@@ -11,13 +11,10 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
     const [editingBooking, setEditingItinerary] = useState(null);
     const [customers, setCustomers] = useState([]);
     const [locations, setLocations] = useState([]);
-    const modelName = "Pending Itineraries";
+    const modelName = "Pending";
 
     useEffect(() => {
         fetchItineraries(activeCustomerId, jwtToken);
-        //TODO Do I need Customers and Locations
-        fetchCustomers(jwtToken);
-        fetchLocations(jwtToken);
     }, []);
 
     const fetchItineraries = async () => {
@@ -31,26 +28,6 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
             console.error(error.message);
         }
     };
-
-    //TODO May not need this 
-    const fetchCustomers = async () => {
-        try {
-            const customersData = await customerService.getCustomers(jwtToken);
-            setCustomers(customersData);
-        } catch (error) {
-            console.error(error.message)
-        }
-    }
-
-    //TODO May not need this
-    const fetchLocations = async () => {
-        try {
-            const locationsData = await locationService.getLocations();
-            setLocations(locationsData);
-        } catch (error) {
-            console.error(error.message)
-        }
-    }
 
     const handleDelete = async (itineraryId, jwtToken) => {
         try {

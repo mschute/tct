@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import service from '../service/UserService';
 import roleService from "../service/RolesService";
 import List from "./List";
-import Details from "./Details";
 import "../styles/table.css";
 import UserForm from "./UserForm";
 
@@ -46,24 +45,6 @@ const Users = ({jwtToken}) => {
     const handleCancelEdit = () => {
         setEditingUser(null);
     };
-
-    // const handleFormSubmit = async (event) => {
-    //     event.preventDefault();
-    //     try {
-    //         console.log('Editing User:', editingUser);
-    //
-    //         if (editingUser.id) {
-    //             console.log('Updating existing user:', editingUser);
-    //             await service.updateUser(editingUser.id, editingUser);
-    //             fetchUsers();
-    //         }
-    //     } catch (error) {
-    //         console.error('Error saving user:', error);
-    //         console.error('Response data:', error.response?.data);
-    //     } finally {
-    //         setEditingUser(null);
-    //     }
-    // };
     
     const handleRoleAssign = async (event) => {
         event.preventDefault();

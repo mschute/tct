@@ -22,29 +22,12 @@ export function isValidStartTime(time) {
     return parts.length === 3;
 }
 
-//TODO Bug to solve time issue
+export function isFirstTwoDigitsOver24 (timeString){
+    const time = formatToClock(timeString)
+    const [hours] = time.split(':').map(Number);
 
-// export function isFirstTwoDigitsOver24 (timeString){
-//     const [hours] = timeString.split(':').map(Number);
-//     return hours > 24;
-// }
-
-// export function calcPastMidnight(startTime, totalTravelTime){
-//     const startTimeMilliseconds = timeToMilliseconds(startTime);
-//     const secondsToAdd = totalTravelTime;
-//     const currentTime = new Date();
-//
-//     const newTime = new Date(currentTime.getTime() + secondsToAdd * 1000);
-//
-//     const newTimeMilliseconds = newTime.getHours() * 3600000 + newTime.getMinutes() * 60000 + newTime.getSeconds() * 1000;
-//    
-//     return newTimeMilliseconds < startTimeMilliseconds;
-// }
-//
-// const timeToMilliseconds = (time) => {
-//     const [hours, minutes, seconds] = time.split(':').map(Number);
-//     return hours * 3600000 + minutes * 60000 + seconds * 1000;
-// };
+    return hours >= 24;
+}
 
 export function calculateTomorrow() {
     const today = new Date();
