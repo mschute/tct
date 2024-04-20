@@ -1,11 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import service from '../service/ItineraryService';
 import List from "./List";
 import Form from "./Form";
 import Details from "./Details";
 import ItineraryForm from "./ItineraryForm";
+import bookingLocationService from "../service/BookingLocationService";
 
-const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, handleStartTimeChange, handleEndTimeChange, handleDeleteItineraryButtonClick, handleStopTime, handleNoteChange, isAuthenticated, jwtToken }) => {
+
+const Itinerary = ({
+                       itineraryDTO,
+                       handleRouteUpdate,
+                       handleTripDateChange,
+                       handleStartTimeChange,
+                       handleEndTimeChange,
+                       handleDeleteItineraryButtonClick,
+                       handleStopTime,
+                       handleNoteChange,
+                       jwtToken,
+                       activeCustomerId,
+                       handlePassengerCount,
+                       handleInputChange
+                   }) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingItinerary, setEditingItinerary] = useState(null);
@@ -25,13 +40,6 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
         }
     }
 
-    const handleEdit = (itineraryId) => {
-        const selected = itineraries.find((itinerary) => itinerary.itineraryId === itineraryId);
-        setSelectedItinerary(null);
-
-        setEditingItinerary({ itineraryId: selected.itineraryId, tripDate: selected.tripDate, tripStartTime: selected.tripStartTime, tripEndTime: selected.tripEndTime, passengerCount: selected.passengerCount, customerName: selected.customerName, itineraryNotes: selected.itineraryNotes, itineraryLocations: selected.itineraryLocations });
-    };
-
     const handleDelete = async (itineraryId, jwtToken) => {
         try {
             await service.deleteItinerary(itineraryId, jwtToken)
@@ -47,38 +55,35 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
         setEditingItinerary(null);
     };
 
-    const handleCreate = () => {
-        setSelectedItinerary(null);
-        setEditingItinerary({ tripDate: '', tripStartTime: '', tripEndTime: '', passengerCount: '', customerName: '', itineraryNotes: '', itineraryLocations: ''});
-    };
-
     const handleCancelEdit = () => {
         setEditingItinerary(null);
     };
 
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            if (editingItinerary) {
-                if (editingItinerary.itineraryId) {
-                    console.log('Updating existing itinerary:', editingItinerary);
-                    await service.updateItinerary(editingItinerary.itineraryId, editingItinerary, jwtToken);
-
-                } else {
-                    // Remove the existing itineraryId property for new itineraries
-                    const { itineraryId, ...newItinerary } = editingItinerary;
-                    console.log('Creating new itinerary:', newItinerary);
-                    await service.createItinerary(newItinerary, jwtToken)
-                }
-                fetchItineraries();
-            }
-        } catch (error) {
-            console.error('Error saving itinerary:', error);
-            console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingItinerary(null);
-        }
-    };
+    // const handleFormSubmit = async (event) => {
+    //     event.preventDefault();
+    //     console.log("The handle form submit is being called")
+    //     console.log("The editing itinerary", itineraryDTO)
+    //     try {
+    //         if (itineraryDTO) {
+    //             itineraryDTO.tripStartTime += ":00";
+    //             const endTime = itineraryDTO.tripEndTime
+    //            
+    //             itineraryDTO.tripEndTime += ":00";
+    //             const {itineraryId, ...newItinerary} = editingItinerary;
+    //             console.log('Creating new itinerary:', newItinerary);
+    //             await service.createItinerary(newItinerary, jwtToken)
+    //
+    //            
+    //             });
+    //             fetchItineraries();
+    //         }
+    //     } catch (error) {
+    //         console.error('Error saving itinerary:', error);
+    //         console.error('Response data:', error.response?.data);
+    //     } finally {
+    //         setEditingItinerary(null);
+    //     }
+    // };
 
     return (
         <div>
@@ -91,8 +96,10 @@ const Itinerary = ({ itineraryDTO, handleRouteUpdate, handleTripDateChange, hand
                 handleDeleteItineraryButtonClick={handleDeleteItineraryButtonClick}
                 handleStopTime={handleStopTime}
                 handleNoteChange={handleNoteChange}
-                isAuthenicated={isAuthenticated}
-                // handleInputChange={(e) => setEditingItinerary({ ...editingItinerary, [e.target.name]: e.target.value })}*/}
+                activeCustomerId={activeCustomerId}
+                handlePassengerCount={handlePassengerCount}
+                handleInputChange={handleInputChange}
+                //handleInputChange={(e) => setEditingItinerary({...editingItinerary, [e.target.name]: e.target.value})}
             />
         </div>
     );

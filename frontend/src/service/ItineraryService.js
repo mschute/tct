@@ -34,6 +34,7 @@ const service = {
     },
 
     createItinerary: async (newItinerary, jwtToken) => {
+        console.log("The create itinerary form was called:", JSON.stringify(newItinerary))
         try {
             const response = await axios.post(`${API_URL}`, newItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;

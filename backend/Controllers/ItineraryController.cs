@@ -222,7 +222,7 @@ namespace backend.Controllers
 
         // POST: api/Itinerary
         // Create itinerary
-        [Authorize(Roles = "Admin, Customer")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpPost]
         public async Task<ActionResult<Itinerary>> PostItinerary(Itinerary itinerary)
         {
@@ -233,10 +233,10 @@ namespace backend.Controllers
                     _logger.LogErrorEx("Invalid request");
                     return BadRequest("Model State is invalid: " + ModelState);
                 }
-                
+
                 _context.Itineraries.Add(itinerary);
                 await _context.SaveChangesAsync();
-
+                
                 _logger.LogInformationEx($"Itinerary created successfully");
                 return CreatedAtAction("GetItinerary", new { id = itinerary.ItineraryId }, itinerary);
             }

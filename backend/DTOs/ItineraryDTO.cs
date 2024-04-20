@@ -7,6 +7,7 @@ public class ItineraryDTO
     public TimeOnly TripStartTime { get; set; }
     public TimeOnly TripEndTime { get; set; }
     public string CustomerName { get; set; }
+    public int CustomerId { get; set; }
     public int PassengerCount { get; set; }
     public ICollection<string> LocationNames { get; set; }
     public ICollection<string> LocationAddresses { get; set; }

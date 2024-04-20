@@ -235,22 +235,11 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking(Booking booking)
         {
-            Console.WriteLine("The Post is being called.");
             try
             {
                 if (!ModelState.IsValid)
                 {
                     _logger.LogErrorEx("Invalid request");
-                    
-                    foreach (var state in ModelState)
-                    {
-                        if (state.Value.Errors.Any())
-                        {
-                            var errorMessage = string.Join(" | ", state.Value.Errors.Select(e => e.ErrorMessage));
-                            // Log or handle the error message
-                            Console.WriteLine($"Field: {state.Key}, Error: {errorMessage}");
-                        }
-                    }
                     
                     return BadRequest(ModelState);
                 }

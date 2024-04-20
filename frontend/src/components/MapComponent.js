@@ -5,12 +5,16 @@ import "../styles/MapComponent.css";
 import "../styles/itinerary-form-style.css"
 import Itinerary from "./Itinerary";
 import LocationService from "../service/LocationService";
+import service from "../service/ItineraryService";
+import ItineraryForm from "./ItineraryForm";
+import {formatToClock, isValidStartTime} from "../helpers/helpers";
+import itineraryLocationService from "../service/ItineraryLocationService";
 
 
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
 // https://stackoverflow.com/a/50549617
 
-const MapComponent = ({isAuthenticated, activeCustomerId}) => {
+const MapComponent = ({activeCustomerId, jwtToken}) => {
     const map = useMap();
     const routesLibrary = useMapsLibrary('routes');
     // https://github.com/visgl/react-google-maps/blob/main/examples/directions/src/app.tsx#L98
@@ -26,10 +30,11 @@ const MapComponent = ({isAuthenticated, activeCustomerId}) => {
     const currentDate = new Date().toISOString().slice(0, 16);
 
     const [itineraryDTO, setItineraryDTO] = useState({
+        itineraryId: "",
         tripDate: currentDate.slice(0, 10),
         tripStartTime: currentDate.slice(10, 8),
         tripEndTime: currentDate.slice(10, 8),
-        customerName: "Your Name",
+        customerId: activeCustomerId,
         passengerCount: 1,
         locations: [
             {
@@ -56,6 +61,11 @@ const MapComponent = ({isAuthenticated, activeCustomerId}) => {
     });
     const [locations, setLocations] = useState([])
 
+    const handleInputChange = (event) => {
+        const {name, value} = event.target;
+        setItineraryDTO({...itineraryDTO, [name]: value})
+    }
+    
     const handleMarkerClick = (marker) => {
         setIsInfoWindowOpen(true);
         setActiveMarker(marker);
@@ -140,6 +150,16 @@ const MapComponent = ({isAuthenticated, activeCustomerId}) => {
     const handleStartTimeChange = (event) => {
         const tripStartTime = event.target.value;
         setItineraryDTO({...itineraryDTO, tripStartTime});
+    }
+
+    const handleEndTimeChange = (event) => {
+        const tripEndTime = event.target.value;
+        setItineraryDTO({...itineraryDTO, tripEndTime});
+    }
+
+    const handlePassengerCount = (event) => {
+        const passengerCount = event.target.value;
+        setItineraryDTO({...itineraryDTO, passengerCount});
     }
 
     function calcTotalTime(locations) {
@@ -245,6 +265,51 @@ const MapComponent = ({isAuthenticated, activeCustomerId}) => {
         }
     }, [locations]);
 
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        console.log("Itinerary DTO start time", itineraryDTO.tripStartTime)
+        
+        try {
+            if (itineraryDTO) {
+
+                const endTime = itineraryDTO.tripEndTime;
+                itineraryDTO.tripEndTime = formatToClock(endTime)
+                
+                if(!isValidStartTime(itineraryDTO.tripStartTime)){
+                    itineraryDTO.tripStartTime += ":00";
+                }
+                
+                const newItinerary = {
+                    tripDate: itineraryDTO.tripDate,
+                    tripStartTime: itineraryDTO.tripStartTime,
+                    tripEndTime: itineraryDTO.tripEndTime += ":00",
+                    passengerCount: itineraryDTO.passengerCount,
+                    customerId: itineraryDTO.customerId,
+                    itineraryNotes: itineraryDTO.itineraryNotes
+                }
+                console.log("New itinerary", newItinerary)
+
+                const createdItinerary = await service.createItinerary(newItinerary, jwtToken)
+                
+                const _itineraryId = createdItinerary.itineraryId;
+                
+                    const itineraryLocations = itineraryDTO.locations.map((location, index) => ({
+                        itineraryId: _itineraryId,
+                        locationId: location.index,
+                        stopOrder: location.stopOrders,
+                        stopOver: location.stopOver,
+                        travelTimeNextLocale: location.travelTimeNextLocale
+                    }));
+                    
+                    for (const itineraryLocation of itineraryLocations) {
+                        await itineraryLocationService.createItineraryLocation(itineraryLocation, jwtToken);
+                    }
+            }
+        } catch (error) {
+            console.error('Error saving itinerary:', error);
+            console.error('Response data:', error.response?.data);
+        }};
+
     return (
         <>
             <p className="google-map">
@@ -306,19 +371,23 @@ const MapComponent = ({isAuthenticated, activeCustomerId}) => {
                     calculated. The pick-up and drop-off location are already determined. Feel free to add any other
                     destination you would like.</p>
                 {}
-                {isAuthenticated ? " " : <p className="sign-in-warning">Please sign-in to submit your itinerary </p>}
+                {jwtToken !== "" ? " " : <p className="sign-in-warning">Please sign-in to submit your itinerary </p>}
             </div>
 
-            <Itinerary
+            <ItineraryForm
                 itineraryDTO={itineraryDTO}
                 handleRouteUpdate={handleRouteUpdate}
                 handleTripDateChange={handleTripDateChange}
                 handleStartTimeChange={handleStartTimeChange}
+                handleEndTimeChange={handleEndTimeChange}
                 handleDeleteItineraryButtonClick={handleDeleteItineraryButtonClick}
                 handleStopTime={handleStopTime}
                 handleNoteChange={handleNoteChange}
-                isAuthenticated={isAuthenticated}
                 activeCustomerId={activeCustomerId}
+                handlePassengerCount={handlePassengerCount}
+                handleInputChange={handleInputChange}
+                handleFormSubmit={handleFormSubmit}
+                jwtToken={jwtToken}
             />
         </>
     );
