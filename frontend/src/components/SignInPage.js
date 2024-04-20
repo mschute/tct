@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import accountService from '../service/AccountService';
+import Modal from "./Modal";
 import "../styles/global.css";
 import "../styles/BasicPage.css";
 import "../styles/Form.css"
@@ -12,10 +13,16 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
     const [user, setUser] = useState({email: '', password: ''});
     const [formType, setFormType] = useState(formTypes.signIn);
     const navigation = useNavigate();
-    // const [error, setError] = useState('');
+    const [error, setError] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    // const [verificationMessage, setVerificationMessage] = useState('');
+    const [verificationMessage, setVerificationMessage] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
+    const closeModal = () => {
+        setShowModal(false);
+        navigation('/')
+    }
+    
     const handleInputChange = (event) => {
         const {name, value} = event.target
         setUser({...user, [name]: value})
@@ -33,17 +40,19 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
 
                 navigation('/');
             } else {
-                //TODO Need to add pop-up asking user to go to their email address to verify their email.
                 await accountService.register(user);
-                // setVerificationMessage( "Registration successful. An email has been sent to verify your email address.");
-                //setUser({email: '', password: ''});
-                navigation('/');
+                setVerificationMessage("Registration successful. An email has been sent to verify your email address.");
+                setShowModal(true);
+                setUser({email: '', password: ''});
             }
-            // setError('');
-            // setVerificationMessage('');
+            setError('');
+            setVerificationMessage('');
         } catch (error) {
-            console.log("Error in login or registration", error)
-            // setError(error.message || "An error occurred during sign-in. Email and password combination not valid.");
+            if (formType === formTypes.signIn){
+                setError("An error occurred during sign-in. Email and password combination not valid.");
+            } else {
+                setError("An error occurred during registration. Please try again.");
+            }
         }
     };
 
@@ -57,26 +66,30 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
 
     return (
         <div className="page-dimensions">
+            {showModal ? (<Modal onClose={closeModal} modalTitle="Registration successful" message={verificationMessage}>
+                <button onClick={closeModal}>Close</button>
+                <span onClick={closeModal}>X</span>
+            </Modal>) : null}
             <div className="form-container">
                 <h4 className="title">{title}</h4>
                 <form method="POST">
                     <div className="sign-in-container">
                         <div className="sign-in-field-container">
-                            <input className="sign-in-field" name="email" placeholder="Email Address" onChange={handleInputChange} />
-                                   {/*// onChange={(e) => {*/}
-                                   {/*//     handleInputChange(e);*/}
-                                   {/*//     setError('');*/}
-                                   {/*// }}/>*/}
+                            <input className="sign-in-field" name="email" placeholder="Email Address"
+                                   onChange={(e) => {
+                                       handleInputChange(e);
+                                       setError('');
+                                   }}/>
                         </div>
                         <div className="sign-in-field-container">
                             <input className="sign-in-field" name="password" type="password"
                                    placeholder="Password"
-                                   onChange={handleInputChange}
-                                   // onChange={(e) => {
-                                   //     handleInputChange(e);
-                                   //     setError('');
-                                   // }}
+                                   onChange={(e) => {
+                                       handleInputChange(e);
+                                       setError('');
+                                   }}
                             />
+
                         </div>
                         <div className="button-container">
                             <button className="primary-button" type="submit"
@@ -85,14 +98,11 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
                     </div>
                 </form>
                 <div className="sign-in-container">
-                    <button className="text-link-button" onClick={handleFormSwitch}>{switchButtonText}</button>
+                    <button className="text-link-button"
+                            onClick={handleFormSwitch}>{switchButtonText}</button>
                 </div>
-                {/*{error === '' ? "" :*/}
-                {/*    <div className="error-message">Action failed. Please try again.</div>}*/}
-
-                {/*{verificationMessage === true ? "" :*/}
-                {/*    <div className="registration-message">{verificationMessage}</div>*/}
-                {/*}*/}
+                {error === '' ? "" :
+                    <div className="error-message">{error}</div>}
             </div>
         </div>
     );
