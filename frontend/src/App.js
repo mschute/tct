@@ -76,7 +76,7 @@ function App() {
             <div>
                 <Header handleSignOut={handleSignOut} jwtToken={jwtToken} userRole={userRole}/>
                 <Routes>
-                    <Route path="/" element={<Home activeCustomerId={activeCustomerId}/>} exact/>
+                    <Route path="/" element={<Home jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>} exact/>
                     <Route path="/customerpage" element={<CustomerPage jwtToken={jwtToken} userRole={userRole} activeCustomerId={activeCustomerId}/>} exact/>
                     <Route path="/adminpage" element={<AdminPage jwtToken={jwtToken} userRole={userRole}/>} exact/>
                     <Route path="/signinpage" element={<SignInPage handleSetJwtToken={handleSetJwtToken}/>} exact/>

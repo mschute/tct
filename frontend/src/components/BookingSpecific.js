@@ -19,7 +19,7 @@ const BookingSpecific = ({jwtToken, activeCustomerId}) => {
     const [customers, setCustomers] = useState([]);
     const [drivers, setDrivers] = useState([]);
     const [locations, setLocations] = useState([]);
-    const modelName = "Booking";
+    const modelName = "Customer Bookings";
 
     useEffect(() => {
         // Fetch bookings data when component mounts
@@ -80,26 +80,7 @@ const BookingSpecific = ({jwtToken, activeCustomerId}) => {
 
     return (
         <div>
-            <ViewList model={bookings} modelName={modelName} />
-            {selectedBooking && <Details model={selectedBooking} modelName={modelName} />}
-            {editingBooking && (
-                <Form
-                    fields={[
-                        {name:"bookingID", label: "Booking ID", value:editingBooking.bookingId, type:"text", disabled:true},
-                        {name:"totalPrice", label: "Total Price", value:editingBooking.totalPrice, type:"number", disabled:false},
-                        {name:"tripDate", label: "Trip Date", value:editingBooking.tripDate, type:"date", disabled:false},
-                        {name:"tripStartTime", label: "Trip Start Time", value:editingBooking.tripStartTime, type:"time", disabled:false},
-                        {name:"tripEndTime", label: "Trip End Time", value:editingBooking.tripEndTime, type:"time", disabled:false},
-                        {name:"vehicleId", label: "Vehicle", value:editingBooking.vehicleId, type:"select", disabled:false},
-                        {name:"driverId", label: "Driver", value:editingBooking.driverId, type:"select", disabled:false, options: drivers},
-                        {name:"customerId", label: "Customer", value:editingBooking.customerId, type:"select", disabled:false, options: customers},
-                        {name:"locationIds", label: "Location(s)", value:editingBooking.locationIds, type:"select", disabled:false, options: locations},
-                        {name:"bookingNotes", label: "Booking Notes", value:editingBooking.bookingNotes, type:"text", disabled:false},
-                    ]}
-                    model={editingBooking}
-                    modelName={modelName}
-                />
-            )}
+            <List model={bookings} modelName={modelName} />
         </div>
     );
 };

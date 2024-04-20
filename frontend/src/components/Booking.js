@@ -119,6 +119,9 @@ const Bookings = ({jwtToken}) => {
                     //TODO Need to extract booking location logic out
                     console.log('Updating existing booking:', editingBooking);
                     
+                    editingBooking.tripStartTime += ":00"
+                    editingBooking.tripEndTime += ":00"
+                    
                     await service.updateBooking(editingBooking.bookingId, editingBooking, jwtToken);
                     
                     const existingBookingLocations = await bookingLocationService.getSpecificBookingLocation(editingBooking.bookingId, jwtToken);

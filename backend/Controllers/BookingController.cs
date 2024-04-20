@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using backend.Helpers;
 using backend.Models;
@@ -196,7 +197,14 @@ namespace backend.Controllers
                     return BadRequest();
                 }
 
-                _context.Entry(booking).State = EntityState.Modified;
+                var existingBooking = await _context.Bookings.FindAsync(id);
+                if (existingBooking == null)
+                {
+                    _logger.LogErrorEx($"Booking {id} not found");
+                    return NotFound($"Booking {id} not found");
+                }
+                
+                _context.Entry(existingBooking).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
                 
@@ -232,6 +240,7 @@ namespace backend.Controllers
                 if (!ModelState.IsValid)
                 {
                     _logger.LogErrorEx("Invalid request");
+                    
                     return BadRequest(ModelState);
                 }
                 

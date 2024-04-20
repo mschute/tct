@@ -12,15 +12,20 @@ const ItineraryForm = ({
                            handleRouteUpdate,
                            handleTripDateChange,
                            handleStartTimeChange,
+                            handleEndTimeChange,
                            handleDeleteItineraryButtonClick,
                            handleStopTime,
                            handleNoteChange,
-                           isAuthenticated,
+                           handleFormSubmit,
+                           handlePassengerCount,
+                           handleInputChange,
+                           activeCustomerId,
+                           jwtToken
                        }) => {
-    
+
     return (
         <div className="itinerary-form">
-            <form>
+            <form onSubmit={handleFormSubmit}>
                 <table>
                     <thead>
                     <tr>
@@ -52,7 +57,7 @@ const ItineraryForm = ({
                         <td>
                             <label>
                                 <input type="time" name="tripEndTime" value={formatToClock(itineraryDTO.tripEndTime)}
-                                       readOnly/>
+                                       onChange={handleEndTimeChange} readOnly/>
                             </label>
                         </td>
                     </tr>
@@ -172,20 +177,28 @@ const ItineraryForm = ({
                            disabled={true}
                            readOnly/>
                 </div>
+                <br />
+                <div className="input-group">
+                    <label>Passenger Count: </label>
+                    <input type="number" name="passengerCount" value={itineraryDTO.passengerCount}
+                           min={1} max={12} step={1} onChange={(event) => handlePassengerCount(event)}/>
+                </div>
                 <br/>
                 <div className="input-group">
                     <label>Itinerary Notes: </label>
                     <input type="text" name="itineraryNote" value={itineraryDTO.itineraryNotes} disabled={false}
                            id="itinerary-notes" onChange={handleNoteChange}/>
+                    <input type="hidden" name="customerId" value={activeCustomerId}/>
                 </div>
+                {jwtToken !== "" ? (
+                    <button className="primary-button" type="submit">Submit
+                        Itinerary</button>
+                ) : (
+                    <button className="disabled-button" type="submit" disabled={true} >Submit Itinerary</button>
+                )}
             </form>
             {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
             {/*calcPastMidnight(`${itineraryDTO.startTime}`, `${itineraryDTO.totalTravelTime}`)*/}
-            
-            {isAuthenticated===true ? (
-                <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button> ) : (
-                <button className="primary-button" type="submit">Submit Itinerary</button>
-            )}
         </div>
     );
 };

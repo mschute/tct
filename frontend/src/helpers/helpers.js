@@ -17,6 +17,11 @@ export function formatCamelCase(input){
     return formatted;
 }
 
+export function isValidStartTime(time) {
+    const parts = time.split(':');
+    return parts.length === 3;
+}
+
 //TODO Bug to solve time issue
 
 // export function isFirstTwoDigitsOver24 (timeString){

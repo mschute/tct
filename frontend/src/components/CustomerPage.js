@@ -41,9 +41,9 @@ const CustomerPage = ({jwtToken, activeCustomerId}) => {
                     <div id="tab1" className={activeTab === 'tab1' ? 'tab-pane active' : 'tab-pane'}>
                         <CustomerSpecific jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>
                     </div>
-                    {/*<div id="tab2" className={activeTab === 'tab2' ? 'tab-pane active' : 'tab-pane'}>*/}
-                    {/*    <ItinerarySpecific jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>*/}
-                    {/*</div>*/}
+                    <div id="tab2" className={activeTab === 'tab2' ? 'tab-pane active' : 'tab-pane'}>
+                        <ItinerarySpecific jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>
+                    </div>
                     <div id="tab3" className={activeTab === 'tab3' ? 'tab-pane active' : 'tab-pane'}>
                         <BookingSpecific jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>
                     </div>

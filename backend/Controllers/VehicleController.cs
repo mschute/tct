@@ -23,7 +23,7 @@ namespace backend.Controllers
 
         // GET: api/Vehicle
         // Retrieve all vehicles
-        [Authorize(Roles = "Admin, Customer")]
+        [Authorize(Roles="Admin, Customer")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
         {

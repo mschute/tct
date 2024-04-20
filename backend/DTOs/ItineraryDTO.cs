@@ -9,9 +9,7 @@ public class ItineraryDTO
     public string CustomerName { get; set; }
     public int PassengerCount { get; set; }
     public ICollection<string> LocationNames { get; set; }
-    public ICollection<string> LocationAddresses { get; set; }
     public ICollection<int> StopOrders { get; set; }
     public ICollection<int> StopOvers { get; set; }
-    public ICollection<int> TravelTimesNextLocale { get; set; }
     public string ItineraryNotes { get; set; }
 }
