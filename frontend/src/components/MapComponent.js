@@ -147,9 +147,11 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
         setItineraryDTO({...itineraryDTO, tripDate});
     }
 
-    const handleStartTimeChange = (event) => {
+    const handleStartTimeChange = async (event) => {
         const tripStartTime = event.target.value;
-        setItineraryDTO({...itineraryDTO, tripStartTime});
+        const totalTravelTime = calcTotalTime(locations);
+        const tripEndTime = await calcEndTimeChange(tripStartTime, totalTravelTime);
+        setItineraryDTO({...itineraryDTO, tripStartTime, tripEndTime});
     }
 
     const handleEndTimeChange = (event) => {
@@ -172,7 +174,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
                 totalTimeSeconds += location.travelTimeNextLocale;
             }
         });
-        console.log("Total time seconds: " + totalTimeSeconds);
         return totalTimeSeconds
     }
 
