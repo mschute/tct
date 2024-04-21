@@ -90,7 +90,8 @@ public class AccountController : ControllerBase
             _emailService.SendEmail(user.Email, emailSubject, emailBody);
             
             _logger.LogInformationEx($"User {user.UserName} registered successfully. Email verification link sent");
-            return Ok($"User {user.UserName} registered successfully. Email verification link sent");
+            return Ok();
+            //return Ok($"User {user.UserName} registered successfully. Email verification link sent");
         }
 
         _logger.LogErrorEx($"Registration failed for user {user.UserName}. Errors: {string.Join(", ", result.Errors)}");

@@ -12,8 +12,6 @@ namespace backend.Controllers;
     
     [ApiController]
     [Route("api/[controller]")]
-    // Authorize only SuperAdmin to manage user roles
-    //[Authorize(Roles = "SuperAdmin")]
     public class RolesController : ControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -29,7 +27,7 @@ namespace backend.Controllers;
 
         // GET: api/roles
         // Retrieve all Roles
-       [Authorize(Roles = "Admin")]
+       [Authorize(Roles="Admin")]
         [HttpGet]
         public IActionResult GetRoles()
         {
@@ -55,7 +53,7 @@ namespace backend.Controllers;
 
         // Get: api/Roles/5
         // Retrieve specific role
-       [Authorize(Roles = "Admin")]
+       [Authorize(Roles="Admin")]
         [HttpGet("{roleId}")]
         public async Task<IActionResult> GetRole(string roleId)
         {
@@ -87,7 +85,7 @@ namespace backend.Controllers;
 
         // POST: api/Roles
         // Create role
-       [Authorize(Roles = "Admin")]
+       [Authorize(Roles="Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateRole([FromBody] string roleName)
         {

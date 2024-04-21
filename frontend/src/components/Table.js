@@ -35,7 +35,7 @@ const Table = ({model, modelName, handleEdit, handleDelete}) => {
                             </td>
                         ))}
                         <td>
-                            {modelName === "Pending Itineraries" ? ("") : (<button className='primary-button'
+                            {modelName === "Pending Itineraries" || "Pending" ? ("") : (<button className='primary-button'
                                          onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>)}
                             {modelName === "User" ?
                                 ("") : (<button className="delete-button"

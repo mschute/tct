@@ -9,7 +9,8 @@ const service = {
         console.log("This is user data", JSON.stringify(userData))
         try {
             const response = await axios.post(`${API_URL}/register`, userData)
-            return response.data;
+            console.log("Response data from axios call", JSON.stringify(response));
+            return response.status;
         } catch (error) {
             throw new Error(`Error registering user: ${error.response.data.message}`);
         }
