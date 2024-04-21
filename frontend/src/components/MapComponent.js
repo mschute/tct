@@ -204,7 +204,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
 
     useEffect(() => {
         (async () => {
-            console.log("useEffect []]");
             const response = await LocationService.getLocations();
 
             const newMarkers = response.map(location => ({

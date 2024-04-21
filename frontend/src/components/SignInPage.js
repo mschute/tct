@@ -9,7 +9,7 @@ import {useNavigate} from 'react-router-dom';
 
 const formTypes = {signIn: "Sign In", signUp: "Sign Up"}
 
-const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, handleSetUserRole}) => {
+const SignInPage = ({handleSetJwtToken}) => {
     const [user, setUser] = useState({email: '', password: ''});
     const [formType, setFormType] = useState(formTypes.signIn);
     const navigation = useNavigate();

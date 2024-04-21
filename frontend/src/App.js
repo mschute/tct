@@ -17,6 +17,20 @@ function App() {
     const [activeCustomerId, setActiveCustomerId] = useState(window.localStorage.getItem('customerId'))
     const navigation = useNavigate();
 
+    useEffect(() => {
+        if(window.localStorage.getItem('jwtToken')){
+            const token = window.localStorage.getItem('jwtToken');
+            const decodedToken = jwtDecode(token);
+            const expirationTimeSecs = decodedToken.exp;
+            const expirationTimeMS = (expirationTimeSecs * 1000);
+            const expirationTimeInSeconds = timeOut(expirationTimeMS)
+            
+            if(expirationTimeInSeconds > 0){
+                setTimeout(() => {handleSignOut();}, expirationTimeInSeconds);
+            }
+        }
+    }, []);
+    
     const handleSignOut = async () => {
         console.log("logging out")
         try {
