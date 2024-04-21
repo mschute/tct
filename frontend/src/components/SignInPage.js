@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import accountService from '../service/AccountService';
 import Modal from "./Modal";
 import "../styles/global.css";
@@ -15,9 +15,8 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
     const navigation = useNavigate();
     const [error, setError] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const [verificationMessage, setVerificationMessage] = useState(null);
     const [showModal, setShowModal] = useState(false);
-
+    
     const closeModal = () => {
         setShowModal(false);
         navigation('/')
@@ -40,13 +39,13 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
 
                 navigation('/');
             } else {
-                await accountService.register(user);
-                setVerificationMessage("Registration successful. An email has been sent to verify your email address.");
-                setShowModal(true);
-                setUser({email: '', password: ''});
+                const response = await accountService.register(user);
+                if (response === 200){
+                    setShowModal(true);
+                    setUser({email: '', password: ''});
+                }
             }
             setError('');
-            setVerificationMessage('');
         } catch (error) {
             if (formType === formTypes.signIn){
                 setError("An error occurred during sign-in. Email and password combination not valid.");
@@ -64,11 +63,10 @@ const SignInPage = ({isAuthenticated, setIsAuthenticated, handleSetJwtToken, han
     const submitButtonText = formType === formTypes.signIn ? "Sign In" : "Sign Up";
     const switchButtonText = formType === formTypes.signUp ? "Sign into your account" : "Create an account";
 
+    console.log("show modal status", {showModal});
     return (
         <div className="page-dimensions">
-            {showModal ? (<Modal onClose={closeModal} modalTitle="Registration successful" message={verificationMessage}>
-                <button onClick={closeModal}>Close</button>
-                <span onClick={closeModal}>X</span>
+            {showModal===true ? (<Modal closeModal={closeModal} modalTitle="Registration successful" message="An email has been sent to verify your email address.">
             </Modal>) : null}
             <div className="form-container">
                 <h4 className="title">{title}</h4>
