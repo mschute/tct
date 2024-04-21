@@ -1,14 +1,15 @@
-.google-map{
+.google-map {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .date-list li {
     display: inline-flex;
 }
 
-.info-window{
-   text-align: center;
+.info-window {
+    text-align: center;
 }
 
 .info-window-name {
@@ -28,6 +29,6 @@
     margin: 0px;
 }
 
-.sign-in-warning{
+.sign-in-warning {
     font-weight: bold;
 }

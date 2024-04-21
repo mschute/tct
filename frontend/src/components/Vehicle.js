@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import service from '../service/VehicleService';
 import List from "./List";
 import Form from "./Form";
-import Details from "./Details";
 import "../styles/table.css";
 
 const Vehicles = ({jwtToken}) => {
@@ -10,6 +9,7 @@ const Vehicles = ({jwtToken}) => {
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [editingVehicle, setEditingVehicle] = useState(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const modelName = "Vehicle";
 
     useEffect(() => {
@@ -28,8 +28,15 @@ const Vehicles = ({jwtToken}) => {
     const handleEdit = (vehicleId) => {
         const selected = vehicles.find((vehicle) => vehicle.vehicleId === vehicleId);
         setSelectedVehicle(null);
-        
-        setEditingVehicle({ vehicleId: selected.vehicleId, make: selected.make, model: selected.model, gasType: selected.gasType, seats: selected.seats, pricePerDay: selected.pricePerDay});
+
+        setEditingVehicle({
+            vehicleId: selected.vehicleId,
+            make: selected.make,
+            model: selected.model,
+            gasType: selected.gasType,
+            seats: selected.seats,
+            pricePerDay: selected.pricePerDay
+        });
     };
 
     const handleDelete = async (vehicleId) => {
@@ -37,20 +44,13 @@ const Vehicles = ({jwtToken}) => {
             await service.deleteVehicle(vehicleId, jwtToken)
             fetchVehicles(jwtToken);
         } catch (error) {
-            console.error('Error deleting vehicle:', error);
+            setErrorMessage('Error deleting vehicle. Please try again.');
         }
-    };
-
-    const handleViewDetails = (vehicleId) => {
-        const selected = vehicles.find((vehicle) => vehicle.vehicleId === vehicleId);
-        setSelectedVehicle(selected);
-        setEditingVehicle(null);
-        setIsFormOpen(true);
     };
 
     const handleCreate = () => {
         setSelectedVehicle(null);
-        setEditingVehicle({ make: '', model: '', gasType: '', seats: '', pricePerDay: ''});
+        setEditingVehicle({make: '', model: '', gasType: '', seats: '', pricePerDay: ''});
     };
 
     const handleCancelEdit = () => {
@@ -67,13 +67,13 @@ const Vehicles = ({jwtToken}) => {
                     await service.updateVehicle(editingVehicle.vehicleId, editingVehicle, jwtToken);
 
                 } else {
-                    const { vehicleId, ...newVehicle } = editingVehicle;
+                    const {vehicleId, ...newVehicle} = editingVehicle;
                     await service.createVehicle(newVehicle, jwtToken)
                 }
                 fetchVehicles();
             }
         } catch (error) {
-            console.error('Error saving vehicle:', error);
+            setErrorMessage('Error saving vehicle. Please try again');
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingVehicle(null);
@@ -83,26 +83,74 @@ const Vehicles = ({jwtToken}) => {
 
     return (
         <div>
-            <List model={vehicles} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedVehicle && <Details model={selectedVehicle} modelName={modelName} />}
+            <List model={vehicles} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingVehicle && (
                 <Form
                     fields={[
-                        {name:"vehicleId", label:"Vehicle ID", value:editingVehicle.vehicleId, type:"text", disabled:true, min: null, step: null},
-                        {name:"make", label:"Make", value:editingVehicle.make, type:"text", disabled:false, min: null, step: null},
-                        {name:"model", label:"Model", value:editingVehicle.model, type:"text", disabled:false, min: null, step: null},
-                        {name:"gasType", label:"Gas Type", value:editingVehicle.gasType, type:"text", disabled:false, min: null, step: null},
-                        {name:"seats", label:"Seats", value:editingVehicle.seats, type:"number", disabled:false, min: 5, step: 1},
-                        {name:"pricePerDay", label:"Price Per Day", value:editingVehicle.pricePerDay, type:"number", disabled:false, min: 0, step: 25},
+                        {
+                            name: "vehicleId",
+                            label: "Vehicle ID",
+                            value: editingVehicle.vehicleId,
+                            type: "text",
+                            disabled: true,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "make",
+                            label: "Make",
+                            value: editingVehicle.make,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "model",
+                            label: "Model",
+                            value: editingVehicle.model,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "gasType",
+                            label: "Gas Type",
+                            value: editingVehicle.gasType,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "seats",
+                            label: "Seats",
+                            value: editingVehicle.seats,
+                            type: "number",
+                            disabled: false,
+                            min: 5,
+                            step: 1
+                        },
+                        {
+                            name: "pricePerDay",
+                            label: "Price Per Day",
+                            value: editingVehicle.pricePerDay,
+                            type: "number",
+                            disabled: false,
+                            min: 0,
+                            step: 25
+                        },
                     ]}
                     model={editingVehicle}
                     modelName={modelName}
-                    handleInputChange={(e) => setEditingVehicle({ ...editingVehicle, [e.target.name]: e.target.value })}
+                    handleInputChange={(e) => setEditingVehicle({...editingVehicle, [e.target.name]: e.target.value})}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />
             )}
-            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
+            {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

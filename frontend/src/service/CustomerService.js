@@ -15,7 +15,7 @@ const service = {
 
     getSpecificCustomer: async (customerId, jwtToken) => {
         try {
-            const response = await axios.get(`${API_URL}/${customerId}`,{headers: {Authorization: `Bearer ${jwtToken}`}})
+            const response = await axios.get(`${API_URL}/${customerId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching specific customer: ${error.message}`);

@@ -1,4 +1,3 @@
-
 export function formatTime(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -11,7 +10,7 @@ export function formatToClock(totalSeconds) {
     return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
 }
 
-export function formatCamelCase(input){
+export function formatCamelCase(input) {
     const words = input.split(/(?=[A-Z)])/);
     const formatted = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     return formatted;
@@ -22,7 +21,7 @@ export function isValidStartTime(time) {
     return parts.length === 3;
 }
 
-export function isFirstTwoDigitsOver24 (timeString){
+export function isFirstTwoDigitsOver24(timeString) {
     const time = formatToClock(timeString)
     const [hours] = time.split(':').map(Number);
 

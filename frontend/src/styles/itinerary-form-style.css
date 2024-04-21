@@ -1,9 +1,9 @@
-.itinerary-header{
+.itinerary-header {
     text-align: center;
     padding: 20px;
 }
 
-.itinerary-form{
+.itinerary-form {
     background-color: #fff;
     border-radius: 10px;
     padding: 25px;
@@ -11,24 +11,24 @@
     border-color: #0b1b28;
     align-items: center;
     max-width: 1100px;
-    width: 90%; 
+    width: 90%;
     margin: 0 auto;
     overflow: auto;
 }
 
-.itinerary-form th{
+.itinerary-form th {
     font-weight: bold;
     padding: 5px;
     text-align: center;
 }
 
-.itinerary-form label{
+.itinerary-form label {
     font-weight: bold;
     padding: 10px;
     text-align: center;
 }
 
-.itinerary-form tr td{
+.itinerary-form tr td {
     text-align: center;
 }
 
@@ -45,7 +45,7 @@
 input[type="text"],
 input[type="number"],
 input[type="date"],
-input[type="time"] 
+input[type="time"]
 #itinerary-notes {
     width: 100%;
     height: 40px;
@@ -54,7 +54,7 @@ input[type="time"]
     box-sizing: border-box;
 }
 
-#itinerary-notes{
+#itinerary-notes {
     height: 200px;
 }
 

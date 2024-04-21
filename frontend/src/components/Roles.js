@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import service from '../service/RolesService';
 import List from "./List";
 import Form from "./Form";
-import Details from "./Details";
 import "../styles/table.css";
 
 const Roles = ({jwtToken}) => {
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
     const [editingRole, setEditingRole] = useState(null);
-    const [isFormOpen, setIsFormOpen] = useState(false);
     const modelName = "Role";
 
     useEffect(() => {
@@ -31,8 +29,8 @@ const Roles = ({jwtToken}) => {
         const selected = roles.find((role) => role.id === id);
         console.log('Selected role:', selected);
         setSelectedRole(null);
-        
-        setEditingRole({ id: selected.id, name: selected.name});
+
+        setEditingRole({id: selected.id, name: selected.name});
     };
 
     const handleDelete = async (id) => {
@@ -44,22 +42,13 @@ const Roles = ({jwtToken}) => {
             console.error('Error deleting role:', error);
         }
     };
-
-    const handleViewDetails = (id) => {
-        const selected = roles.find((role) => role.id === id);
-        setSelectedRole(selected);
-        setEditingRole(null);
-    };
-
     const handleCreate = () => {
         setSelectedRole(null);
-        setEditingRole({ name: '' });
-        setIsFormOpen(true);
+        setEditingRole({name: ''});
     };
 
     const handleCancelEdit = () => {
         setEditingRole(null);
-        setIsFormOpen(false);
     };
 
     const handleFormSubmit = async (event) => {
@@ -83,23 +72,21 @@ const Roles = ({jwtToken}) => {
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingRole(null);
-            setIsFormOpen(false);
         }
     };
 
     return (
         <div>
-            <List model={roles} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedRole && <Details model={selectedRole} modelName={modelName} />}
+            <List model={roles} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
             {editingRole && (
                 <Form
                     fields={[
-                        {name:"roleId", label:"Role ID", value:editingRole.id, type:"text", disabled:true},
-                        {name:"name", label:"Role Name", value:editingRole.name, type:"text", disabled:false},
+                        {name: "roleId", label: "Role ID", value: editingRole.id, type: "text", disabled: true},
+                        {name: "name", label: "Role Name", value: editingRole.name, type: "text", disabled: false},
                     ]}
                     model={editingRole}
                     modelName={modelName}
-                    handleInputChange={(e) => setEditingRole({ ...editingRole, [e.target.name]: e.target.value })}
+                    handleInputChange={(e) => setEditingRole({...editingRole, [e.target.name]: e.target.value})}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />

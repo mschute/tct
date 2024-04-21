@@ -13,15 +13,6 @@ const service = {
         }
     },
 
-    getSpecificBooking: async (bookingId, jwtToken) => {
-        try {
-            const response = await axios.get(`${API_URL}/${bookingId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching bookings: ${error.message}`);
-        }
-    },
-
     getBookingsByCustomer: async (customerId, jwtToken) => {
         try {
             const response = await axios.get(`${API_URL}/ByCustomer/${customerId}`, {

@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 import '../styles/header.css';
 
 const Header = ({userRole, jwtToken, handleSignOut}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    
+
     const handleDropdownToggle = () => {
         setDropdownOpen(!dropdownOpen);
     };

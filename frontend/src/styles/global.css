@@ -1,6 +1,7 @@
-.html, body{
-    
+.html, body {
+
 }
+
 .primary-button {
     background-color: #365baa;
     color: white;
@@ -17,7 +18,7 @@
     cursor: pointer;
 }
 
-.primary-button:disabled{
+.primary-button:disabled {
     background-color: #6c757d;
     cursor: not-allowed
 }
@@ -42,7 +43,7 @@
     cursor: pointer;
 }
 
-.secondary-button:disabled{
+.secondary-button:disabled {
     background-color: #6c757d;
     cursor: not-allowed
 }
@@ -71,7 +72,7 @@
     background-color: #9A0612;
 }
 
-.disabled-button{
+.disabled-button {
     background-color: #6c757d;
     color: white;
     border: none;
