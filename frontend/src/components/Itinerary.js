@@ -6,11 +6,11 @@ import "../styles/table.css";
 const Itinerary = ({jwtToken, activeCustomerId}) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
-    const [editingBooking, setEditingItinerary] = useState(null);
+    const [editingItinerary, setEditingItinerary] = useState(null);
     const modelName = "Pending Itineraries";
 
     useEffect(() => {
-        fetchItineraries(activeCustomerId, jwtToken);
+        fetchItineraries(jwtToken);
     }, []);
 
     const fetchItineraries = async () => {
@@ -25,9 +25,18 @@ const Itinerary = ({jwtToken, activeCustomerId}) => {
         }
     };
 
+    const handleDelete = async (itineraryId) => {
+        try {
+            await service.deleteItinerary(itineraryId, jwtToken)
+            fetchItineraries(jwtToken);
+        } catch (error) {
+            console.error('Error deleting booking:', error);
+        }
+    };
+
     return (
         <div>
-            <List model={itineraries} modelName={modelName} />
+            <List model={itineraries} modelName={modelName} handleDelete={handleDelete}/>
         </div>
     );
 };

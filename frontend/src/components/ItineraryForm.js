@@ -5,7 +5,7 @@ import {
     isFirstTwoDigitsOver24
 } from "../helpers/helpers";
 import "../styles/itinerary-form-style.css"
-import {useState} from "react";
+import Modal from "./Modal";
 
 const ItineraryForm = ({
                            itineraryDTO,
@@ -20,7 +20,10 @@ const ItineraryForm = ({
                            handlePassengerCount,
                            handleInputChange,
                            activeCustomerId,
-                           jwtToken
+                           jwtToken,
+                           errorMessage,
+                           showModal,
+                           closeModal
                        }) => {
 
     return (
@@ -200,6 +203,8 @@ const ItineraryForm = ({
                     <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button>
                 )}
             </form>
+            {(errorMessage === '') ? ("") : <div className="error-message">{errorMessage}</div>}
+            {showModal === false ? ("") : <Modal modalTitle="Itinerary successfully submitted" message="You may see your itinerary on the Itinerary tab on the Customer page." closeModal={closeModal} />}
         </div>
     );
 };
