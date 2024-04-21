@@ -1,18 +1,18 @@
 import {
-    calcPastMidnight,
     calculateTomorrow,
     formatTime,
     formatToClock,
     isFirstTwoDigitsOver24
 } from "../helpers/helpers";
 import "../styles/itinerary-form-style.css"
+import Modal from "./Modal";
 
 const ItineraryForm = ({
                            itineraryDTO,
                            handleRouteUpdate,
                            handleTripDateChange,
                            handleStartTimeChange,
-                            handleEndTimeChange,
+                           handleEndTimeChange,
                            handleDeleteItineraryButtonClick,
                            handleStopTime,
                            handleNoteChange,
@@ -20,7 +20,10 @@ const ItineraryForm = ({
                            handlePassengerCount,
                            handleInputChange,
                            activeCustomerId,
-                           jwtToken
+                           jwtToken,
+                           errorMessage,
+                           showModal,
+                           closeModal
                        }) => {
 
     return (
@@ -59,7 +62,10 @@ const ItineraryForm = ({
                                 <input type="time" name="tripEndTime" value={formatToClock(itineraryDTO.tripEndTime)}
                                        onChange={handleEndTimeChange} readOnly/>
                             </label>
+
                         </td>
+                        {isFirstTwoDigitsOver24(itineraryDTO.tripEndTime) ?
+                            <div className="error-message">Tour cannot go past midnight</div> : ""}
                     </tr>
                     </tbody>
                 </table>
@@ -177,7 +183,7 @@ const ItineraryForm = ({
                            disabled={true}
                            readOnly/>
                 </div>
-                <br />
+                <br/>
                 <div className="input-group">
                     <label>Passenger Count: </label>
                     <input type="number" name="passengerCount" value={itineraryDTO.passengerCount}
@@ -190,15 +196,15 @@ const ItineraryForm = ({
                            id="itinerary-notes" onChange={handleNoteChange}/>
                     <input type="hidden" name="customerId" value={activeCustomerId}/>
                 </div>
-                {jwtToken !== "" ? (
+                {jwtToken !== null && !isFirstTwoDigitsOver24(itineraryDTO.tripEndTime) && itineraryDTO.tripStartTime !== '' && itineraryDTO.tripStartTime !== '' && itineraryDTO.locations.length >= 3? (
                     <button className="primary-button" type="submit">Submit
                         Itinerary</button>
                 ) : (
-                    <button className="disabled-button" type="submit" disabled={true} >Submit Itinerary</button>
+                    <button className="disabled-button" type="submit" disabled={true}>Submit Itinerary</button>
                 )}
             </form>
-            {/*//TODO Bug isFirstTwoDigitsOver24(formatToClock(itineraryDTO.endTime)) > "23:59"*/}
-            {/*calcPastMidnight(`${itineraryDTO.startTime}`, `${itineraryDTO.totalTravelTime}`)*/}
+            {(errorMessage === '') ? ("") : <div className="error-message">{errorMessage}</div>}
+            {showModal === false ? ("") : <Modal modalTitle="Itinerary successfully submitted" message="You may see your itinerary on the Itinerary tab on the Customer page." closeModal={closeModal} />}
         </div>
     );
 };

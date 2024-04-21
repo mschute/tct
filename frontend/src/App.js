@@ -18,6 +18,7 @@ function App() {
     const navigation = useNavigate();
 
     const handleSignOut = async () => {
+        console.log("logging out")
         try {
             await service.logout();
 
@@ -27,7 +28,9 @@ function App() {
 
             window.localStorage.removeItem('userRole');
             setUserRole(null);
-            setActiveCustomerId(null);
+
+            window.localStorage.removeItem('customerId')
+            setActiveCustomerId(null)
 
             navigation('/');
         } catch (error) {
@@ -36,17 +39,17 @@ function App() {
     }
 
     const handleSetJwtToken = (token) => {
-        console.log("handleSetJwtToken is called")
         const decodedToken = jwtDecode(token);
-        const expirationTime = decodedToken.exp * 1000;
+        const expirationTimeSecs = decodedToken.exp;
+        const expirationTimeMS = (expirationTimeSecs * 1000);
+  
         window.localStorage.setItem('jwtToken', token);
-        window.localStorage.setItem('expirationTime', expirationTime.toString())
+        window.localStorage.setItem('expirationTime', expirationTimeMS.toString())
         setJwtToken(token);
         
-        console.log("The token to send to the handle sets")
         handleSetUserRole(token)
         handleSetCustomerId(token)
-        timeOut(expirationTime);
+        timeOut(expirationTimeMS);
     }
     
     const timeOut = async (expirationTime) => {
@@ -56,7 +59,6 @@ function App() {
     }
 
     const handleSetUserRole = (token) => {
-        console.log("Handle set user role was called")
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         window.localStorage.setItem('userRole', userRole);
@@ -64,11 +66,9 @@ function App() {
     }
 
     const handleSetCustomerId = (token) => {
-        console.log("Handle set customer Id was called")
         const decodedToken = jwtDecode(token);
         const customerId = decodedToken["customerId"];
         window.localStorage.setItem('customerId', customerId);
-        console.log("Customer Id in the handle set", customerId)
         setActiveCustomerId(customerId);
     }
 

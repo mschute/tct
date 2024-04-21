@@ -31,8 +31,7 @@ const Roles = ({jwtToken}) => {
         const selected = roles.find((role) => role.id === id);
         console.log('Selected role:', selected);
         setSelectedRole(null);
-
-        // Ensure that the property names match the expected format
+        
         setEditingRole({ id: selected.id, name: selected.name});
     };
 
@@ -40,7 +39,7 @@ const Roles = ({jwtToken}) => {
         try {
             console.log("Role ID" + id);
             await service.deleteRole(id, jwtToken)
-            fetchRoles();
+            fetchRoles(jwtToken);
         } catch (error) {
             console.error('Error deleting role:', error);
         }
@@ -105,7 +104,6 @@ const Roles = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
-            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

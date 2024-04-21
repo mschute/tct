@@ -32,8 +32,14 @@
     overflow-x: auto;
 }
 
-.marquee-container img {
-    margin-right: 20px;
+.fleet img {
+    margin: 0 10px;
+    box-shadow: 5px 5px 5px #c6c9cc;
+}
+
+.locations img {
+    margin: 0 10px;
+    box-shadow: 5px 5px 5px #03223f;
 }
 
 .image-container {

@@ -77,7 +77,7 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
                         {name:"lastName", label:"Last Name", value:editingCustomer.lastName, type:"text", disabled:false},
                         {name:"dob", label:"Date of Birth", value:editingCustomer.dob, type:"date", disabled:false},
                         {name:"nationality", label:"Nationality", value:editingCustomer.nationality, type:"text", disabled:false},
-                        { name: "userId", type: "hidden", value: editingCustomer.userId}
+                        {name: "userId", type: "hidden", value: editingCustomer.userId}
                     ]}
                     model={editingCustomer}
                     modelName={modelName}

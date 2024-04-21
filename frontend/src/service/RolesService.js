@@ -46,7 +46,7 @@ const service = {
 
     deleteRole: async (roleId, jwtToken) => {
         try {
-            const response = await axios.delete(`${API_URL}/${roleId}`, roleId, {headers: {Authorization: `Bearer ${jwtToken}`}})
+            const response = await axios.delete(`${API_URL}/${roleId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error deleting role: ${error.message}`);

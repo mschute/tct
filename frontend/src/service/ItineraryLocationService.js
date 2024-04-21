@@ -13,15 +13,6 @@ const service = {
         }
     },
 
-    // getSpecificItineraryLocation: async (itineraryId, locationId) => {
-    //     try {
-    //         const response = await axios.get(`${API_URL}/${itineraryId}/${locationId}`)
-    //         return response.data;
-    //     } catch (error) {
-    //         throw new Error(`Error fetching bookings: ${error.message}`);
-    //     }
-    // },
-
     getSpecificItineraryLocation: async (itineraryId, jwtToken) => {
         try {
             const response = await axios.get(`${API_URL}/${itineraryId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
@@ -31,14 +22,14 @@ const service = {
         }
     },
 
-    // GetBookingLocationsByItineraryId: async (itineraryId) => {
-    //     try {
-    //         const response = await axios.get(`${API_URL}/${itineraryId}`)
-    //         return response.data;
-    //     } catch (error) {
-    //         throw new Error(`Error fetching itineraries: ${error.message}`);
-    //     }
-    // },
+    GetBookingLocationsByItineraryId: async (itineraryId) => {
+        try {
+            const response = await axios.get(`${API_URL}/${itineraryId}`)
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching itineraries: ${error.message}`);
+        }
+    },
 
     createItineraryLocation: async (newItineraryLocation, jwtToken) => {
         try {

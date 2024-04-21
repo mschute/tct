@@ -22,8 +22,7 @@ const Header = ({userRole, jwtToken, handleSignOut}) => {
                                 id="basic-nav-dropdown"
                                 show={dropdownOpen}
                                 className="navbar-text"
-                                onMouseEnter={handleDropdownToggle}
-                                onMouseLeave={handleDropdownToggle}
+                                onToggle={handleDropdownToggle}
                             >
                                 <LinkContainer to="/">
                                     <NavDropdown.Item>

@@ -13,15 +13,6 @@ const service = {
         }
     },
 
-    // getSpecificBookingLocation: async (bookingId, locationId) => {
-    //     try {
-    //         const response = await axios.get(`${API_URL}/${bookingId}/${locationId}`)
-    //         return response.data;
-    //     } catch (error) {
-    //         throw new Error(`Error fetching bookings: ${error.message}`);
-    //     }
-    // },
-
     getSpecificBookingLocation: async (bookingId, jwtToken) => {
         try {
             const response = await axios.get(`${API_URL}/${bookingId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
@@ -31,14 +22,14 @@ const service = {
         }
     },
 
-    // GetBookingLocationsByBookingId: async (bookingId) => {
-    //     try {
-    //         const response = await axios.get(`${API_URL}/${bookingId}`)
-    //         return response.data;
-    //     } catch (error) {
-    //         throw new Error(`Error fetching bookings: ${error.message}`);
-    //     }
-    // },
+    GetBookingLocationsByBookingId: async (bookingId) => {
+        try {
+            const response = await axios.get(`${API_URL}/${bookingId}`)
+            return response.data;
+        } catch (error) {
+            throw new Error(`Error fetching bookings: ${error.message}`);
+        }
+    },
 
     createBookingLocation: async (newBookingLocation, jwtToken) => {
         try {

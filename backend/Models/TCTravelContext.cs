@@ -32,6 +32,16 @@ public class TCTravelContext : IdentityDbContext<IdentityUser>
             .HasForeignKey<Customer>(c => c.UserId)
             .IsRequired(false);
         
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Bookings)
+            .WithOne(b => b.Customer)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Itineraries)
+            .WithOne(i => i.Customer)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<ItineraryLocation>()
             .HasKey(il => new { il.ItineraryId, il.LocationId });
         modelBuilder.Entity<ItineraryLocation>()

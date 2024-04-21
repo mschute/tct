@@ -30,7 +30,7 @@ const Customers = ({jwtToken}) => {
         const selected = customers.find((customer) => customer.customerId === customerId);
         setSelectedCustomer(null);
         
-        setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality});
+        setEditingCustomer({ customerId: selected.customerId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, nationality: selected.nationality, userId: selected.userId});
     };
     
     const handleDelete = async (customerId) => {
@@ -48,11 +48,11 @@ const Customers = ({jwtToken}) => {
         setEditingCustomer(null);
     };
 
-    // const handleCreate = () => {
-    //     setSelectedCustomer(null);
-    //     setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
-    //     setIsFormOpen(true);
-    // };
+    const handleCreate = () => {
+        setSelectedCustomer(null);
+        setEditingCustomer({ firstName: '', lastName: '', dob: '', nationality: '' });
+        setIsFormOpen(true);
+    };
 
     const handleCancelEdit = () => {
         setEditingCustomer(null);
@@ -95,6 +95,7 @@ const Customers = ({jwtToken}) => {
                         {name:"lastName", label:"Last Name", value:editingCustomer.lastName, type:"text", disabled:false},
                         {name:"dob", label:"Date of Birth", value:editingCustomer.dob, type:"date", disabled:false},
                         {name:"nationality", label:"Nationality", value:editingCustomer.nationality, type:"text", disabled:false},
+                        {name:"userId", label:"User ID", value:editingCustomer.userId, type:"text", disabled:true},
                     ]}
                     model={editingCustomer}
                     modelName={modelName}

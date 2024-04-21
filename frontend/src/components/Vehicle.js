@@ -13,7 +13,6 @@ const Vehicles = ({jwtToken}) => {
     const modelName = "Vehicle";
 
     useEffect(() => {
-        // Fetch vehicles data when component mounts
         fetchVehicles(jwtToken);
     }, []);
 

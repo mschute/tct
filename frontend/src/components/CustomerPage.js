@@ -14,6 +14,7 @@ function Bookings() {
 
 const CustomerPage = ({jwtToken, activeCustomerId}) => {
     const [activeTab, setActiveTab] = useState('tab1');
+    console.log("Jwt Token in Customer page", JSON.stringify(jwtToken));
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);

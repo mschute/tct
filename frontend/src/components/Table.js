@@ -8,7 +8,6 @@ const Table = ({model, modelName, handleEdit, handleDelete}) => {
     }
 
     const attributeNames = Object.keys(model[0]);
-    console.log(attributeNames);
 
     return (
         <div className='table-container'>
@@ -36,9 +35,9 @@ const Table = ({model, modelName, handleEdit, handleDelete}) => {
                             </td>
                         ))}
                         <td>
-                            {modelName === "Pending Itineraries" || "Pending Customer Itineraries" ? ("") : (<button className='primary-button'
+                            {modelName === "Pending Itineraries" || "Pending" ? ("") : (<button className='primary-button'
                                          onClick={() => handleEdit(entry[attributeNames[0]])}>Edit</button>)}
-                            {modelName === "User" || "Pending Customer Itineraries" ?
+                            {modelName === "User" ?
                                 ("") : (<button className="delete-button"
                                                 onClick={() => handleDelete(entry[attributeNames[0]])}>Delete</button>)
                             }

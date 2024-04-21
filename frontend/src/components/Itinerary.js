@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import List from "./List";
-import customerService from "../service/CustomerService";
-import locationService from "../service/LocationService";
 import service from "../service/ItineraryService";
 import "../styles/table.css";
 
 const Itinerary = ({jwtToken, activeCustomerId}) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
-    const [editingBooking, setEditingItinerary] = useState(null);
-    const [customers, setCustomers] = useState([]);
-    const [locations, setLocations] = useState([]);
-    const modelName = "Pending Customer Itineraries";
+    const [editingItinerary, setEditingItinerary] = useState(null);
+    const modelName = "Pending Itineraries";
 
     useEffect(() => {
-        fetchItineraries(activeCustomerId, jwtToken);
-        //TODO Do I need Customers and Locations
-        fetchCustomers(jwtToken);
-        fetchLocations(jwtToken);
+        fetchItineraries(jwtToken);
     }, []);
 
     const fetchItineraries = async () => {
@@ -32,28 +25,18 @@ const Itinerary = ({jwtToken, activeCustomerId}) => {
         }
     };
 
-    //TODO May not need this 
-    const fetchCustomers = async () => {
+    const handleDelete = async (itineraryId) => {
         try {
-            const customersData = await customerService.getCustomers(jwtToken);
-            setCustomers(customersData);
+            await service.deleteItinerary(itineraryId, jwtToken)
+            fetchItineraries(jwtToken);
         } catch (error) {
-            console.error(error.message)
+            console.error('Error deleting booking:', error);
         }
-    }
-    
-    const fetchLocations = async () => {
-        try {
-            const locationsData = await locationService.getLocations();
-            setLocations(locationsData);
-        } catch (error) {
-            console.error(error.message)
-        }
-    }
+    };
 
     return (
         <div>
-            <List model={itineraries} modelName={modelName} />
+            <List model={itineraries} modelName={modelName} handleDelete={handleDelete}/>
         </div>
     );
 };

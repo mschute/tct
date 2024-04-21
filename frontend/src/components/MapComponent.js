@@ -3,12 +3,12 @@ import {InfoWindow, Map, Marker, useMap, useMapsLibrary} from '@vis.gl/react-goo
 import '@react-google-maps/api'
 import "../styles/MapComponent.css";
 import "../styles/itinerary-form-style.css"
-import Itinerary from "./Itinerary";
 import LocationService from "../service/LocationService";
 import service from "../service/ItineraryService";
 import ItineraryForm from "./ItineraryForm";
-import {formatToClock, isValidStartTime} from "../helpers/helpers";
+import {calculateTomorrow, formatToClock, isValidStartTime} from "../helpers/helpers";
 import itineraryLocationService from "../service/ItineraryLocationService";
+import {useNavigate} from 'react-router-dom';
 
 
 //https://www.npmjs.com/package/@vis.gl/react-google-maps?activeTab=readme
@@ -22,16 +22,20 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
     const [directionsRenderer, setDirectionsRenderer] = useState(null);
     const [markers, setMarkers] = useState([])
     const [activeMarker, setActiveMarker] = useState(null);
-    const [markerPositions, setMarkerPositions] = useState([]); // TODO maybe remove
-    const [locationAddress, setLocationAddress] = useState('') // TODO maybe remove
     const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
 
     // Itinerary Data
     const currentDate = new Date().toISOString().slice(0, 16);
+    const tomorrowDate = calculateTomorrow(currentDate);
+    
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const navigation = useNavigate();
+    
 
     const [itineraryDTO, setItineraryDTO] = useState({
         itineraryId: "",
-        tripDate: currentDate.slice(0, 10),
+        tripDate: tomorrowDate.slice(0, 10),
         tripStartTime: currentDate.slice(10, 8),
         tripEndTime: currentDate.slice(10, 8),
         customerId: activeCustomerId,
@@ -65,7 +69,7 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
         const {name, value} = event.target;
         setItineraryDTO({...itineraryDTO, [name]: value})
     }
-    
+
     const handleMarkerClick = (marker) => {
         setIsInfoWindowOpen(true);
         setActiveMarker(marker);
@@ -135,7 +139,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
         setItineraryDTO({...itineraryDTO, totalTravelTime, locations: newLocations});
     }
 
-    // TODO not tested
     const handleRouteUpdate = (event) => {
         console.log("handleRouteUpdate event.target.value=" + event.target.value);
         const locations = event.target.value;
@@ -147,9 +150,11 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
         setItineraryDTO({...itineraryDTO, tripDate});
     }
 
-    const handleStartTimeChange = (event) => {
+    const handleStartTimeChange = async (event) => {
         const tripStartTime = event.target.value;
-        setItineraryDTO({...itineraryDTO, tripStartTime});
+        const totalTravelTime = calcTotalTime(locations);
+        const tripEndTime = await calcEndTimeChange(tripStartTime, totalTravelTime);
+        setItineraryDTO({...itineraryDTO, tripStartTime, tripEndTime});
     }
 
     const handleEndTimeChange = (event) => {
@@ -172,7 +177,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
                 totalTimeSeconds += location.travelTimeNextLocale;
             }
         });
-        console.log("Total time seconds: " + totalTimeSeconds);
         return totalTimeSeconds
     }
 
@@ -182,6 +186,11 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
         const parsedTravelTime = parseInt(totalTravelTime);
 
         return startTimeInSeconds + parsedTravelTime;
+    }
+
+    const closeModal = () => {
+        setShowModal(false);
+        navigation("/customerpage");
     }
 
     // Initialize directions service and renderer
@@ -212,7 +221,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
     }, []);
 
     useEffect(() => {
-        console.log("useEffect [locations] \nlocations=" + JSON.stringify(locations) + "\nitineraryDTO.locations=" + JSON.stringify(itineraryDTO.locations));
         if (!directionsRenderer) return;
         if (!directionsService) return;
 
@@ -267,18 +275,16 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        console.log("Itinerary DTO start time", itineraryDTO.tripStartTime)
-        
         try {
             if (itineraryDTO) {
 
                 const endTime = itineraryDTO.tripEndTime;
                 itineraryDTO.tripEndTime = formatToClock(endTime)
-                
-                if(!isValidStartTime(itineraryDTO.tripStartTime)){
+
+                if (!isValidStartTime(itineraryDTO.tripStartTime)) {
                     itineraryDTO.tripStartTime += ":00";
                 }
-                
+
                 const newItinerary = {
                     tripDate: itineraryDTO.tripDate,
                     tripStartTime: itineraryDTO.tripStartTime,
@@ -287,28 +293,30 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
                     customerId: itineraryDTO.customerId,
                     itineraryNotes: itineraryDTO.itineraryNotes
                 }
-                console.log("New itinerary", newItinerary)
 
                 const createdItinerary = await service.createItinerary(newItinerary, jwtToken)
-                
+
                 const _itineraryId = createdItinerary.itineraryId;
-                
-                    const itineraryLocations = itineraryDTO.locations.map((location, index) => ({
-                        itineraryId: _itineraryId,
-                        locationId: location.index,
-                        stopOrder: location.stopOrders,
-                        stopOver: location.stopOver,
-                        travelTimeNextLocale: location.travelTimeNextLocale
-                    }));
-                    
-                    for (const itineraryLocation of itineraryLocations) {
-                        await itineraryLocationService.createItineraryLocation(itineraryLocation, jwtToken);
-                    }
+
+                const itineraryLocations = itineraryDTO.locations.map((location, index) => ({
+                    itineraryId: _itineraryId,
+                    locationId: location.index,
+                    stopOrder: location.stopOrders,
+                    stopOver: location.stopOver,
+                    travelTimeNextLocale: location.travelTimeNextLocale
+                }));
+
+                for (const itineraryLocation of itineraryLocations) {
+                    await itineraryLocationService.createItineraryLocation(itineraryLocation, jwtToken);
+                }
+                setShowModal(true);
             }
         } catch (error) {
             console.error('Error saving itinerary:', error);
             console.error('Response data:', error.response?.data);
-        }};
+            setErrorMessage('An error occurred while saving the itinerary. Please try again.');
+        }
+    };
 
     return (
         <>
@@ -388,6 +396,9 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
                 handleInputChange={handleInputChange}
                 handleFormSubmit={handleFormSubmit}
                 jwtToken={jwtToken}
+                errorMessage={errorMessage}
+                showModal={showModal}
+                closeModal={closeModal}
             />
         </>
     );

@@ -216,7 +216,7 @@ namespace backend.Controllers
 
         // POST: api/Itinerary
         // Create itinerary
-        [Authorize(Roles="Admin, Customer")]
+        [Authorize(Roles="Admin,Customer")]
         [HttpPost]
         public async Task<ActionResult<Itinerary>> PostItinerary(Itinerary itinerary)
         {
@@ -243,7 +243,7 @@ namespace backend.Controllers
 
         // DELETE: api/Itinerary/5
         // Delete specific itinerary
-        [Authorize(Roles = "Admin, Customer")]
+        [Authorize(Roles="Admin,Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItinerary(int id)
         {

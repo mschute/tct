@@ -90,7 +90,8 @@ public class AccountController : ControllerBase
             _emailService.SendEmail(user.Email, emailSubject, emailBody);
             
             _logger.LogInformationEx($"User {user.UserName} registered successfully. Email verification link sent");
-            return Ok($"User {user.UserName} registered successfully. Email verification link sent");
+            return Ok();
+            //return Ok($"User {user.UserName} registered successfully. Email verification link sent");
         }
 
         _logger.LogErrorEx($"Registration failed for user {user.UserName}. Errors: {string.Join(", ", result.Errors)}");
@@ -222,7 +223,7 @@ public class AccountController : ControllerBase
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["Jwt:ExpireHours"]));
+        var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiresIn"]));
 
         var token = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],

@@ -19,7 +19,7 @@ const BookingSpecific = ({jwtToken, activeCustomerId}) => {
     const [customers, setCustomers] = useState([]);
     const [drivers, setDrivers] = useState([]);
     const [locations, setLocations] = useState([]);
-    const modelName = "Customer Bookings";
+    const modelName = "Confirmed Bookings";
 
     useEffect(() => {
         // Fetch bookings data when component mounts
