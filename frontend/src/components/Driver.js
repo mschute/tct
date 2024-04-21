@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import service from '../service/DriverService';
 import List from "./List";
 import Form from "./Form";
-import Details from "./Details";
 import "../styles/table.css";
 
 const Drivers = ({jwtToken}) => {
@@ -10,10 +9,10 @@ const Drivers = ({jwtToken}) => {
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [editingDriver, setEditingDriver] = useState(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const modelName = "Driver";
 
     useEffect(() => {
-        // Fetch drivers data when component mounts
         fetchDrivers(jwtToken);
     }, []);
 
@@ -21,9 +20,14 @@ const Drivers = ({jwtToken}) => {
         try {
             const driversData = await service.getDrivers(jwtToken);
             setDrivers(driversData);
+            clearErrorMessage();
         } catch (error) {
             console.error(error.message)
         }
+    }
+
+    const clearErrorMessage = () => {
+        setErrorMessage('');
     }
 
     const handleEdit = (driverId) => {
@@ -32,8 +36,13 @@ const Drivers = ({jwtToken}) => {
         console.log('Selected driver:', selected);
         setSelectedDriver(null);
 
-        // Ensure that the property names match the expected format
-        setEditingDriver({ driverId: selected.driverId, firstName: selected.firstName, lastName: selected.lastName, dob: selected.dob, drivingLicenseNo: selected.drivingLicenseNo});
+        setEditingDriver({
+            driverId: selected.driverId,
+            firstName: selected.firstName,
+            lastName: selected.lastName,
+            dob: selected.dob,
+            drivingLicenseNo: selected.drivingLicenseNo
+        });
     };
 
     const handleDelete = async (driverId) => {
@@ -41,19 +50,13 @@ const Drivers = ({jwtToken}) => {
             await service.deleteDriver(driverId, jwtToken)
             fetchDrivers(jwtToken);
         } catch (error) {
-            console.error('Error deleting driver:', error);
+            setErrorMessage('Error deleting driver. Please try again.');
         }
-    };
-
-    const handleViewDetails = (driverId) => {
-        const selected = drivers.find((driver) => driver.driverId === driverId);
-        setSelectedDriver(selected);
-        setEditingDriver(null);
     };
 
     const handleCreate = () => {
         setSelectedDriver(null);
-        setEditingDriver({ firstName: '', lastName: '', dob: '', drivingLicenseNo: '' });
+        setEditingDriver({firstName: '', lastName: '', dob: '', drivingLicenseNo: ''});
         setIsFormOpen(true)
     };
 
@@ -74,14 +77,14 @@ const Drivers = ({jwtToken}) => {
 
                 } else {
                     // Remove the existing driverId property for new drivers
-                    const { driverId, ...newDriver } = editingDriver;
+                    const {driverId, ...newDriver} = editingDriver;
                     console.log('Creating new driver:', newDriver);
                     await service.createDriver(newDriver, jwtToken)
                 }
                 fetchDrivers(jwtToken);
             }
         } catch (error) {
-            console.error('Error saving driver:', error);
+            setErrorMessage('Error saving driver. Please try again');
             console.error('Response data:', error.response?.data);
         } finally {
             setEditingDriver(null);
@@ -91,25 +94,65 @@ const Drivers = ({jwtToken}) => {
 
     return (
         <div>
-            <List model={drivers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete} />
-            {selectedDriver && <Details model={selectedDriver} modelName={modelName} />}
+            <List model={drivers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingDriver && (
                 <Form
                     fields={[
-                        {name:"driverId", label:"Driver ID", value:editingDriver.driverId, type:"text", disabled:true, min: null, step: null},
-                        {name:"firstName", label:"First Name", value:editingDriver.firstName, type:"text", disabled:false, min: null, step: null},
-                        {name:"lastName", label:"Last Name", value:editingDriver.lastName, type:"text", disabled:false, min: null, step: null},
-                        {name:"dob", label:"Date of Birth", value:editingDriver.dob, type:"date", disabled:false, min: null, step: null},
-                        {name:"drivingLicenseNo", label:"Driving License No", value:editingDriver.drivingLicenseNo, type:"text", disabled:false, min: null, step: null},
+                        {
+                            name: "driverId",
+                            label: "Driver ID",
+                            value: editingDriver.driverId,
+                            type: "text",
+                            disabled: true,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "firstName",
+                            label: "First Name",
+                            value: editingDriver.firstName,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "lastName",
+                            label: "Last Name",
+                            value: editingDriver.lastName,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "dob",
+                            label: "Date of Birth",
+                            value: editingDriver.dob,
+                            type: "date",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
+                        {
+                            name: "drivingLicenseNo",
+                            label: "Driving License No",
+                            value: editingDriver.drivingLicenseNo,
+                            type: "text",
+                            disabled: false,
+                            min: null,
+                            step: null
+                        },
                     ]}
                     model={editingDriver}
                     modelName={modelName}
-                    handleInputChange={(e) => setEditingDriver({ ...editingDriver, [e.target.name]: e.target.value })}
+                    handleInputChange={(e) => setEditingDriver({...editingDriver, [e.target.name]: e.target.value})}
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />
             )}
-            {isFormOpen===true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
+            {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );
 };

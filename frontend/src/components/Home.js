@@ -32,12 +32,12 @@ const Home = ({activeCustomerId, jwtToken}) => {
                         Fleet
                     </h2>
                     <div className="marquee-container fleet">
-                            <img src="/images/Fleet1.jpeg"/>
-                            <img src="/images/Fleet2.jpeg"/>
-                            <img src="/images/Fleet3.jpeg"/>
-                            <img src="/images/Fleet4.jpeg"/>
-                            <img src="/images/Fleet5.jpeg"/>
-                            <img src="/images/Fleet6.jpeg"/>
+                        <img src="/images/Fleet1.jpeg"/>
+                        <img src="/images/Fleet2.jpeg"/>
+                        <img src="/images/Fleet3.jpeg"/>
+                        <img src="/images/Fleet4.jpeg"/>
+                        <img src="/images/Fleet5.jpeg"/>
+                        <img src="/images/Fleet6.jpeg"/>
                     </div>
                 </div>
                 <div className="section-background section-background-even marquee">
@@ -45,26 +45,26 @@ const Home = ({activeCustomerId, jwtToken}) => {
                         Locations
                     </h2>
                     <div className="marquee-container locations">
-                            <img src="/images/4.jpeg"/>
-                            <img src="/images/5.jpeg"/>
-                            <img src="/images/6.jpeg"/>
-                            <img src="/images/7.jpeg"/>
-                            <img src="/images/8.jpeg"/>
-                            <img src="/images/9.jpeg"/>
-                            <img src="/images/10.jpeg"/>
-                            <img src="/images/11.jpeg"/>
-                            <img src="/images/12.jpeg"/>
-                            <img src="/images/13.jpeg"/>
-                            <img src="/images/14.jpeg"/>
-                            <img src="/images/15.jpeg"/>
-                            <img src="/images/16.jpeg"/>
-                            <img src="/images/17.jpeg"/>
-                            <img src="/images/18.jpeg"/>
-                            <img src="/images/19.jpeg"/>
-                            <img src="/images/20.jpeg"/>
-                            <img src="/images/21.jpeg"/>
-                            <img src="/images/22.jpeg"/>
-                            <img src="/images/24.jpeg"/>
+                        <img src="/images/4.jpeg"/>
+                        <img src="/images/5.jpeg"/>
+                        <img src="/images/6.jpeg"/>
+                        <img src="/images/7.jpeg"/>
+                        <img src="/images/8.jpeg"/>
+                        <img src="/images/9.jpeg"/>
+                        <img src="/images/10.jpeg"/>
+                        <img src="/images/11.jpeg"/>
+                        <img src="/images/12.jpeg"/>
+                        <img src="/images/13.jpeg"/>
+                        <img src="/images/14.jpeg"/>
+                        <img src="/images/15.jpeg"/>
+                        <img src="/images/16.jpeg"/>
+                        <img src="/images/17.jpeg"/>
+                        <img src="/images/18.jpeg"/>
+                        <img src="/images/19.jpeg"/>
+                        <img src="/images/20.jpeg"/>
+                        <img src="/images/21.jpeg"/>
+                        <img src="/images/22.jpeg"/>
+                        <img src="/images/24.jpeg"/>
                     </div>
                 </div>
                 <div className="section-background section-background-odd">

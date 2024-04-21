@@ -16,7 +16,7 @@ const service = {
     getItinerariesByCustomer: async (customerId, jwtToken) => {
         try {
             const response = await axios.get(`${API_URL}/ByCustomer/${customerId}`, {
-                headers: { Authorization: `Bearer ${jwtToken}` }
+                headers: {Authorization: `Bearer ${jwtToken}`}
             });
             return response.data;
         } catch (error) {
@@ -28,15 +28,6 @@ const service = {
         console.log("The create itinerary form was called:", JSON.stringify(newItinerary))
         try {
             const response = await axios.post(`${API_URL}`, newItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching itineraries: ${error.message}`);
-        }
-    },
-
-    updateItinerary: async (itineraryId, editingItinerary, jwtToken) => {
-        try {
-            const response = await axios.put(`${API_URL}/${itineraryId}`, editingItinerary, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching itineraries: ${error.message}`);

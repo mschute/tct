@@ -8,7 +8,8 @@ const Modal = ({modalTitle, message, closeModal}) => {
                 <div className="modal-content-container">
                     <div className="modal-header-container">
                         <h5 className="modal-title-container">{modalTitle}</h5>
-                        <button type="button" className="close-button" onClick={closeModal} data-dismiss="modal" aria-label="Close">
+                        <button type="button" className="close-button" onClick={closeModal} data-dismiss="modal"
+                                aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -16,7 +17,9 @@ const Modal = ({modalTitle, message, closeModal}) => {
                         <p>{message}</p>
                     </div>
                     <div className="modal-footer-container">
-                        <button type="button" className="primary-button" onClick={closeModal} data-dismiss="modal">Close</button>
+                        <button type="button" className="primary-button" onClick={closeModal}
+                                data-dismiss="modal">Close
+                        </button>
                     </div>
                 </div>
             </div>

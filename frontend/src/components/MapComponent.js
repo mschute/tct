@@ -27,11 +27,11 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
     // Itinerary Data
     const currentDate = new Date().toISOString().slice(0, 16);
     const tomorrowDate = calculateTomorrow(currentDate);
-    
+
     const [errorMessage, setErrorMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
     const navigation = useNavigate();
-    
+
 
     const [itineraryDTO, setItineraryDTO] = useState({
         itineraryId: "",
@@ -137,12 +137,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
 
         setLocations(newLocations);
         setItineraryDTO({...itineraryDTO, totalTravelTime, locations: newLocations});
-    }
-
-    const handleRouteUpdate = (event) => {
-        console.log("handleRouteUpdate event.target.value=" + event.target.value);
-        const locations = event.target.value;
-        setLocations(locations);
     }
 
     const handleTripDateChange = (event) => {
@@ -383,7 +377,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
 
             <ItineraryForm
                 itineraryDTO={itineraryDTO}
-                handleRouteUpdate={handleRouteUpdate}
                 handleTripDateChange={handleTripDateChange}
                 handleStartTimeChange={handleStartTimeChange}
                 handleEndTimeChange={handleEndTimeChange}
@@ -392,7 +385,6 @@ const MapComponent = ({activeCustomerId, jwtToken}) => {
                 handleNoteChange={handleNoteChange}
                 activeCustomerId={activeCustomerId}
                 handlePassengerCount={handlePassengerCount}
-                handleInputChange={handleInputChange}
                 handleFormSubmit={handleFormSubmit}
                 jwtToken={jwtToken}
                 errorMessage={errorMessage}

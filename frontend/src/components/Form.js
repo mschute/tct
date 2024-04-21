@@ -68,7 +68,7 @@ const Form = ({fields, modelName, handleInputChange, handleSubmit, handleCancel}
                         <br/>
                     </div>
                 ))}
-                
+
                 <div className='button-container'>
                     <button type="submit" className='primary-button'>Save</button>
                     <button type="button" onClick={handleCancel} className='delete-button'>Cancel</button>

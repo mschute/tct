@@ -8,7 +8,8 @@ import UserForm from "./UserForm";
 const Users = ({jwtToken}) => {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
-    const [roles, setRoles] = useState()
+    const [roles, setRoles] = useState();
+    const [errorMessage, setErrorMessage] = useState('');
     const modelName = "User";
 
     useEffect(() => {
@@ -20,11 +21,16 @@ const Users = ({jwtToken}) => {
         try {
             const usersData = await service.getUsers(jwtToken);
             setUsers(usersData);
+            clearErrorMessage();
         } catch (error) {
             console.error(error.message)
         }
     }
-    
+
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+
     const fetchRoles = async () => {
         try {
             const rolesData = await roleService.getRoles(jwtToken);
@@ -39,20 +45,19 @@ const Users = ({jwtToken}) => {
         setEditingUser(null);
 
         setEditingUser({userId: selected.userId, email: selected.email, roleName: selected.roleName});
-        console.log(editingUser)
     };
 
     const handleCancelEdit = () => {
         setEditingUser(null);
     };
-    
+
     const handleRoleAssign = async (event) => {
         event.preventDefault();
         try {
-            await roleService.updateUserRole({userId: editingUser.userId, roleName: editingUser.roleName });
+            await roleService.updateUserRole({userId: editingUser.userId, roleName: editingUser.roleName});
             fetchUsers(jwtToken);
         } catch (error) {
-            console.error('Error assigning role: ', error);
+            setErrorMessage('Error assigning role. Please try again.');
             console.error('Response data: ', error.response?.data);
         } finally {
             setEditingUser(null);
@@ -62,17 +67,25 @@ const Users = ({jwtToken}) => {
     return (
         <div>
             <List model={users} modelName={modelName} handleEdit={handleEdit}/>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingUser && (
                 <UserForm
                     fields={[
                         {name: "userId", label: "User ID", value: editingUser.userId, type: "text", disabled: true},
                         {name: "email", label: "Email", value: editingUser.email, type: "text", disabled: true},
-                        {name: "roleName", label: "Role Name", value: editingUser.roleName, type: "select", disabled: false, options: roles },
+                        {
+                            name: "roleName",
+                            label: "Role Name",
+                            value: editingUser.roleName,
+                            type: "select",
+                            disabled: false,
+                            options: roles
+                        },
                     ]}
                     modelName={modelName}
                     handleInputChange={(event) => {
-                        const { name, value } = event.target;
-                        setEditingUser({...editingUser, [name]: value });
+                        const {name, value} = event.target;
+                        setEditingUser({...editingUser, [name]: value});
                     }}
                     handleRoleAssign={handleRoleAssign}
                     handleCancelEdit={handleCancelEdit}

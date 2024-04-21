@@ -13,15 +13,6 @@ const service = {
         }
     },
 
-    getSpecificVehicle: async (vehicleId, jwtToken) => {
-        try {
-            const response = await axios.get(`${API_URL}/${vehicleId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching vehicles: ${error.message}`);
-        }
-    },
-
     createVehicle: async (newVehicle, jwtToken) => {
         try {
             const response = await axios.post(`${API_URL}`, newVehicle, {headers: {Authorization: `Bearer ${jwtToken}`}})

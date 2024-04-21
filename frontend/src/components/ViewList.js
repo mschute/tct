@@ -1,7 +1,7 @@
 import React from 'react';
 import ViewTable from './ViewTable';
 
-const ViewList = ({ model, modelName, handleEdit, handleDelete}) => {
+const ViewList = ({model, modelName, handleEdit, handleDelete}) => {
     return (
         <div>
             <h2>{modelName}</h2>

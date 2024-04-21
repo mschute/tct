@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import List from "./List";
 import service from "../service/ItineraryService";
-import locationService from "../service/LocationService";
-import customerService from "../service/CustomerService";
 import "../styles/table.css";
 
 
@@ -10,14 +8,11 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
     const [itineraries, setItineraries] = useState([]);
     const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [editingBooking, setEditingItinerary] = useState(null);
-    // const [customers, setCustomers] = useState(null);
-    // const [locations, setLocations] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const modelName = "Pending";
 
     useEffect(() => {
         fetchItineraries(activeCustomerId, jwtToken);
-        // fetchLocations();
-        // fetchCustomers(jwtToken);
     }, []);
 
     const fetchItineraries = async () => {
@@ -27,29 +22,15 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
             setSelectedItinerary(null);
             setEditingItinerary(null);
             setItineraries(itinerariesData);
-
+            clearErrorMessage();
         } catch (error) {
             console.error(error.message);
         }
     };
 
-    // const fetchCustomers = async (jwtToken) => {
-    //     try {
-    //         const customersData = await customerService.getCustomers(jwtToken);
-    //         setCustomers(customersData);
-    //     } catch (error) {
-    //         console.error(error.message)
-    //     }
-    // }
-    //
-    // const fetchLocations = async () => {
-    //     try {
-    //         const locationsData = await locationService.getLocations();
-    //         setLocations(locationsData);
-    //     } catch (error) {
-    //         console.error(error.message)
-    //     }
-    // }
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
 
     const handleDelete = async (itineraryId) => {
         console.log("This is jwt in Itinerary Specific", JSON.stringify(jwtToken));
@@ -57,13 +38,14 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
             await service.deleteItinerary(itineraryId, jwtToken)
             fetchItineraries(jwtToken);
         } catch (error) {
-            console.error('Error deleting itinerary:', error);
+            setErrorMessage('Error deleting itinerary. Please try again.');
         }
     };
 
     return (
         <div>
             <List model={itineraries} modelName={modelName} handleDelete={handleDelete}/>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
     );
 };

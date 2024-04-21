@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 import Home from './components/Home';
 import CustomerPage from './components/CustomerPage';
 import AdminPage from './components/AdminPage';
@@ -18,19 +18,21 @@ function App() {
     const navigation = useNavigate();
 
     useEffect(() => {
-        if(window.localStorage.getItem('jwtToken')){
+        if (window.localStorage.getItem('jwtToken')) {
             const token = window.localStorage.getItem('jwtToken');
             const decodedToken = jwtDecode(token);
             const expirationTimeSecs = decodedToken.exp;
             const expirationTimeMS = (expirationTimeSecs * 1000);
             const expirationTimeInSeconds = timeOut(expirationTimeMS)
-            
-            if(expirationTimeInSeconds > 0){
-                setTimeout(() => {handleSignOut();}, expirationTimeInSeconds);
+
+            if (expirationTimeInSeconds > 0) {
+                setTimeout(() => {
+                    handleSignOut();
+                }, expirationTimeInSeconds);
             }
         }
     }, []);
-    
+
     const handleSignOut = async () => {
         console.log("logging out")
         try {
@@ -56,20 +58,22 @@ function App() {
         const decodedToken = jwtDecode(token);
         const expirationTimeSecs = decodedToken.exp;
         const expirationTimeMS = (expirationTimeSecs * 1000);
-  
+
         window.localStorage.setItem('jwtToken', token);
         window.localStorage.setItem('expirationTime', expirationTimeMS.toString())
         setJwtToken(token);
-        
+
         handleSetUserRole(token)
         handleSetCustomerId(token)
         timeOut(expirationTimeMS);
     }
-    
+
     const timeOut = async (expirationTime) => {
         const currentTime = new Date().getTime();
         const expirationTimeInSeconds = (expirationTime - currentTime);
-        setTimeout(() => {handleSignOut();}, expirationTimeInSeconds)
+        setTimeout(() => {
+            handleSignOut();
+        }, expirationTimeInSeconds)
     }
 
     const handleSetUserRole = (token) => {
@@ -87,15 +91,16 @@ function App() {
     }
 
     return (
-            <div>
-                <Header handleSignOut={handleSignOut} jwtToken={jwtToken} userRole={userRole}/>
-                <Routes>
-                    <Route path="/" element={<Home jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>} exact/>
-                    <Route path="/customerpage" element={<CustomerPage jwtToken={jwtToken} userRole={userRole} activeCustomerId={activeCustomerId}/>} exact/>
-                    <Route path="/adminpage" element={<AdminPage jwtToken={jwtToken} userRole={userRole}/>} exact/>
-                    <Route path="/signinpage" element={<SignInPage handleSetJwtToken={handleSetJwtToken}/>} exact/>
-                </Routes>
-            </div>
+        <div>
+            <Header handleSignOut={handleSignOut} jwtToken={jwtToken} userRole={userRole}/>
+            <Routes>
+                <Route path="/" element={<Home jwtToken={jwtToken} activeCustomerId={activeCustomerId}/>} exact/>
+                <Route path="/customerpage" element={<CustomerPage jwtToken={jwtToken} userRole={userRole}
+                                                                   activeCustomerId={activeCustomerId}/>} exact/>
+                <Route path="/adminpage" element={<AdminPage jwtToken={jwtToken} userRole={userRole}/>} exact/>
+                <Route path="/signinpage" element={<SignInPage handleSetJwtToken={handleSetJwtToken}/>} exact/>
+            </Routes>
+        </div>
     );
 }
 

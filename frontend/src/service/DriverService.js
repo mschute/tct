@@ -5,19 +5,10 @@ const API_URL = 'http://localhost:5255/api/Driver'
 const service = {
 
     getDrivers: async (jwtToken) => {
-        
+
         try {
             const response = await axios.get(`${API_URL}`, {headers: {Authorization: `Bearer ${jwtToken}`}});
-            
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching drivers: ${error.message}`);
-        }
-    },
 
-    getSpecificDriver: async (driverId, jwtToken) => {
-        try {
-            const response = await axios.get(`${API_URL}/${driverId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching drivers: ${error.message}`);

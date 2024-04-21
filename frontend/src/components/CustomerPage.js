@@ -4,14 +4,6 @@ import CustomerSpecific from "./CustomerSpecific";
 import BookingSpecific from "./BookingSpecific";
 import ItinerarySpecific from "./ItinerarySpecific";
 
-function Itineraries() {
-    return null;
-}
-
-function Bookings() {
-    return null;
-}
-
 const CustomerPage = ({jwtToken, activeCustomerId}) => {
     const [activeTab, setActiveTab] = useState('tab1');
     console.log("Jwt Token in Customer page", JSON.stringify(jwtToken));

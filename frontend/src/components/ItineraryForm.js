@@ -9,7 +9,6 @@ import Modal from "./Modal";
 
 const ItineraryForm = ({
                            itineraryDTO,
-                           handleRouteUpdate,
                            handleTripDateChange,
                            handleStartTimeChange,
                            handleEndTimeChange,
@@ -18,7 +17,6 @@ const ItineraryForm = ({
                            handleNoteChange,
                            handleFormSubmit,
                            handlePassengerCount,
-                           handleInputChange,
                            activeCustomerId,
                            jwtToken,
                            errorMessage,
@@ -196,7 +194,7 @@ const ItineraryForm = ({
                            id="itinerary-notes" onChange={handleNoteChange}/>
                     <input type="hidden" name="customerId" value={activeCustomerId}/>
                 </div>
-                {jwtToken !== null && !isFirstTwoDigitsOver24(itineraryDTO.tripEndTime) && itineraryDTO.tripStartTime !== '' && itineraryDTO.tripStartTime !== '' && itineraryDTO.locations.length >= 3? (
+                {jwtToken !== null && !isFirstTwoDigitsOver24(itineraryDTO.tripEndTime) && itineraryDTO.tripStartTime !== '' && itineraryDTO.tripStartTime !== '' && itineraryDTO.locations.length >= 3 ? (
                     <button className="primary-button" type="submit">Submit
                         Itinerary</button>
                 ) : (
@@ -204,7 +202,9 @@ const ItineraryForm = ({
                 )}
             </form>
             {(errorMessage === '') ? ("") : <div className="error-message">{errorMessage}</div>}
-            {showModal === false ? ("") : <Modal modalTitle="Itinerary successfully submitted" message="You may see your itinerary on the Itinerary tab on the Customer page." closeModal={closeModal} />}
+            {showModal === false ? ("") : <Modal modalTitle="Itinerary successfully submitted"
+                                                 message="You may see your itinerary on the Itinerary tab on the Customer page."
+                                                 closeModal={closeModal}/>}
         </div>
     );
 };

@@ -35,7 +35,7 @@ const UserForm = ({fields, modelName, handleInputChange, handleRoleAssign, handl
                         </label>
                     </div>
                 ))}
-                <button className="primary-button" type="submit" onClick={handleRoleAssign}>Save Role</button>
+                <button className="primary-button" type="submit" onClick={handleRoleAssign}>Save</button>
                 <button className="secondary-button" type="button" onClick={handleCancelEdit}>Cancel</button>
             </form>
         </div>

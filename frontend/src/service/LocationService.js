@@ -13,15 +13,6 @@ const service = {
         }
     },
 
-    getSpecificLocation: async (locationId) => {
-        try {
-            const response = await axios.get(`${API_URL}/${locationId}`)
-            return response.data;
-        } catch (error) {
-            throw new Error(`Error fetching locations: ${error.message}`);
-        }
-    },
-
     createLocation: async (newLocation, jwtToken) => {
         try {
             const response = await axios.post(`${API_URL}`, newLocation, {headers: {Authorization: `Bearer ${jwtToken}`}})

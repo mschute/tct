@@ -16,12 +16,12 @@ const SignInPage = ({handleSetJwtToken}) => {
     const [error, setError] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    
+
     const closeModal = () => {
         setShowModal(false);
         navigation('/')
     }
-    
+
     const handleInputChange = (event) => {
         const {name, value} = event.target
         setUser({...user, [name]: value})
@@ -40,14 +40,14 @@ const SignInPage = ({handleSetJwtToken}) => {
                 navigation('/');
             } else {
                 const response = await accountService.register(user);
-                if (response === 200){
+                if (response === 200) {
                     setShowModal(true);
                     setUser({email: '', password: ''});
                 }
             }
             setError('');
         } catch (error) {
-            if (formType === formTypes.signIn){
+            if (formType === formTypes.signIn) {
                 setError("An error occurred during sign-in. Email and password combination not valid.");
             } else {
                 setError("An error occurred during registration. Please try again.");
@@ -66,7 +66,8 @@ const SignInPage = ({handleSetJwtToken}) => {
     console.log("show modal status", {showModal});
     return (
         <div className="page-dimensions">
-            {showModal===true ? (<Modal closeModal={closeModal} modalTitle="Registration successful" message="An email has been sent to verify your email address.">
+            {showModal === true ? (<Modal closeModal={closeModal} modalTitle="Registration successful"
+                                          message="An email has been sent to verify your email address.">
             </Modal>) : null}
             <div className="form-container">
                 <h4 className="title">{title}</h4>
