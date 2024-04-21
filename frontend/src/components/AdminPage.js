@@ -49,6 +49,7 @@ const AdminPage = ({jwtToken}) => {
                 <div className="tab-content">
                     <div id="tab1" className={activeTab === 'tab1' ? 'tab-pane active' : 'tab-pane'}>
                         <Itinerary jwtToken={jwtToken}/>
+                        <br/>
                         <Booking jwtToken={jwtToken}/>
                     </div>
                     <div id="tab2" className={activeTab === 'tab2' ? 'tab-pane active' : 'tab-pane'}>
