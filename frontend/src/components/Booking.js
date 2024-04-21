@@ -116,7 +116,6 @@ const Bookings = ({jwtToken}) => {
         try {
             if (editingBooking) {
                 if (editingBooking.bookingId) {
-                    //TODO Need to extract booking location logic out
                     console.log('Updating existing booking:', editingBooking);
                     
                     editingBooking.tripStartTime += ":00"
@@ -146,9 +145,11 @@ const Bookings = ({jwtToken}) => {
                     await Promise.all([...createBookingLocationPromises, ...deleteBookingLocationPromises]);
 
                 } else {
-                    //TODO Need to extract booking location logic out
                     const { bookingId, ...newBooking } = editingBooking;
 
+                    newBooking.tripStartTime += ":00"
+                    newBooking.tripEndTime += ":00"
+                    
                     const createdBooking = await service.createBooking(newBooking, jwtToken);
                     
                     const _bookingId = createdBooking.bookingId;

@@ -12,7 +12,6 @@ const Hero = () => {
                 <h1 className='business-title'>Tay Country Travel</h1>
             </div>
         </Container>
-
     );
 }
 
