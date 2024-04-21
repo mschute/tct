@@ -9,7 +9,7 @@ import Customers from "./Customers";
 import Users from "./Users";
 import Itinerary from "./Itinerary";
 
-const AdminPage = ({userRole, jwtToken}) => {
+const AdminPage = ({jwtToken}) => {
     const [activeTab, setActiveTab] = useState('tab1');
 
     const handleTabClick = (tab) => {

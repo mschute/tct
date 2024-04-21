@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +60,7 @@ builder.Services.AddScoped<AppJwtBearerEvents>();
      {
          // Override default events type for JwtBearerEvents in order to use logging for Jwt events
          options.EventsType = typeof(AppJwtBearerEvents);
-         
+
          options.TokenValidationParameters = new TokenValidationParameters
          {
              ValidateIssuer = true,

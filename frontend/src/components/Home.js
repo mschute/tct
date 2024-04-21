@@ -31,7 +31,7 @@ const Home = ({activeCustomerId, jwtToken}) => {
                     <h2 className='section-text section-text-title'>
                         Fleet
                     </h2>
-                    <div className="marquee-container">
+                    <div className="marquee-container fleet">
                             <img src="/images/Fleet1.jpeg"/>
                             <img src="/images/Fleet2.jpeg"/>
                             <img src="/images/Fleet3.jpeg"/>
@@ -44,7 +44,7 @@ const Home = ({activeCustomerId, jwtToken}) => {
                     <h2 className='section-text section-text-title'>
                         Locations
                     </h2>
-                    <div className="marquee-container">
+                    <div className="marquee-container locations">
                             <img src="/images/4.jpeg"/>
                             <img src="/images/5.jpeg"/>
                             <img src="/images/6.jpeg"/>

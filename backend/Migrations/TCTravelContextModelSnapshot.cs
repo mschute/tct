@@ -340,7 +340,7 @@ namespace backend.Migrations
                     b.Property<DateOnly>("TripDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeOnly>("TripEndTime")
+                    b.Property<TimeOnly?>("TripEndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<TimeOnly>("TripStartTime")

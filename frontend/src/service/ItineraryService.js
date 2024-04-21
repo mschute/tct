@@ -44,6 +44,7 @@ const service = {
     },
 
     deleteItinerary: async (itineraryId, jwtToken) => {
+        console.log("This is jwt token", JSON.stringify(jwtToken))
         try {
             const response = await axios.delete(`${API_URL}/${itineraryId}`, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
