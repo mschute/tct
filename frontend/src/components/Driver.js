@@ -16,11 +16,11 @@ const Drivers = ({jwtToken}) => {
     useEffect(() => {
         fetchDrivers(jwtToken);
     }, []);
-    
+
     const clearErrorMessage = () => {
         setErrorMessage('');
     }
-    
+
     const fetchDrivers = async (jwtToken) => {
         try {
             const driversData = await service.getDrivers(jwtToken);
@@ -69,7 +69,7 @@ const Drivers = ({jwtToken}) => {
         event.preventDefault();
         try {
             clearErrorMessage();
-            
+
             if (editingDriver) {
                 let error = validateWord("First Name", editingDriver.firstName);
                 if (error !== "") {
@@ -94,7 +94,7 @@ const Drivers = ({jwtToken}) => {
                     setErrorMessage(error);
                     return;
                 }
-                    
+
                 if (editingDriver.driverId) {
                     await service.updateDriver(editingDriver.driverId, editingDriver, jwtToken);
 
@@ -160,7 +160,7 @@ const Drivers = ({jwtToken}) => {
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />
-            )}            
+            )}
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
