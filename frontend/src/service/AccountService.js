@@ -5,11 +5,8 @@ const API_URL = 'http://localhost:5255/api/account'
 const service = {
 
     register: async (userData) => {
-        console.log("Register was called")
-        console.log("This is user data", JSON.stringify(userData))
         try {
             const response = await axios.post(`${API_URL}/register`, userData)
-            console.log("Response data from axios call", JSON.stringify(response));
             return response.status;
         } catch (error) {
             throw new Error(`Error registering user: ${error.response.data.message}`);
@@ -17,7 +14,6 @@ const service = {
     },
 
     login: async (credentials) => {
-        console.log("Login was called")
         try {
             const response = await axios.post(`${API_URL}/login`, credentials)
             return response.data;

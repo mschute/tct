@@ -3,6 +3,7 @@ import service from '../service/DriverService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
+import {validateDOB, validateWord, validateDrivingLicense} from "../helpers/helpers";
 
 const Drivers = ({jwtToken}) => {
     const [drivers, setDrivers] = useState([]);
@@ -15,7 +16,11 @@ const Drivers = ({jwtToken}) => {
     useEffect(() => {
         fetchDrivers(jwtToken);
     }, []);
-
+    
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+    
     const fetchDrivers = async (jwtToken) => {
         try {
             const driversData = await service.getDrivers(jwtToken);
@@ -26,15 +31,10 @@ const Drivers = ({jwtToken}) => {
         }
     }
 
-    const clearErrorMessage = () => {
-        setErrorMessage('');
-    }
-
     const handleEdit = (driverId) => {
-        console.log('Edit button clicked for driver driverId:', driverId);
         const selected = drivers.find((driver) => driver.driverId === driverId);
-        console.log('Selected driver:', selected);
         setSelectedDriver(null);
+        setIsFormOpen(true);
 
         setEditingDriver({
             driverId: selected.driverId,
@@ -68,34 +68,53 @@ const Drivers = ({jwtToken}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Driver:', editingDriver);
-
+            clearErrorMessage();
+            
             if (editingDriver) {
+                let error = validateWord("First Name", editingDriver.firstName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Last Name", editingDriver.lastName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateDOB("Date of Birth", editingDriver.dob);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateDrivingLicense("Driving License", editingDriver.drivingLicenseNo);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                    
                 if (editingDriver.driverId) {
-                    console.log('Updating existing driver:', editingDriver);
                     await service.updateDriver(editingDriver.driverId, editingDriver, jwtToken);
 
                 } else {
-                    // Remove the existing driverId property for new drivers
                     const {driverId, ...newDriver} = editingDriver;
-                    console.log('Creating new driver:', newDriver);
                     await service.createDriver(newDriver, jwtToken)
                 }
-                fetchDrivers(jwtToken);
+                await fetchDrivers(jwtToken);
+                setEditingDriver(null);
+                setIsFormOpen(false);
             }
         } catch (error) {
             setErrorMessage('Error saving driver. Please try again');
             console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingDriver(null);
-            setIsFormOpen(false);
         }
     };
 
     return (
         <div>
             <List model={drivers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingDriver && (
                 <Form
                     fields={[
@@ -105,8 +124,6 @@ const Drivers = ({jwtToken}) => {
                             value: editingDriver.driverId,
                             type: "text",
                             disabled: true,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "firstName",
@@ -114,8 +131,6 @@ const Drivers = ({jwtToken}) => {
                             value: editingDriver.firstName,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "lastName",
@@ -123,8 +138,6 @@ const Drivers = ({jwtToken}) => {
                             value: editingDriver.lastName,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "dob",
@@ -132,8 +145,6 @@ const Drivers = ({jwtToken}) => {
                             value: editingDriver.dob,
                             type: "date",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "drivingLicenseNo",
@@ -141,8 +152,6 @@ const Drivers = ({jwtToken}) => {
                             value: editingDriver.drivingLicenseNo,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                     ]}
                     model={editingDriver}
@@ -151,7 +160,8 @@ const Drivers = ({jwtToken}) => {
                     handleSubmit={handleFormSubmit}
                     handleCancel={handleCancelEdit}
                 />
-            )}
+            )}            
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );

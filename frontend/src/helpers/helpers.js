@@ -42,12 +42,25 @@ export function calculateTomorrow() {
 
 export function validateWord(label, text) {
     if (text === null || text === "") {
-        return label + ' is required. Please try again'
+        return label + ' is required. Please try again.'
     }
 
     const isWord = new RegExp("^[a-z]+$", "i");
     if (!isWord.test(text)) {
-        return label + ' is not a valid word. Please try again'
+        return label + ' is not a valid word. Please try again.'
+    }
+
+    return "";
+}
+
+export function validateDrivingLicense(label, text) {
+    if (text === null || text === "") {
+        return label + ' is required. Please try again'
+    }
+    
+    const isLicense = new RegExp("^[A-Z 0-9]+$");
+    if (!isLicense.test(text)) {
+        return label + ' can only include capital letters, numbers and spaces. Please try again.'
     }
 
     return "";
@@ -55,7 +68,7 @@ export function validateWord(label, text) {
 
 export function validateDOB(label, dob) {
     if (dob === null || dob === "") {
-        return label + ' is required. Please try again'
+        return label + ' is required. Please try again.'
     }
     
     const today = new Date();
@@ -66,11 +79,11 @@ export function validateDOB(label, dob) {
     upperLimit.setFullYear(today.getFullYear() - 16);
     
     if (date < lowerLimit) {
-        return label + ' cannot be over 110 years ago. Please try again'
+        return label + ' cannot be over 110 years ago. Please try again.'
     }
 
     if (date > upperLimit) {
-        return label + ' cannot be less than 16 years ago. Please try again'
+        return label + ' cannot be less than 16 years ago. Please try again.'
     }
 
     return "";

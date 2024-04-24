@@ -136,7 +136,6 @@ const Bookings = ({jwtToken}) => {
         try {
             if (editingBooking) {
                 if (editingBooking.bookingId) {
-                    console.log('Updating existing booking:', editingBooking);
 
                     editingBooking.tripStartTime += ":00"
                     editingBooking.tripEndTime += ":00"

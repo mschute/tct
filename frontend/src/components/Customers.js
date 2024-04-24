@@ -16,6 +16,9 @@ const Customers = ({jwtToken}) => {
         fetchCustomers(jwtToken);
     }, []);
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
     const fetchCustomers = async () => {
         try {
             const customersData = await service.getCustomers(jwtToken);
@@ -24,10 +27,6 @@ const Customers = ({jwtToken}) => {
         } catch (error) {
             console.error(error.message)
         }
-    }
-
-    const clearErrorMessage = () => {
-        setErrorMessage('');
     }
 
     const handleEdit = (customerId) => {
