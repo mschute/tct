@@ -17,6 +17,10 @@ const Users = ({jwtToken}) => {
         fetchRoles(jwtToken);
     }, []);
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+    
     const fetchUsers = async () => {
         try {
             const usersData = await service.getUsers(jwtToken);
@@ -25,10 +29,6 @@ const Users = ({jwtToken}) => {
         } catch (error) {
             console.error(error.message)
         }
-    }
-
-    const clearErrorMessage = () => {
-        setErrorMessage('');
     }
 
     const fetchRoles = async () => {
@@ -54,20 +54,19 @@ const Users = ({jwtToken}) => {
     const handleRoleAssign = async (event) => {
         event.preventDefault();
         try {
+            clearErrorMessage();
+            
             await roleService.updateUserRole({userId: editingUser.userId, roleName: editingUser.roleName});
-            fetchUsers(jwtToken);
+            await fetchUsers(jwtToken);
         } catch (error) {
             setErrorMessage('Error assigning role. Please try again.');
             console.error('Response data: ', error.response?.data);
-        } finally {
-            setEditingUser(null);
         }
-    }
+    };
 
     return (
         <div>
             <List model={users} modelName={modelName} handleEdit={handleEdit}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingUser && (
                 <UserForm
                     fields={[
@@ -91,6 +90,7 @@ const Users = ({jwtToken}) => {
                     handleCancelEdit={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
     );
 };
