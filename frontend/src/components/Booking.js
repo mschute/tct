@@ -8,6 +8,16 @@ import locationService from "../service/LocationService";
 import service from "../service/BookingService";
 import bookingLocationService from "../service/BookingLocationService";
 import "../styles/table.css";
+import {
+    validateNotEmpty,
+    validateLocations,
+    validateSelection,
+    validateDate,
+    validateTime,
+    validateTimeDifference,
+    validatePrice
+} from "../helpers/validation";
+import {calculateTomorrow} from "../helpers/helpers";
 
 const Bookings = ({jwtToken}) => {
     const [bookings, setBookings] = useState([]);
@@ -29,6 +39,10 @@ const Bookings = ({jwtToken}) => {
         fetchLocations(jwtToken);
     }, []);
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+    
     const fetchBookings = async () => {
         try {
             const bookingsData = await service.getBookings(jwtToken);
@@ -40,10 +54,6 @@ const Bookings = ({jwtToken}) => {
             console.error(error.message);
         }
     };
-
-    const clearErrorMessage = () => {
-        setErrorMessage('');
-    }
 
     const fetchVehicles = async () => {
         try {
@@ -84,6 +94,7 @@ const Bookings = ({jwtToken}) => {
     const handleEdit = (bookingId) => {
         const selected = bookings.find((booking) => booking.bookingId === bookingId);
         setSelectedBooking(null);
+        setIsFormOpen(true);
 
         setEditingBooking({
             bookingId: selected.bookingId,
@@ -134,7 +145,69 @@ const Bookings = ({jwtToken}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
+            clearErrorMessage();
+            
             if (editingBooking) {
+                let error = validatePrice("Total Price", editingBooking.totalPrice);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateDate("Trip Date", editingBooking.tripDate);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateTime("Start Time", editingBooking.tripStartTime);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateTime("End Time", editingBooking.tripEndTime);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateTimeDifference("Start Time", "End Time", editingBooking.tripStartTime, editingBooking.tripEndTime);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateSelection("Vehicle", editingBooking.vehicleId);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateSelection("Driver", editingBooking.driverId);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateSelection("Customer", editingBooking.customerId);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateLocations("Locations", editingBooking.locationIds);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateNotEmpty("Booking notes", editingBooking.bookingNotes);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
                 if (editingBooking.bookingId) {
 
                     editingBooking.tripStartTime += ":00"
@@ -181,20 +254,18 @@ const Bookings = ({jwtToken}) => {
 
                     await Promise.all(createBookingLocationPromise);
                 }
-                fetchBookings(jwtToken);
+                await fetchBookings(jwtToken);
+                setEditingBooking(null);
+                setIsFormOpen(false);
             }
         } catch (error) {
             setErrorMessage('Error saving booking. Please try again.');
-        } finally {
-            setEditingBooking(null);
-            setIsFormOpen(false);
         }
     };
 
     return (
         <div>
             <List model={bookings} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingBooking && (
                 <Form
                     fields={[
@@ -204,8 +275,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.bookingId,
                             type: "text",
                             disabled: true,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "totalPrice",
@@ -213,7 +282,7 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.totalPrice,
                             type: "number",
                             disabled: false,
-                            min: 0,
+                            min: 50,
                             step: 10
                         },
                         {
@@ -222,8 +291,7 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.tripDate,
                             type: "date",
                             disabled: false,
-                            min: null,
-                            step: null
+                            min: calculateTomorrow(),
                         },
                         {
                             name: "tripStartTime",
@@ -231,8 +299,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.tripStartTime,
                             type: "time",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "tripEndTime",
@@ -240,8 +306,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.tripEndTime,
                             type: "time",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "vehicleId",
@@ -249,8 +313,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.vehicleId,
                             type: "select",
                             disabled: false,
-                            min: null,
-                            step: null,
                             options: vehicles
                         },
                         {
@@ -259,8 +321,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.driverId,
                             type: "select",
                             disabled: false,
-                            min: null,
-                            step: null,
                             options: drivers
                         },
                         {
@@ -269,8 +329,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.customerId,
                             type: "select",
                             disabled: false,
-                            min: null,
-                            step: null,
                             options: customers
                         },
                         {
@@ -279,8 +337,6 @@ const Bookings = ({jwtToken}) => {
                             value: editingBooking.locationIds,
                             type: "select",
                             disabled: false,
-                            min: null,
-                            step: null,
                             options: locations
                         },
                         {
@@ -307,6 +363,7 @@ const Bookings = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );

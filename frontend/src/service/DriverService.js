@@ -5,7 +5,6 @@ const API_URL = 'http://localhost:5255/api/Driver'
 const service = {
 
     getDrivers: async (jwtToken) => {
-
         try {
             const response = await axios.get(`${API_URL}`, {headers: {Authorization: `Bearer ${jwtToken}`}});
 

@@ -63,6 +63,42 @@ export function validateDOB(label, dob) {
     return "";
 }
 
+export function validateDate(label, date) {
+    if (date === null || date === "" || date === "dd/mm/yyy") {
+        return label + ' is required. Please try again.'
+    }
+
+    return "";
+}
+
+export function validatePrice(label, price) {
+    if (price === null || price === "") {
+        return label + ' is required. Please try again.'
+    }
+    
+    if (price < 50) {
+        return label + ' must be over 50. Please try again.'
+    }
+
+    return "";
+}
+
+export function validateTime(label, time) {
+    if (time === null || time === "" || time === "--:--") {
+        return label + ' is required. Please try again.'
+    }
+
+    return "";
+}
+
+export function validateTimeDifference(label1, label2, time1, time2) {
+    if (time1 > time2) {
+        return label2 + ' cannot be earlier than ' + label1 + '. Please try again.'
+    }
+
+    return "";
+}
+
 export function validateNumber(label, number) {
     if (number === null || number === "") {
         return label + ' is required. Please try again.'
@@ -81,7 +117,6 @@ export function validateNumber(label, number) {
 }
 
 export function validateLatitude(label, lat) {
-    console.log("This is lat: " + lat);
     if (lat === null || lat === "") {
         return label + ' is required. Please try again.'
     }
@@ -112,5 +147,25 @@ export function validateNotEmpty(label, value) {
         return label + ' is required. Please try again.'
     }
     
+    return "";
+}
+
+export function validateLocations(label, locations) {
+    if (locations === null || locations === "") {
+        return label + ' is required. Please try again.'
+    }
+
+    if (locations.length < 3) {
+        return 'At least 3 locations are required. Please try again.'
+    }
+
+    return "";
+}
+
+export function validateSelection(label, selection) {
+    if (selection === null || selection === "") {
+        return label + ' is required. Please try again.'
+    }
+
     return "";
 }
