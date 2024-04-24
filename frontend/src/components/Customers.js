@@ -3,6 +3,7 @@ import service from '../service/CustomerService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
+import {validateDOB, validateWord} from "../helpers/helpers";
 
 const Customers = ({jwtToken}) => {
     const [customers, setCustomers] = useState([]);
@@ -59,9 +60,33 @@ const Customers = ({jwtToken}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Customer:', editingCustomer);
+            clearErrorMessage();
 
             if (editingCustomer) {
+                let error = validateWord("First Name", editingCustomer.firstName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Last Name", editingCustomer.lastName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateDOB("Date of Birth", editingCustomer.dob);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Nationality", editingCustomer.nationality);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
                 if (editingCustomer.customerId) {
                     await service.updateCustomer(editingCustomer.customerId, editingCustomer, jwtToken);
 
@@ -69,20 +94,18 @@ const Customers = ({jwtToken}) => {
                     const {customerId, ...newCustomer} = editingCustomer;
                     await service.createCustomer(newCustomer, jwtToken)
                 }
-                fetchCustomers();
+                await fetchCustomers();
+                setEditingCustomer(null);
             }
         } catch (error) {
             setErrorMessage('Error saving customer. Please try again');
             console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingCustomer(null);
         }
     };
 
     return (
         <div>
             <List model={customers} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingCustomer && (
                 <Form
                     fields={[
@@ -130,6 +153,7 @@ const Customers = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
     );
 };

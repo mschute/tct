@@ -62,8 +62,7 @@ const SignInPage = ({handleSetJwtToken}) => {
     const title = formType === formTypes.signIn ? "Sign In" : "Sign Up";
     const submitButtonText = formType === formTypes.signIn ? "Sign In" : "Sign Up";
     const switchButtonText = formType === formTypes.signUp ? "Sign into your account" : "Create an account";
-
-    console.log("show modal status", {showModal});
+    
     return (
         <div className="page-dimensions">
             {showModal === true ? (<Modal closeModal={closeModal} modalTitle="Registration successful"

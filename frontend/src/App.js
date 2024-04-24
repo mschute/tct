@@ -34,7 +34,6 @@ function App() {
     }, []);
 
     const handleSignOut = async () => {
-        console.log("logging out")
         try {
             await service.logout();
 
