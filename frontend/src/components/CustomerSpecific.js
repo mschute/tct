@@ -3,6 +3,7 @@ import service from '../service/CustomerService';
 import Form from "./Form";
 import "../styles/table.css";
 import ViewList from "./ViewList";
+import {validateDOB, validateWord} from "../helpers/helpers";
 
 const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
     const [customers, setCustomers] = useState([]);
@@ -24,6 +25,10 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
         }
     }
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+
     const handleEdit = (customerId) => {
         if (customers.customerId === customerId) {
             setSelectedCustomer(null);
@@ -36,7 +41,6 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
                 nationality: customers.nationality,
                 userId: customers.userId
             });
-            console.log("Customer's userId", customers.userId)
         } else {
             console.error('Customer not found: ', customerId)
         }
@@ -49,28 +53,47 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Customer:', editingCustomer);
-
+            clearErrorMessage();
             if (editingCustomer) {
-                if (editingCustomer.customerId) {
-                    console.log('Updating existing customer:', editingCustomer);
-                    await service.updateCustomer(editingCustomer.customerId, editingCustomer, jwtToken);
-
+                let error = validateWord("First Name", editingCustomer.firstName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
                 }
-                fetchCustomer();
+
+                error = validateWord("Last Name", editingCustomer.lastName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateDOB("Date of Birth", editingCustomer.dob);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Nationality", editingCustomer.nationality);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                if (editingCustomer.customerId) {
+                    await service.updateCustomer(editingCustomer.customerId, editingCustomer, jwtToken);
+                }
+                await fetchCustomer();
+                setEditingCustomer(null);
             }
         } catch (error) {
             setErrorMessage('Error saving customer. Please try again.');
             console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingCustomer(null);
         }
     };
 
     return (
         <div>
             <ViewList model={customers} modelName={modelName} handleEdit={handleEdit}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingCustomer && (
                 <Form
                     fields={[
@@ -118,6 +141,7 @@ const CustomerSpecific = ({jwtToken, activeCustomerId}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
     );
 };

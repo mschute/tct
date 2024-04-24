@@ -16,7 +16,6 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
     }, []);
 
     const fetchItineraries = async () => {
-        console.log("This is fetch jwtToken", JSON.stringify(jwtToken));
         try {
             const itinerariesData = await service.getItinerariesByCustomer(activeCustomerId, jwtToken);
             setSelectedItinerary(null);
@@ -33,7 +32,6 @@ const ItinerarySpecific = ({jwtToken, activeCustomerId}) => {
     }
 
     const handleDelete = async (itineraryId) => {
-        console.log("This is jwt in Itinerary Specific", JSON.stringify(jwtToken));
         try {
             await service.deleteItinerary(itineraryId, jwtToken)
             fetchItineraries(jwtToken);

@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {jwtDecode} from "jwt-decode";
 import {useNavigate} from 'react-router-dom';
 
-
 function App() {
     const [jwtToken, setJwtToken] = useState(window.localStorage.getItem('jwtToken'));
     const [userRole, setUserRole] = useState(window.localStorage.getItem('userRole'));
