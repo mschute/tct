@@ -27,7 +27,6 @@ const service = {
     },
 
     createBooking: async (newBooking, jwtToken) => {
-        console.log("Create booking data in the service call ", JSON.stringify(newBooking));
         try {
             const response = await axios.post(`${API_URL}`, newBooking, {headers: {Authorization: `Bearer ${jwtToken}`}})
             return response.data;
