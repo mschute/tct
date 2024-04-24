@@ -3,6 +3,7 @@ import service from '../service/LocationService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
+import {validateLatitude, validateLongitude, validateMultipleWords, validateNotEmpty} from "../helpers/validation";
 
 const Locations = ({jwtToken}) => {
     const [locations, setLocations] = useState([]);
@@ -16,6 +17,10 @@ const Locations = ({jwtToken}) => {
         fetchLocations(jwtToken);
     }, []);
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+    
     const fetchLocations = async () => {
         try {
             const locationsData = await service.getLocations();
@@ -26,13 +31,10 @@ const Locations = ({jwtToken}) => {
         }
     }
 
-    const clearErrorMessage = () => {
-        setErrorMessage('');
-    }
-
-    const handleEdit = (locationId, jwtToken) => {
+    const handleEdit = (locationId) => {
         const selected = locations.find((location) => location.locationId === locationId);
         setSelectedLocation(null);
+        setIsFormOpen(true);
 
         setEditingLocation({
             locationId: selected.locationId,
@@ -44,10 +46,10 @@ const Locations = ({jwtToken}) => {
         });
     };
 
-    const handleDelete = async (locationId, jwtToken) => {
+    const handleDelete = async (locationId) => {
         try {
             await service.deleteLocation(locationId, jwtToken)
-            fetchLocations(jwtToken);
+            fetchLocations();
         } catch (error) {
             setErrorMessage('Error deleting location. Please try again.');
         }
@@ -73,9 +75,39 @@ const Locations = ({jwtToken}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Editing Location:', editingLocation);
+            clearErrorMessage();
 
             if (editingLocation) {
+                let error = validateMultipleWords("Location Name", editingLocation.locationName);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateNotEmpty("Location Address", editingLocation.locationAddress);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
+                error = validateLatitude("Latitude", editingLocation.locationLat);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateLongitude("Longitude", editingLocation.locationLng);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateNotEmpty("Location Description", editingLocation.locationDescription);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+                
                 if (editingLocation.locationId) {
                     await service.updateLocation(editingLocation.locationId, editingLocation, jwtToken);
 
@@ -83,21 +115,20 @@ const Locations = ({jwtToken}) => {
                     const {locationId, ...newLocation} = editingLocation;
                     await service.createLocation(newLocation, jwtToken)
                 }
-                fetchLocations(jwtToken);
+                await fetchLocations(jwtToken);
+                setEditingLocation(null);
+                setIsFormOpen(false);
+                setErrorMessage("");
             }
         } catch (error) {
             setErrorMessage('Error saving location. Please try again');
             console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingLocation(null);
-            setIsFormOpen(false);
         }
     };
 
     return (
         <div>
             <List model={locations} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingLocation && (
                 <Form
                     fields={[
@@ -107,8 +138,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationId,
                             type: "text",
                             disabled: true,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "locationName",
@@ -116,8 +145,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationName,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "locationAddress",
@@ -125,8 +152,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationAddress,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "locationLat",
@@ -134,8 +159,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationLat,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "locationLng",
@@ -143,8 +166,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationLng,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "locationDescription",
@@ -152,8 +173,6 @@ const Locations = ({jwtToken}) => {
                             value: editingLocation.locationDescription,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                     ]}
                     model={editingLocation}
@@ -163,6 +182,7 @@ const Locations = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );

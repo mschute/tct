@@ -74,7 +74,7 @@ namespace backend.Controllers
 
         // PUT: api/Location/5
         // Update specific location
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocation(int id, Location location)
         {

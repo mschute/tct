@@ -1,3 +1,5 @@
+import {getRoles} from "@testing-library/react";
+import rolesService from "../service/RolesService";
 
 export function validateWord(label, text) {
     if (text === null || text === "") {
@@ -5,6 +7,19 @@ export function validateWord(label, text) {
     }
 
     const isWord = new RegExp("^[a-z]+$", "i");
+    if (!isWord.test(text)) {
+        return label + ' is not a valid word. Please try again.'
+    }
+
+    return "";
+}
+
+export function validateMultipleWords(label, text) {
+    if (text === null || text === "") {
+        return label + ' is required. Please try again.'
+    }
+
+    const isWord = new RegExp("^[a-z ]+$", "i");
     if (!isWord.test(text)) {
         return label + ' is not a valid word. Please try again.'
     }
@@ -62,5 +77,40 @@ export function validateNumber(label, number) {
         return label + ' cannot be 0 or below. Please try again.'
     }
 
+    return "";
+}
+
+export function validateLatitude(label, lat) {
+    console.log("This is lat: " + lat);
+    if (lat === null || lat === "") {
+        return label + ' is required. Please try again.'
+    }
+
+    const isLat = new RegExp("^([-+]?\d{1,2}([.]\d+)?)$");
+    if (isLat.test(lat)) {
+        return label + ' is not a valid latitude. Please try again.'
+    }
+    
+    return "";
+}
+
+export function validateLongitude(label, lng) {
+    if (lng === null || lng === "") {
+        return label + ' is required. Please try again.'
+    }
+
+    const isLng = new RegExp('^([-+]?\d{1,3}([.]\d+)?)$');
+    if (isLng.test(lng)) {
+        return label + ' is not a valid longitude. Please try again.'
+    }
+    
+    return "";
+}
+
+export function validateNotEmpty(label, value) {
+    if (value === null || value === "") {
+        return label + ' is required. Please try again.'
+    }
+    
     return "";
 }
