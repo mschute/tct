@@ -3,7 +3,7 @@ import service from '../service/CustomerService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
-import {validateDOB, validateWord} from "../helpers/helpers";
+import {validateDOB, validateWord} from "../helpers/validation";
 
 const Customers = ({jwtToken}) => {
     const [customers, setCustomers] = useState([]);

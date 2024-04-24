@@ -3,6 +3,7 @@ import service from '../service/VehicleService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
+import {validateWord, validateNumber} from "../helpers/validation";
 
 const Vehicles = ({jwtToken}) => {
     const [vehicles, setVehicles] = useState([]);
@@ -16,6 +17,10 @@ const Vehicles = ({jwtToken}) => {
         fetchVehicles(jwtToken);
     }, []);
 
+    const clearErrorMessage = () => {
+        setErrorMessage('');
+    }
+
     const fetchVehicles = async () => {
         try {
             const vehiclesData = await service.getVehicles(jwtToken);
@@ -28,6 +33,7 @@ const Vehicles = ({jwtToken}) => {
     const handleEdit = (vehicleId) => {
         const selected = vehicles.find((vehicle) => vehicle.vehicleId === vehicleId);
         setSelectedVehicle(null);
+        setIsFormOpen(true);
 
         setEditingVehicle({
             vehicleId: selected.vehicleId,
@@ -51,6 +57,7 @@ const Vehicles = ({jwtToken}) => {
     const handleCreate = () => {
         setSelectedVehicle(null);
         setEditingVehicle({make: '', model: '', gasType: '', seats: '', pricePerDay: ''});
+        setIsFormOpen(true);
     };
 
     const handleCancelEdit = () => {
@@ -61,8 +68,39 @@ const Vehicles = ({jwtToken}) => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
+            clearErrorMessage();
 
             if (editingVehicle) {
+                let error = validateWord("Make", editingVehicle.make);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Model", editingVehicle.model);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateWord("Gas Type", editingVehicle.gasType);
+                if (error !== "") {
+                    setErrorMessage(error);
+                    return;
+                }
+
+                error = validateNumber("Seats", editingVehicle.seats);
+                if (error !== "") {
+                    setErrorMessage("");
+                    return;
+                }
+
+                error = validateNumber("Price Per Day", editingVehicle.pricePerDay);
+                if (error !== "") {
+                    setErrorMessage("");
+                    return;
+                }
+                
                 if (editingVehicle.vehicleId) {
                     await service.updateVehicle(editingVehicle.vehicleId, editingVehicle, jwtToken);
 
@@ -70,21 +108,19 @@ const Vehicles = ({jwtToken}) => {
                     const {vehicleId, ...newVehicle} = editingVehicle;
                     await service.createVehicle(newVehicle, jwtToken)
                 }
-                fetchVehicles();
+                await fetchVehicles();
+                setEditingVehicle(null);
+                setIsFormOpen(false);
             }
         } catch (error) {
             setErrorMessage('Error saving vehicle. Please try again');
             console.error('Response data:', error.response?.data);
-        } finally {
-            setEditingVehicle(null);
-            setIsFormOpen(false);
         }
     };
 
     return (
         <div>
             <List model={vehicles} modelName={modelName} handleEdit={handleEdit} handleDelete={handleDelete}/>
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {editingVehicle && (
                 <Form
                     fields={[
@@ -94,8 +130,6 @@ const Vehicles = ({jwtToken}) => {
                             value: editingVehicle.vehicleId,
                             type: "text",
                             disabled: true,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "make",
@@ -103,8 +137,6 @@ const Vehicles = ({jwtToken}) => {
                             value: editingVehicle.make,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "model",
@@ -112,8 +144,6 @@ const Vehicles = ({jwtToken}) => {
                             value: editingVehicle.model,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "gasType",
@@ -121,8 +151,6 @@ const Vehicles = ({jwtToken}) => {
                             value: editingVehicle.gasType,
                             type: "text",
                             disabled: false,
-                            min: null,
-                            step: null
                         },
                         {
                             name: "seats",
@@ -139,7 +167,7 @@ const Vehicles = ({jwtToken}) => {
                             value: editingVehicle.pricePerDay,
                             type: "number",
                             disabled: false,
-                            min: 0,
+                            min: 25,
                             step: 25
                         },
                     ]}
@@ -150,6 +178,7 @@ const Vehicles = ({jwtToken}) => {
                     handleCancel={handleCancelEdit}
                 />
             )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {isFormOpen === true ? "" : (<button className="primary-button" onClick={handleCreate}>Add new</button>)}
         </div>
     );

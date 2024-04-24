@@ -3,7 +3,7 @@ import service from '../service/DriverService';
 import List from "./List";
 import Form from "./Form";
 import "../styles/table.css";
-import {validateDOB, validateWord, validateDrivingLicense} from "../helpers/helpers";
+import {validateDOB, validateWord, validateDrivingLicense} from "../helpers/validation";
 
 const Drivers = ({jwtToken}) => {
     const [drivers, setDrivers] = useState([]);
