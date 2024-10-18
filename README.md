@@ -1,19 +1,50 @@
-Version 2 - Tay Country Travel ASP.NET Framework Core Web API with ReactJS front-end
+Version 2 - Tay Country Travel ASP.NET Core Web API with ReactJS Front-end
 
-This project is for Tay Country Travel, a luxury travel company that offers transportation for golfing, heritage landscapes and other tourist destinations. This service aims to create a booking system that will allow Admin to create bookings that will record the associated Driver, Vehicle, Locations, Customers (Passengers), and other related information. Customers can look at potential destinations on a Map (offered by Google Maps API). The user can add destinations on the itinerary which will automatically be added to the form. The Customer can add the amount of time they can stop over at that location. They can also dynamically remove the locations on the itinerary. The Customer will select a date and start time and the end time will be calculated automatically. They can add any notes they so wish. The Admin will see this itinerary request and will then create an official booking for the Customer.
+This project is for Tay Country Travel, a luxury transport service for golfing, heritage, and tourist destinations. The booking system enables Admins to manage bookings, drivers, vehicles, locations, and customers, while providing a seamless user experience for customers to plan their itineraries.
 
-Not only does the Admin have the ability to see the Customers pending itineraries and create a booking, but they can also add, edit and delete information for Drivers, Locations, Vehicles. They can also view information for Users, Customres and Roles.
+Features:
 
-This service also has a register, sign-up and sign-out functionality. Users and their roles are identified at sign-in and are verified through a JWT token. Users will automatically be signed-out after the JWT token expires.
+Customer Side:
 
-Customers can create and delete an itinerary, update their Customer Info and delete a booking for their account.
+- Customers can create, update, or delete itineraries.
+- Use Google Maps API integration to select destinations directly from the map.
+- Dynamically add or remove destinations from the itinerary and specify stopover times.
+- The system automatically calculates the estimated total duration of the tour based on the selected locations and times.
 
-Created a RESTful backend API service for ASP.NET Framework Core using a Model View Controller architectural pattern to aid in organisation. The Model folder contains classes that hold the business logic and aid in mapping the database for data to be stored in. Controllers contain Create Retrieve Update and Delete actions that will operate on the database based on the business logic of the models. Views are not implemented in this version.
+Admin Side:
 
-Dependency injection is used for logging, configuring the database, identity framework, email service, defining user roles, and JWT token and events. SQLite database configuration is implemented. JWT Bearer Events methods are overridden in order to add logging functionality for these events. MailKit, a .NET mail-client library created by Jeffrey Stedfast was used for sending registration emails through Simple Mail Transfer Protocol (SMTP). Logs are output to the Console as well as saved to a created new file each day the program is run. Two helper classes were created to aid in the functionality of the program, one to check if a user’s passwords meets the business requirements and a logger extension to aid in printing uniform logs. Identity Framework was used to aid user registration and role functionality. The role assigned to a particular user was used to adjust their authorization for various CRUD actions on the website.
+- Admins can manage bookings, customers, drivers, vehicles, and locations.
+- They can create, edit, or delete records and manage itinerary requests submitted by customers.
 
-NuGet packages installed for this project are:
+Authentication:
 
-• MailKit • Microsoft.AspNetCore.Authentication.JwtBearer • Microsoft.AspNetCore.Identity.EntityFrameworkCore • Microsoft.Extensions.Logging.Console • Microsoft.Extensions.Logging.EventLog • Microsoft.VisualStudio.Web.CodeGeneration.Design • Serilog.Extensions.Logging.File, Microsoft.EntityFrameworkCore • Microsoft.EntityFrameworkCore.Tools • Microsoft.Extensions.DependencyInjection • Npgsql.EntityFrameworkCore.PostgreSQL
+- The system uses JWT tokens for user authentication, including sign-up, sign-in, and automatic sign-out upon token expiration.
 
+Backend:
+
+- ASP.NET Core Web API: Utilizes the MVC architecture, with Models handling business logic and database mapping, and Controllers for CRUD operations.
+- RESTful API: The backend exposes a RESTful API that allows the front-end to communicate with the server for booking management, customer data, itineraries, and more. It supports GET, POST, PUT, and DELETE requests to handle various operations.
+- SQLite: Database configuration for persistence.
+- Dependency Injection: Employed for logging, database configuration, identity framework, email service, JWT tokens, and role management.
+- MailKit: For sending emails through SMTP.
+
+Frontend:
+
+- ReactJS: A dynamic and responsive front-end framework for creating interactive UI elements.
+- CSS: Styled the application for a clean and intuitive user experience.
+- Google Maps API: Integrated to allow customers to visually select locations on a map, which are then automatically added to their itinerary form. Customers can adjust stopover times, and the system calculates the total travel duration.
+
+Design:
+
+- Custom Travel Itinerary Form: Allows users to interact with the map, select locations, adjust time spent at each stop, and add notes. This form integrates seamlessly with the RESTful API to provide accurate travel estimates.
+
+NuGet Packages:
+
+- MailKit
+- Microsoft.AspNetCore.Authentication.JwtBearer
+- Microsoft.AspNetCore.Identity.EntityFrameworkCore
+- Microsoft.EntityFrameworkCore & Tools
+- Serilog.Extensions.Logging.File
+- Microsoft.Extensions.Logging.Console & EventLog
+- Npgsql.EntityFrameworkCore.PostgreSQL
 
